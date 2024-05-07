@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/BubbleboddyNeue-Bold Trial.ttf",
+      "sha1": "c50d971e9874e6da90d6bfae3ef2d0d4222bf0b1"
+    },
+    {
+      "path": "src/assets/fonts/BubbleboddyNeue-ExtraBold Trial.ttf",
+      "sha1": "ad0460e4796a43c89d04b68cb0c2aaf4316a18b0"
+    },
+    {
+      "path": "src/assets/fonts/BubbleboddyNeue-Light Trial.ttf",
+      "sha1": "2853fde8d8f014b5ef23ef7a616ad835d94bab15"
+    },
+    {
+      "path": "src/assets/fonts/bubbleboddyneue-regular trial.ttf",
+      "sha1": "508dec56a492105bcefe6641adbc101ff1b1aa50"
+    },
+    {
+      "path": "src/assets/fonts/BubbleboddyNeue-Thin Trial.ttf",
+      "sha1": "9a342553cb4a5e7f427b7f94d0c5df679885150f"
+    },
+    {
+      "path": "src/assets/fonts/BubblegumSans-Regular.ttf",
+      "sha1": "59d2f0ba7152be179faedefab35965d8cc28a94c"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Italic.ttf",
+      "sha1": "65f3f6a7e1bd2fa6f2df35e4b07775d7f1dde4f0"
+    }
+  ]
+}
