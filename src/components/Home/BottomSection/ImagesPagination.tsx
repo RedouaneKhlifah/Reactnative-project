@@ -1,17 +1,17 @@
 import {StyleSheet, Animated, View, Dimensions} from 'react-native';
-import React, { FC } from 'react';
-import { offreImagesDataT } from './OfferImages';
-import { SIZES } from '../../../constants';
+import React, {FC} from 'react';
+import {offreImagesDataT} from './OfferImages';
+import {SIZES} from '../../../constants';
 
 const {width} = Dimensions.get('screen');
 
 interface IPagination {
-  data : offreImagesDataT[],
-  scrollX : Animated.Value,
-  index : number
+  data: offreImagesDataT[];
+  scrollX: Animated.Value;
+  index: number;
 }
 
-const Pagination:FC<IPagination> = ({data, scrollX, index}) => {
+const ImagesPagination: FC<IPagination> = ({data, scrollX, index}) => {
   return (
     <View style={styles.container}>
       {data.map((_, idx) => {
@@ -19,7 +19,7 @@ const Pagination:FC<IPagination> = ({data, scrollX, index}) => {
 
         const dotWidth = scrollX.interpolate({
           inputRange,
-          outputRange: [9, 16, 9],
+          outputRange: [8, 14, 8],
           extrapolate: 'clamp',
         });
 
@@ -50,7 +50,7 @@ const Pagination:FC<IPagination> = ({data, scrollX, index}) => {
   );
 };
 
-export default Pagination;
+export default ImagesPagination;
 
 const styles = StyleSheet.create({
   container: {
@@ -62,15 +62,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dot: {
-    width: 9,
-    height: 9,
+    width: 8,
+    height: 8,
     borderRadius: SIZES.fullRadius,
     marginHorizontal: 3,
     backgroundColor: 'red',
   },
   dotActive: {
     backgroundColor: '#AB82FF',
-    width: 16,
-    height: 16,
+    width: 12,
+    height: 12,
   },
 });

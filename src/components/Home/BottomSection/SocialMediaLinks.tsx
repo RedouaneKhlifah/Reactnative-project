@@ -1,16 +1,17 @@
-import { View, Text, Pressable } from 'react-native'
-import React, { Children, FC } from 'react'
-import { COLORS } from '../../../constants'
+import {View, Text, Pressable} from "react-native";
+import React, {Children, FC} from "react";
+import {COLORS} from "../../../constants";
 
-const SocialMediaLinks:FC<{Icon : FC}> = ({Icon}) => {
+const SocialMediaLinks: FC<{Icon: FC}> = ({Icon}) => {
   return (
-    <Pressable style={({ pressed }) => [
-        { opacity: pressed ? 0.8 : 1 },{backgroundColor : COLORS.LightGray2 , padding : 3 , borderRadius : 5 }
+    <Pressable
+      style={({pressed}) => [
+        {opacity: pressed ? 0.8 : 1},
+        {backgroundColor: COLORS.LightGray2, padding: 3, borderRadius: 5},
       ]}>
-        
-        <Icon/>
+      <Icon />
     </Pressable>
-  )
-}
+  );
+};
 
-export default SocialMediaLinks
+export default SocialMediaLinks;

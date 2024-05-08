@@ -1,52 +1,47 @@
-
-
-import {Animated, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Animated, FlatList, View} from 'react-native';
 import React, {useRef, useState} from 'react';
-import BestOfferCard from "./BestOfferCard";
-import { bestOfferCardT } from '../../../interfaces/bestOfferCardT';
-import { Images } from '../../../constants'
-
+import BestOfferCard from './BestOfferCard';
+import {bestOfferCardT} from '../../../interfaces/bestOfferCardT';
+import {Images} from '../../../constants';
 
 export const OffreData: bestOfferCardT[] = [
   {
     id: 1,
-    title: "Restaurant",
+    title: 'Restaurant',
     image: Images.restaurant,
   },
   {
     id: 2,
-    title: "Hotel",
+    title: 'Hotel',
     image: Images.restaurant,
   },
   {
     id: 3,
-    title: "Restaurant",
+    title: 'Restaurant',
     image: Images.restaurant,
   },
   {
     id: 4,
-    title: "Restaurant",
+    title: 'Restaurant',
     image: Images.restaurant,
   },
   {
     id: 5,
-    title: "Restaurant",
+    title: 'Restaurant',
     image: Images.restaurant,
   },
   {
     id: 6,
-    title: "Restaurant",
+    title: 'Restaurant',
     image: Images.restaurant,
   },
-
 ];
-
 
 const BestOfferCards = () => {
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 
-  const handleOnScroll = (event : any) => {
+  const handleOnScroll = (event: any) => {
     Animated.event(
       [
         {
@@ -63,18 +58,19 @@ const BestOfferCards = () => {
     )(event);
   };
 
-  const handleOnViewableItemsChanged = useRef(({viewableItems} :{viewableItems : any}) => {
-    console.log("viewableItems")
-    console.log(index);
-    setIndex(viewableItems[0].index);
-  }).current;
+  const handleOnViewableItemsChanged = useRef(
+    ({viewableItems}: {viewableItems: any}) => {
+      setIndex(viewableItems[0].index);
+    },
+  ).current;
 
   const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 50,
   }).current;
 
-    const renderItem = ({ item }: { item: bestOfferCardT }) => <BestOfferCard OffreData={item} />;
-
+  const renderItem = ({item}: {item: bestOfferCardT}) => (
+    <BestOfferCard OffreData={item} />
+  );
 
   return (
     <View>
@@ -88,10 +84,8 @@ const BestOfferCards = () => {
         onScroll={handleOnScroll}
         onViewableItemsChanged={handleOnViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
-        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-
+        ItemSeparatorComponent={() => <View style={{width: 10}} />}
       />
-      {/* <Pagination data={Slides} scrollX={scrollX} index={index} /> */}
     </View>
   );
 };

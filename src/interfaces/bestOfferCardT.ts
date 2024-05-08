@@ -1,7 +1,7 @@
-import { ImageSourcePropType } from "react-native"
+import {ImageSourcePropType} from 'react-native';
 
 export interface bestOfferCardT {
-    id : number,
-    title : string
-    image  : ImageSourcePropType | undefined
+  id: number;
+  title: string;
+  image: ImageSourcePropType | undefined;
 }
