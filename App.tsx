@@ -9,14 +9,14 @@ import RoleSelectionScreen from './src/screen/RoleSelectionScreen';
 import WelcomeScreen from './src/screen/WelcomeScreen';
 import ProfileScreen from './src/screen/ProfileScreen';
 import Home from './src/screen/Home';
-
+import Profile from "./src/screen/influencer/Profile";
 
 function App(): React.JSX.Element {
 
   return (
     <SafeAreaView>
 
-        <Home/>
+        <Profile/>
 
 
     </SafeAreaView>
