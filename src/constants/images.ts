@@ -11,6 +11,8 @@ import homeBackground2Source from '../assets/images/home-background2.png';
 import UnionSource from '../assets/images/Union.png';
 import restaurantSource from '../assets/images/restaurant.png';
 import offreImageSource from '../assets/images/offreImage.png';
+import milfayaBg from "../assets/images/milfaya.png"
+import milfayaPro from "../assets/images/milfayaProfile.png"
 
 // Define image sources with ImageSourcePropType
 const influencer = influencerSource as ImageSourcePropType;
@@ -36,4 +38,6 @@ export const Images = {
   Union,
   restaurant,
   offreImage,
+  milfayaBg,
+  milfayaPro
 };
