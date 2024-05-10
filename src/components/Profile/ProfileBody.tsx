@@ -6,8 +6,9 @@ import {
   ImageBackground,
   Image,
   Pressable,
+  FlatList
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import InputWithLabel from '../ui/InputWithLabel';
 import DatePicker from 'react-native-date-picker';
@@ -15,8 +16,16 @@ import DateInputWithLbel from '../ui/DateInputWithLbel';
 import Selector from '../ui/Selector';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import Button from '../ui/Button';
+import Dropdown from '../ui/Dropdown';
+
 
 const ProfileBody = () => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Male', value: 'Male'},
+    {label: 'female', value: 'banana'}
+  ]);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.ImageContainer}>
@@ -50,7 +59,26 @@ const ProfileBody = () => {
           placeholder="jj/mm/aaaa"
         />
         <View style={styles.SelectorsContainer}>
-          <Selector labelText={'Sexe'} />
+          <Dropdown
+            open={open}
+            label='Sexe'
+            placeholder='male'
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            disableBorderRadius={true}
+            maxHeight={120}
+            dropDownDirection="TOP"
+            placeholderStyle={{
+              fontSize: 14,
+              fontStyle: 'italic'
+            }}
+            labelTextStyle={{
+              fontWeight: 'bold'
+            }}
+          />          
           <Selector labelText={'Social Media'} />
           <Selector labelText={'Interets'} />
         </View>

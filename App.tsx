@@ -14,11 +14,13 @@ import AnnouncePage from './src/screen/AnnouncePage';
 import LoginScreen from './src/screen/auth screens/LoginScreen';
 import SignupScreen from './src/screen/auth screens/SignupScreen';
 import Profile from "./src/screen/influencer/Profile";
+import RedirectMail from './src/screen/auth screens/RedirectMail';
+import ContactMail from './src/screen/mail/ContactMail';
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaView>
-        <Profile/>
+        <ContactMail/>
     </SafeAreaView>
   );
 }

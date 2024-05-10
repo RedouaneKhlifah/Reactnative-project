@@ -29,6 +29,7 @@ export const SIZES = {
   radius: 16,
   smallRadius: 8,
   middleRadius: 12,
+  sm:13,
   fullRadius: 999,
   padding: 24,
   padding2: 36,

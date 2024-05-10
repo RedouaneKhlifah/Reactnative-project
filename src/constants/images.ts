@@ -14,6 +14,10 @@ import offreImageSource from '../assets/images/offreImage.png';
 import selctedImageSource from '../assets/images/selctedImage.png';
 import milfayaBg from "../assets/images/milfaya.png"
 import milfayaPro from "../assets/images/milfayaProfile.png"
+import mails from "../assets/images/mails.png"
+import winwinMail from "../assets/images/winwinMail.png"
+import winwingradiant from "../assets/images/winwingradiant.png"
+import imgwithGrad from "../assets/images/imgwithGrad.png"
 
 // Define image sources with ImageSourcePropType
 const influencer = influencerSource as ImageSourcePropType;
@@ -42,5 +46,9 @@ export const Images = {
   offreImage,
   selctedImage,
   milfayaBg,
-  milfayaPro
+  milfayaPro,
+  mails,
+  winwinMail,
+  winwingradiant,
+  imgwithGrad
 };
