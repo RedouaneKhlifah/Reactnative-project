@@ -13,11 +13,12 @@ import CategorySection from './src/screen/CategorySection';
 import AnnouncePage from './src/screen/AnnouncePage';
 import LoginScreen from './src/screen/auth screens/LoginScreen';
 import SignupScreen from './src/screen/auth screens/SignupScreen';
+import Profile from "./src/screen/influencer/Profile";
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaView>
-      <AnnouncePage />
+        <Profile/>
     </SafeAreaView>
   );
 }
