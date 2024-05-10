@@ -2,6 +2,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, SIZES} from '../../../constants';
 import BestOfferCards from './BestOfferCards';
+import {responsiveWidth} from '../../../utils/responsive';
 
 const BestOfferSection = () => {
   return (
@@ -26,12 +27,13 @@ const styles = StyleSheet.create({
   },
   title: {
     ...FONTS.body2,
+    fontSize: responsiveWidth(20),
     color: COLORS.white,
     fontWeight: '400',
   },
   subTitle: {
     ...FONTS.body4,
-    fontSize: 10,
+    fontSize: responsiveWidth(11),
     color: COLORS.white,
     fontWeight: '400',
     width: '42%',

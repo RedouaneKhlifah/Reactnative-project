@@ -1,24 +1,24 @@
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
+// Ignore warning related to react-native-date-picker
+declare const global: {
+  ignoreDatePickerWarning: boolean;
+};
+global.ignoreDatePickerWarning = true;
 
-  View,
-} from 'react-native';
+import React from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import RoleSelectionScreen from './src/screen/RoleSelectionScreen';
-import WelcomeScreen from './src/screen/WelcomeScreen';
 import ProfileScreen from './src/screen/ProfileScreen';
 import Home from './src/screen/Home';
+import CategorySection from './src/screen/CategorySection';
+import AnnouncePage from './src/screen/AnnouncePage';
+import LoginScreen from './src/screen/auth screens/LoginScreen';
+import SignupScreen from './src/screen/auth screens/SignupScreen';
 import Profile from "./src/screen/influencer/Profile";
 
 function App(): React.JSX.Element {
-
   return (
     <SafeAreaView>
-
         <Profile/>
-
-
     </SafeAreaView>
   );
 }

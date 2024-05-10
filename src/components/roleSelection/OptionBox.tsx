@@ -1,28 +1,21 @@
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import React, { useState } from 'react';
-import { appTheme } from '../../constants';
-import { Images } from '../../constants';
+import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
+import React, {useState} from 'react';
+import {appTheme} from '../../constants';
+import {Images} from '../../constants';
+import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 
-const { COLORS, FONTS, SIZES } = appTheme;
+const {COLORS, FONTS, SIZES} = appTheme;
 
 const OptionBox = () => {
   return (
     <Pressable
-      style={({ pressed }) => [
-        style.container,
-        { opacity: pressed ? 0.8 : 1 },
-      ]}
-    >
-      <View style={style.imageContainer}>
-        <Image 
-          style={style.image} 
-          source={Images.influencer} 
-          resizeMode="cover" // Set resizeMode to contain
-        />
-      </View>
+      style={({pressed}) => [style.container, {opacity: pressed ? 0.8 : 1}]}>
+      <Image style={style.image} source={Images.testImage} resizeMode="cover" />
       <View style={style.textContainer}>
-        <Text style={{ ...FONTS.h2 ,color : COLORS.black }}>Influencer</Text>
-        <Text style={{ ...FONTS.h4,color : COLORS.black }}>Obtenez des collaborations Win Win</Text>
+        <Text style={{...FONTS.h2, color: COLORS.black}}>Influencer</Text>
+        <Text style={{...FONTS.h4, color: COLORS.black}}>
+          Obtenez des collaborations Win Win
+        </Text>
       </View>
     </Pressable>
   );
@@ -31,29 +24,24 @@ const OptionBox = () => {
 const style = StyleSheet.create({
   container: {
     backgroundColor: COLORS.yellow,
-    flex : 1,
+    height: responsiveHeight(309),
+    width: responsiveWidth(331),
     borderRadius: SIZES.radius,
     alignItems: 'center',
-    padding : 10,
-    gap : 8
-  },
-  imageContainer: {
-    alignItems: 'center',
-    borderRadius: SIZES.smallRadius,
-    overflow: 'hidden',
-    width: '100%',
-    paddingBottom : 10,
-    flex : 4,
+    padding: 10,
+    justifyContent: 'center',
+    gap: 8,
   },
   image: {
-    width: '100%',
     borderRadius: SIZES.smallRadius,
     overflow: 'hidden',
+    height: responsiveHeight(212),
+    width: responsiveWidth(301),
   },
   textContainer: {
-    flex : 1,
-    width: '100%',
-    justifyContent : "center"
+    width: responsiveWidth(301),
+    alignSelf: 'center',
+    justifyContent: 'center',
   },
 });
 

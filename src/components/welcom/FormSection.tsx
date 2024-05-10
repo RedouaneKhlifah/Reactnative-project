@@ -1,109 +1,118 @@
-import { View, StyleSheet, Text, Pressable } from 'react-native';
-import React from 'react';
+import {View, StyleSheet, Text, Pressable} from 'react-native';
+import React, {FC} from 'react';
 import Prefix from './Prefix';
 import Input from '../ui/Input';
-import { COLORS, FONTS, SIZES } from '../../constants';
-import LoginService from './LoginService';
-import { Icons } from '../../constants'
+import {COLORS, FONTS, SIZES} from '../../constants';
+import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
+import InputWithLabel from '../ui/InputWithLabel';
+import Button from '../ui/Button';
+import {AuthSectionProp} from './AuthSection';
 
-const FormSection = () => {
+interface FormSectionProp extends AuthSectionProp {}
+
+enum AuthType {
+  SignUp = 'SIGN_UP',
+  Login = 'LOGIN',
+}
+
+const FormSection: FC<FormSectionProp> = ({type}) => {
   return (
-    <View style  = {styles.FormSectionContainer}>
-      {/* form inputes */}
-    <View style={styles.formContainer}>
-        <View style =  {styles.prefixContainer}>
-          <Prefix />
-        </View>
-        <View style = {styles.inputContainer}>
-          <Input />
-        </View>
-    </View>
+    <View style={styles.formSection}>
+      <InputWithLabel
+        labelText={'Email'}
+        placeholder={'hello@gmail.com'}
+        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.black}}
+        inputStyle={{
+          fontSize: responsiveWidth(11),
+          color: COLORS.black,
+          fontWeight: '500',
+        }}
+      />
+      <InputWithLabel
+        labelText={'Password'}
+        placeholder={'Your password ...'}
+        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.black}}
+        inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+      />
 
-     {/* bytton */}
-    <Pressable style = {styles.Button} >
-        <Text style  = {styles.buttonText}>Continuer</Text>
-    </Pressable>
-      {/* Line with Text "or" and another line */}
-      
-      <View style={styles.dividerContainer}>
-        <View style={styles.straightLine} />
-        <View style={styles.orTextContainer} >
-          <Text style={styles.orText}>Ou avec</Text>
+      {type == AuthType.SignUp && (
+        <InputWithLabel
+          labelText={'Confirmer la Mot de passe'}
+          placeholder={'Confirmer password'}
+          labelStyle={{fontSize: responsiveWidth(13), color: COLORS.black}}
+          inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+        />
+      )}
+
+      <View style={{width: '100%'}}>
+        <Button
+          buttonStyle={{
+            backgroundColor: COLORS.purple,
+            borderRadius: 54,
+            width: '100%',
+          }}
+          titleStyle={{
+            fontSize: responsiveWidth(16),
+            fontWeight: '400',
+            color: COLORS.white,
+            paddingVertical: responsiveHeight(10),
+          }}
+          title="Continuer"
+          onPress={() => {}}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: responsiveHeight(12),
+            justifyContent: 'center',
+            gap: responsiveWidth(4),
+          }}>
+          <Text
+            style={{
+              fontSize: responsiveWidth(13),
+            }}>
+            Avez vous déjà un compte?
+          </Text>
+          <Pressable
+            style={({pressed}) => [{opacity: pressed ? 0.7 : 1}]}
+            onPress={() => {}}>
+            <Text
+              style={{
+                fontWeight: '700',
+                fontSize: responsiveWidth(13),
+                color: COLORS.purple,
+              }}>
+              {type == AuthType.SignUp ? 'se connecter' : "S'inscrire"}
+            </Text>
+          </Pressable>
         </View>
-        <View style={styles.straightLine} />
       </View>
-
-        <View style  = {styles.loginServiceContainer}>
-          <LoginService title='google' Icon={Icons.Google} />
-          <LoginService title='Apple' Icon={Icons.Apple}/>
-          <LoginService title='Facebook' Icon={Icons.Facbook}/>
-          <LoginService title='Email' Icon={Icons.Email}/>
-        </View>
-
-
     </View>
-    
   );
 };
 
 const styles = StyleSheet.create({
-  FormSectionContainer : {
-    flex :1,
-    gap : 15,
-        width : "90%"
-  },
-  formContainer: {
-    flex : 4,
-    alignItems : "center",
-    flexDirection : "row",
-    gap : 15,
-  },
-  inputContainer: {
-    justifyContent : "center",
-    flex : 3,
-  },
-  prefixContainer : {
-    flex : 1
-  },
-  Button : {
-    alignItems : "center",
-    justifyContent : "center",
-    backgroundColor : COLORS.purple,
-    borderRadius : SIZES.fullRadius,
-    flex :  4,
-  },
-  buttonText : {
-    ...FONTS.body2,
-    color : COLORS.white
-  },
-
-  dividerContainer: {
-    flexDirection: 'row',
+  formSection: {
+    flex: 6,
     alignItems: 'center',
-    flex : 1
+    width: '90%',
+    alignSelf: 'center',
+    gap: responsiveHeight(15),
   },
-  straightLine: {
-    flex: 1,
-    borderWidth : 0.6,
-    borderColor :  COLORS.lightGray,
-    backgroundColor : "black"
+  footer: {
+    flex: 2,
+    alignItems: 'center',
+    width: '90%',
+    alignSelf: 'center',
   },
-  orTextContainer : {
-    justifyContent : "center",
-    paddingHorizontal: 10,
+  footerText: {
+    textAlign: 'center',
+    ...FONTS.h4,
+    fontSize: responsiveWidth(14),
+    fontWeight: '300',
+    color: COLORS.defaultGray,
   },
-  orText: {
-    ...FONTS.body5,
-    fontSize : 13,
-    color: COLORS.lightGray,
-    fontWeight : "400",
-    lineHeight : 13,
-    flex :1,
-  },
-  loginServiceContainer : {
-    flex : 20
-  },
-
 });
 
 export default FormSection;

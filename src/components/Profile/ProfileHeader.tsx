@@ -1,55 +1,60 @@
-import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native'
-import React from 'react'
-import { COLORS, FONTS, Icons, Images, SIZES } from '../../constants'
+import {View, Text, StyleSheet, ImageBackground, Pressable} from 'react-native';
+import React from 'react';
+import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
+import {responsiveWidth} from '../../utils/responsive';
 
 const ProfileHeader = () => {
   return (
-        <ImageBackground source={Images.yellowBackground} resizeMode='cover' style = {styles.container} >
-            <View style={styles.innerContainer}>
-                <Pressable style={({ pressed }) => [
-                { opacity: pressed ? 0.8 : 1  } ,styles.pressableContainer
-                ]}>
-                <Icons.backArrow style = {styles.icon}/>
-                </Pressable>
-                <Text style  = {styles.text}>Détails de profile</Text>
-            </View>
-        </ImageBackground>
-  )
-}
-
+    <ImageBackground
+      source={Images.yellowBackground}
+      resizeMode="cover"
+      style={styles.container}>
+      <View style={styles.innerContainer}>
+        <Pressable
+          style={({pressed}) => [
+            {opacity: pressed ? 0.8 : 1},
+            styles.pressableContainer,
+          ]}>
+          <Icons.backArrow style={styles.icon} />
+        </Pressable>
+        <Text style={styles.text}>Détails de profile</Text>
+      </View>
+    </ImageBackground>
+  );
+};
 
 const styles = StyleSheet.create({
-    container : {
-        height :" 100%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
+  container: {
+    height: ' 100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
-    innerContainer: {
-        width: "90%",
-        justifyContent :"center",
-        height :"29%",
-      },
-      pressableContainer: {
-        height :"100%",
-        flex : 1
-      },
-      icon: {
-        position: "absolute",
-     },
-      textConatiner  :{
-      backgroundColor: COLORS.white,
-      justifyContent: "center",
-        height : "100%",
-        borderRadius: SIZES.fullRadius,
-      
-      },
-      text: {
-        ...FONTS.h3,
-        fontSize : 25,
-        color : COLORS.white,
-        textAlign : "center",
-      },
-})
+  innerContainer: {
+    width: '90%',
+    justifyContent: 'center',
+    height: '29%',
+  },
+  pressableContainer: {
+    height: '100%',
+    flex: 1,
+  },
+  icon: {
+    position: 'absolute',
+  },
+  textConatiner: {
+    backgroundColor: COLORS.white,
+    justifyContent: 'center',
+    height: '100%',
+    borderRadius: SIZES.fullRadius,
+  },
+  text: {
+    ...FONTS.h3,
+    fontSize: responsiveWidth(23),
+    color: COLORS.white,
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+});
 
-export default ProfileHeader
+export default ProfileHeader;

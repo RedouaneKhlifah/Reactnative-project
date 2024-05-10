@@ -1,48 +1,72 @@
-import { View, StyleSheet, Text, Pressable } from 'react-native';
-import React from 'react';
-import { COLORS, FONTS, Icons, SIZES } from '../../constants';
+import {View, StyleSheet, Text, Pressable} from 'react-native';
+import React, {FC} from 'react';
+import {COLORS, FONTS, Icons, SIZES} from '../../constants';
+import {responsiveWidth} from '../../utils/responsive';
 
-const NavbarHeader = () => {
+interface NavbarHeaderProp {
+  title: string;
+  buttonTitle?: string;
+}
+
+const NavbarHeader: FC<NavbarHeaderProp> = ({title, buttonTitle}) => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Pressable style={({ pressed }) => [
-          { opacity: pressed ? 0.8 : 1 },
-        ]}>
+        <Pressable style={({pressed}) => [{opacity: pressed ? 0.8 : 1}]}>
           <Icons.backArrow />
         </Pressable>
-        <Pressable style={({ pressed }) => [
-          { opacity: pressed ? 0.8 : 1 } , styles.textConatiner] }>
-          <Text style={styles.text}>Passer</Text>
-        </Pressable>
+        <Text
+          style={{
+            ...FONTS.h3,
+            fontSize: responsiveWidth(26),
+            fontWeight: '400',
+            color: COLORS.white,
+            position: 'absolute',
+            left: '50%',
+            transform: [{translateX: -40}],
+          }}>
+          {title}
+        </Text>
+
+        {buttonTitle && (
+          <Pressable
+            style={({pressed}) => [
+              {opacity: pressed ? 0.8 : 1},
+              styles.textConatiner,
+              {opacity: 1},
+            ]}
+            onPress={() => console.log('test')}>
+            <Text style={styles.text}>{buttonTitle}</Text>
+          </Pressable>
+        )}
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   innerContainer: {
-    width: "90%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height :"29%"
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: responsiveWidth(33),
+    position: 'relative',
   },
-  textConatiner  :{
-  backgroundColor: COLORS.white,
-  justifyContent: "center",
-    height : "100%",
+  textConatiner: {
+    backgroundColor: COLORS.white,
+    justifyContent: 'center',
+    height: '100%',
     borderRadius: SIZES.fullRadius,
-  
   },
   text: {
     color: COLORS.black,
-    paddingHorizontal: 18,
+    paddingHorizontal: responsiveWidth(18),
     ...FONTS.h3,
   },
 });
