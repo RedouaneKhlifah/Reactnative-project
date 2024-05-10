@@ -2,16 +2,27 @@ import {StyleSheet, Animated, View, Dimensions} from 'react-native';
 import React, {FC} from 'react';
 import {offreImagesDataT} from './OfferImages';
 import {SIZES} from '../../../constants';
+import {IoffreImagesData} from './OffreCard';
 
 const {width} = Dimensions.get('screen');
 
 interface IPagination {
-  data: offreImagesDataT[];
+  data: IoffreImagesData[];
   scrollX: Animated.Value;
   index: number;
+  unactiveDotWidth: number;
+  activeDotWidtch: number;
+  activeDotBg: string;
 }
 
-const ImagesPagination: FC<IPagination> = ({data, scrollX, index}) => {
+const ImagesPagination: FC<IPagination> = ({
+  data,
+  scrollX,
+  index,
+  unactiveDotWidth,
+  activeDotWidtch,
+  activeDotBg,
+}) => {
   return (
     <View style={styles.container}>
       {data.map((_, idx) => {
@@ -19,7 +30,7 @@ const ImagesPagination: FC<IPagination> = ({data, scrollX, index}) => {
 
         const dotWidth = scrollX.interpolate({
           inputRange,
-          outputRange: [8, 14, 8],
+          outputRange: [unactiveDotWidth, activeDotWidtch, unactiveDotWidth],
           extrapolate: 'clamp',
         });
 
@@ -40,8 +51,13 @@ const ImagesPagination: FC<IPagination> = ({data, scrollX, index}) => {
             key={idx.toString()}
             style={[
               styles.dot,
+              {width: unactiveDotWidth, height: unactiveDotWidth},
               {width: dotWidth, backgroundColor},
-              idx === index && styles.dotActive,
+              idx === index && {
+                backgroundColor: activeDotBg,
+                width: activeDotWidtch,
+                height: activeDotWidtch,
+              },
             ]}
           />
         );
@@ -62,15 +78,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dot: {
-    width: 8,
-    height: 8,
     borderRadius: SIZES.fullRadius,
     marginHorizontal: 3,
     backgroundColor: 'red',
-  },
-  dotActive: {
-    backgroundColor: '#AB82FF',
-    width: 12,
-    height: 12,
   },
 });

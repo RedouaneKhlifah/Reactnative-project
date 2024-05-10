@@ -1,45 +1,57 @@
-import { View, Text ,TextInput, StyleSheet } from 'react-native'
-import React from 'react'
-import { COLORS, FONTS, SIZES } from '../../constants';
-
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  StyleProp,
+  TextStyle,
+} from 'react-native';
+import React from 'react';
+import {COLORS, FONTS, SIZES} from '../../constants';
+import {responsiveHeight} from '../../utils/responsive';
 
 interface props {
-    labelText :string,
-    placeholder : string,
+  labelText: string;
+  placeholder: string;
+  labelStyle: StyleProp<TextStyle>;
+  inputStyle: StyleProp<TextStyle>;
 }
 
-const InputWithLabel:React.FC<props> = ({labelText,placeholder}) => {
-
-  
+const InputWithLabel: React.FC<props> = ({
+  labelText,
+  placeholder,
+  labelStyle,
+  inputStyle,
+}) => {
   return (
-    <View style  = {styles.container}>
-      <Text style  = {styles.label}>{labelText}</Text>
-      <TextInput style={styles.input} placeholder={`${placeholder}`}  placeholderTextColor={COLORS.grayHalfOpacity} />
+    <View style={styles.container}>
+      <Text style={[styles.label, labelStyle]}>{labelText}</Text>
+      <TextInput
+        style={[styles.input, inputStyle]}
+        placeholder={`${placeholder}`}
+        placeholderTextColor={COLORS.grayHalfOpacity}
+      />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-    container : {
+  container: {
+    width: '100%',
+  },
+  label: {
+    ...FONTS.body3,
+    fontWeight: '400',
+    paddingLeft: 3,
+    transform: [{translateY: 5}],
+  },
+  input: {
+    fontWeight: '300',
+    borderBottomWidth: 2,
+    borderColor: COLORS.superLightGray,
+    paddingVertical: 0,
+    paddingLeft: 3,
+  },
+});
 
-    },
-    label  : {
-        color :COLORS.darkGray,
-        ...FONTS.body3,
-        fontSize: 12,
-        fontWeight : "400",
-        paddingLeft : 3
-    },
-    input: {
-      ...FONTS.body4,
-      fontSize: 13,
-      fontWeight : "400",
-      color : COLORS.black,
-      borderBottomWidth : 1,
-      borderColor : COLORS.superLightGray,
-      paddingVertical: 0, 
-      paddingLeft : 3,
-    },
-  });
-  
-export default InputWithLabel
+export default InputWithLabel;

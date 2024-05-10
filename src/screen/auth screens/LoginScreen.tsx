@@ -1,22 +1,27 @@
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import React from 'react';
-import {Images, appTheme} from '../constants';
-import NavbarHeader from '../components/welcom/NavbarHeader';
-import LoginSection from '../components/welcom/LoginSection';
+import {Images, appTheme} from '../../constants';
+import NavbarHeader from '../../components/welcom/NavbarHeader';
+import AuthSection from '../../components/welcom/AuthSection';
 
 const {SIZES} = appTheme;
 
-const WelcomeScreen = () => {
+export enum AuthType {
+  SignUp = 'SIGN_UP',
+  Login = 'LOGIN',
+}
+
+const LoginScreen = () => {
   return (
     <ImageBackground
       source={Images.yellowBackground}
       resizeMode="cover"
       style={{height: SIZES.height, backgroundColor: 'red'}}>
       <View style={styles.navbarContainer}>
-        <NavbarHeader />
+        <NavbarHeader title="Login" />
       </View>
       <View style={styles.LoginSectionContainer}>
-        <LoginSection />
+        <AuthSection type={AuthType.Login} />
       </View>
     </ImageBackground>
   );
@@ -31,4 +36,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomeScreen;
+export default LoginScreen;

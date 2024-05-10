@@ -9,14 +9,19 @@ import Facbook from '../assets/icons/Facebook.svg';
 import Email from '../assets/icons/Email.svg';
 import pen from '../assets/icons/edit.svg';
 import search from '../assets/icons/search.svg';
-import verify from '../assets/icons/verify.svg';
+import verify from '../assets/icons/verify.png';
 import star from '../assets/icons/star.svg';
-import facbookLink from '../assets/icons/FacebookLink.svg';
-import instagramLink from '../assets/icons/InstagramLink.svg';
-import TikTok from '../assets/icons/TikTok.svg';
-import gougleMap from '../assets/icons/GoogleMaps.svg';
-import offreMail from '../assets/icons/offreMail.svg';
-import save from '../assets/icons/save.svg';
+import facbookLink from '../assets/icons/Facebook.png';
+import instagramLink from '../assets/icons/Instagramlink.png';
+import Tiktok from '../assets/icons/Tiktok.png';
+import gougleMap from '../assets/icons/GoogleMaps.png';
+import trier from '../assets/icons/trier.svg';
+import filter from '../assets/icons/filter.svg';
+import youtub from '../assets/icons/youtub.png';
+import arrowDown from '../assets/icons/arrowDown.png';
+import mail from '../assets/icons/mail.png';
+import save from '../assets/icons/save.png';
+import backArrow2 from '../assets/icons/backArrow2.svg';
 
 export const Icons = {
   morroco,
@@ -24,6 +29,7 @@ export const Icons = {
   plus,
   arrow,
   backArrow,
+  backArrow2,
   Google,
   Apple,
   Facbook,
@@ -34,8 +40,12 @@ export const Icons = {
   star,
   facbookLink,
   instagramLink,
-  TikTok,
+  Tiktok,
   gougleMap,
-  offreMail,
+  youtub,
+  trier,
+  filter,
+  arrowDown,
+  mail,
   save,
 };

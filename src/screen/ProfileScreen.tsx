@@ -2,7 +2,7 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import React from 'react';
 import {Images, appTheme} from '../constants';
 import NavbarHeader from '../components/welcom/NavbarHeader';
-import LoginSection from '../components/welcom/LoginSection';
+import LoginSection from '../components/welcom/AuthSection';
 import ProfileBody from '../components/Profile/ProfileBody';
 import ProfileHeader from '../components/Profile/ProfileHeader';
 

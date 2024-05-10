@@ -33,7 +33,7 @@ const data = {
 
 const Home = () => {
   return (
-    <ScrollView>
+    <ScrollView style={{marginBottom: 20}}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.topSection}
@@ -48,7 +48,12 @@ const Home = () => {
         </ImageBackground>
       </View>
 
-      <View style={{width: '90%', alignSelf: 'center', marginVertical: 10}}>
+      <View
+        style={{
+          width: '90%',
+          alignSelf: 'center',
+          marginBottom: 10,
+        }}>
         <View style={{width: '75%'}}>
           <Text style={{fontSize: 22, color: COLORS.black, fontWeight: '400'}}>
             Tu pourrais aimer!
@@ -63,15 +68,25 @@ const Home = () => {
         <OffreCard data={data} />
       </View>
 
-      <View style={{width: '90%', alignSelf: 'center', marginVertical: 10}}>
+      <View
+        style={{
+          width: '90%',
+          alignSelf: 'center',
+          marginVertical: 10,
+          marginTop: 30,
+        }}>
         <View style={{width: '75%'}}>
           <Text style={{fontSize: 22, color: COLORS.black, fontWeight: '400'}}>
-            Tu pourrais aimer!
+            Être inspiré!
           </Text>
           <Text style={{fontSize: 12, color: COLORS.black, fontWeight: '300'}}>
-            Découvrez les entreprises qui peuvent être les meilleures pour vous.
+            Découvrez les entreprises populaires pour la collaboration.
           </Text>
         </View>
+      </View>
+
+      <View style={{alignItems: 'center'}}>
+        <OffreCard data={data} />
       </View>
     </ScrollView>
   );
@@ -79,7 +94,7 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: SIZES.height * 0.6,
+    height: SIZES.height * 0.65,
   },
   topSection: {
     flex: 1,

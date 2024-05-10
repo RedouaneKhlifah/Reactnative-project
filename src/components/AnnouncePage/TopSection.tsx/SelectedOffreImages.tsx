@@ -7,9 +7,10 @@ import {
   Image,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
-import ImagesPagination from './ImagesPagination';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
-import {IoffreImagesData} from './OffreCard';
+import {IoffreImagesData} from '../../Home/BottomSection/OffreCard';
+import ImagesPagination from '../../Home/BottomSection/ImagesPagination';
+import {COLORS, SIZES} from '../../../constants';
 
 export interface offreImagesDataT {
   id: number;
@@ -19,13 +20,13 @@ export interface offreImagesDataT {
 const ImageComponent: FC<{data: IoffreImagesData}> = ({data}) => {
   return (
     <Image
-      style={{width: responsiveWidth(298), height: responsiveHeight(400)}}
+      style={{width: responsiveWidth(390), height: SIZES.height * 0.39}}
       source={data.image}
     />
   );
 };
 
-const OfferImages: FC<{data: IoffreImagesData[]}> = ({data}) => {
+const SelectedOffreImages: FC<{data: IoffreImagesData[]}> = ({data}) => {
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -81,11 +82,11 @@ const OfferImages: FC<{data: IoffreImagesData[]}> = ({data}) => {
         scrollX={scrollX}
         index={index}
         unactiveDotWidth={8}
-        activeDotWidtch={14}
-        activeDotBg="#AB82FF"
+        activeDotWidtch={8}
+        activeDotBg={COLORS.yellow}
       />
     </View>
   );
 };
 
-export default OfferImages;
+export default SelectedOffreImages;

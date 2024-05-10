@@ -9,6 +9,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import {Images} from '../constants';
+import {responsiveHeight} from '../utils/responsive';
 
 const {COLORS, SIZES, FONTS} = appTheme;
 function RoleSelectionScreen() {
@@ -18,30 +19,8 @@ function RoleSelectionScreen() {
       resizeMode="cover"
       style={style.background}>
       <View style={style.container}>
-        <View style={style.inContainer}>
-          <Text
-            style={{
-              ...FONTS.semiLargeTitle,
-              textAlign: 'center',
-              paddingBottom: 20,
-              color: COLORS.black,
-            }}>
-            Vous êtes ?
-          </Text>
-          <View style={style.OptionBox}>
-            <OptionBox />
-            <Text
-              style={{
-                ...FONTS.semiLargeTitle,
-                textAlign: 'center',
-                color: COLORS.black,
-              }}>
-              Ou
-            </Text>
-
-            <OptionBox />
-          </View>
-        </View>
+        <OptionBox />
+        <OptionBox />
       </View>
     </ImageBackground>
   );
@@ -49,22 +28,16 @@ function RoleSelectionScreen() {
 
 const style = StyleSheet.create({
   container: {
-    marginTop: SIZES.height * 0.01,
     alignItems: 'center',
-    height: SIZES.height,
+    justifyContent: 'space-between',
+    alignSelf: 'center',
+    height: responsiveHeight(643),
   },
+
   background: {
     width: SIZES.width,
     height: SIZES.height,
-  },
-  inContainer: {
-    height: SIZES.height * 0.9,
-    width: '70%',
     justifyContent: 'center',
-  },
-  OptionBox: {
-    flex: 1,
-    gap: 5,
   },
 });
 export default RoleSelectionScreen;
