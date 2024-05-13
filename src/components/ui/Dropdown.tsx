@@ -2,54 +2,74 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FONTS, SIZES,COLORS } from '../../constants';
+import RnIcon from './RnIcon';
 
 const Dropdown: React.FC<DropDownProps> = ({
-        open,
         value,
         items,
-        setOpen,
         setValue,
         setItems,
         placeholder,
         label,
         disableBorderRadius = false,
-        maxHeight = 150,
+        maxHeight = 120,
         dropDownDirection = 'TOP',
         placeholderStyle,
-        labelTextStyle
+        labelTextStyle,
+        multiple = false,
+        onSelectItem
     }) => {
-  return (
+      const [isOpen, setIsOpen] = useState(false);
+      return (
     <View>
       <Text style={styles.label}>{label}</Text>
       <DropDownPicker
+            multiple={multiple}
             placeholder={placeholder}
-            open={open}
+            open={isOpen}
             value={value}
             items={items}
-            setOpen={setOpen}
+            setOpen={setIsOpen}
             setValue={setValue}
             setItems={setItems}
             disableBorderRadius={true}
-            maxHeight={120}
-            dropDownDirection="AUTO"
+            maxHeight={maxHeight}
+            dropDownDirection={dropDownDirection}
+            onSelectItem={onSelectItem}
             listMode="SCROLLVIEW"
+            mode="BADGE"
             placeholderStyle={{
                 color: '#d3d3d3',
                 paddingHorizontal:0,
                 ...FONTS.body5
             }}
+            arrowIconStyle={{
+              width:16,
+              height:16
+            }}
             style={{
                 minHeight:30,
                 borderWidth:0,
-                borderBottomWidth:2,
+                borderBottomWidth:1.8,
                 borderRadius:0,
-                borderColor:'#d3d3d3',
+                borderColor:'#ebebeb',
                 backgroundColor:'#fafafa',
                 paddingVertical:0,
             }}
             dropDownContainerStyle={{
-                backgroundColor: "#dfdfdf"
+                backgroundColor: "white",
+                borderWidth:0,
+                borderRadius:0,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 4.84,
+                elevation: 1.5
             }}
+            labelStyle={labelTextStyle}
         />
     </View>
   )
@@ -65,5 +85,7 @@ const styles = StyleSheet.create({
       ...FONTS.body3,
       fontSize: 16,
       fontWeight : "400",
+      margin:0,
+      paddingVertical:0
     },
   });

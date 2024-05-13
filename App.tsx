@@ -20,7 +20,7 @@ import ContactMail from './src/screen/mail/ContactMail';
 function App(): React.JSX.Element {
   return (
     <SafeAreaView>
-        <ContactMail/>
+        <ProfileScreen/>
     </SafeAreaView>
   );
 }

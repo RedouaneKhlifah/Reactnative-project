@@ -11,7 +11,7 @@ import {COLORS, FONTS, SIZES} from '../../constants';
 import {responsiveHeight} from '../../utils/responsive';
 
 interface props {
-  labelText: string;
+  labelText?: string;
   placeholder: string;
   labelStyle: StyleProp<TextStyle>;
   inputStyle: StyleProp<TextStyle>;
