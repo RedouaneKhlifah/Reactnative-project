@@ -60,12 +60,6 @@ const ProfileBody = () => {
     <View style={styles.linkContainer}>
       <View style={{display:'flex', flexDirection:'row',alignItems:'center', gap:5}}>
         <RnIcon name={item} size={20}/>
-        {/* <InputWithLabel
-          placeholder={`${item} link`}
-          labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
-          inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
-          
-        /> */}
         <TextInput
           style={styles.input}
           placeholder={`${item} link`}

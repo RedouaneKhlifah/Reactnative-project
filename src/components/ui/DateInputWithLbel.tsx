@@ -13,11 +13,12 @@ import {Icons} from '../../constants';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 
 interface Props {
-  labelText: string;
+  labelText?: string;
   placeholder: string;
+  mode?:"date"|"time"|"datetime"
 }
 
-const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder}) => {
+const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datetime'}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
@@ -58,7 +59,7 @@ const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder}) => {
         modal
         open={open}
         date={date}
-        mode="date"
+        mode={mode}
         onDateChange={selectedDate => {
           setDate(selectedDate);
           setValue(formatDate(selectedDate));
