@@ -6,8 +6,10 @@ import {
   ImageBackground,
   Image,
   Pressable,
+  FlatList,
+  TextInput
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import InputWithLabel from '../ui/InputWithLabel';
 import DatePicker from 'react-native-date-picker';
@@ -15,8 +17,62 @@ import DateInputWithLbel from '../ui/DateInputWithLbel';
 import Selector from '../ui/Selector';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import Button from '../ui/Button';
+import Dropdown from '../ui/Dropdown';
+import RnIcon from '../ui/RnIcon';
+
+type SocialMedia = 'facebook' | 'instagram' | 'youtube'; // Define the types of social media
 
 const ProfileBody = () => {
+  const [selectedGender, setSelectedGender] = useState(null);  
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+  const [links, setLinks] = useState<{ [key in SocialMedia]?: string }>({});
+
+  const [selectedIntrests, setSelectedIntrests] = useState(null);
+  const [genders, setgenders] = useState([
+    {label: 'Male', value: 'Male'},
+    {label: 'female', value: 'banana'}
+  ]);
+  const [socialLinks, setSocialLinks] = useState([
+    {
+      label: 'facebook', 
+      value: 'facebook',
+      icon: () => <RnIcon name='facebook'/>
+    },
+    
+    {
+      label: 'instagram', 
+      value: 'instagram',      
+      icon: () => <RnIcon name='instagram'/>
+    },
+    {
+      label: 'youtube', 
+      value: 'youtube',      
+      icon: () => <RnIcon name='youtube'/>
+    },
+  ]);
+  const [interets, setInterets] = useState([
+    {label: 'Restaurants', value: 'Restaurants'},
+    {label: 'Hotels', value: 'Hotels'},
+    {label: 'Shops', value: 'Shops'}
+  ]);
+
+  const renderItem = ({ item }: { item: SocialMedia }) => (
+    <View style={styles.linkContainer}>
+      <View style={{display:'flex', flexDirection:'row',alignItems:'center', gap:5}}>
+        <RnIcon name={item} size={20}/>
+        <TextInput
+          style={styles.input}
+          placeholder={`${item} link`}
+          value={links[item] || ''}
+          onChangeText={(text:string) => handleLinkChange(item, text)}
+        />
+      </View>
+    </View>
+  );
+  const handleLinkChange = (socialMedia: SocialMedia, link: string) => {
+    setLinks({ ...links, [socialMedia]: link });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.ImageContainer}>
@@ -50,9 +106,40 @@ const ProfileBody = () => {
           placeholder="jj/mm/aaaa"
         />
         <View style={styles.SelectorsContainer}>
-          <Selector labelText={'Sexe'} />
-          <Selector labelText={'Social Media'} />
-          <Selector labelText={'Interets'} />
+          <Dropdown
+            label='Sexe'
+            placeholder='male'
+            value={selectedGender}
+            items={genders}
+            setValue={setSelectedGender}
+            setItems={setgenders}
+            maxHeight={120}
+          />
+          <Dropdown
+            label='Social Media'
+            placeholder='facebook ...'
+            value={selectedSocialMedia}
+            items={socialLinks}
+            setValue={setSelectedSocialMedia}
+            setItems={setSocialLinks}
+            maxHeight={120}
+            multiple={true}
+          />
+          <FlatList
+            data={selectedSocialMedia}
+            renderItem={renderItem}
+            keyExtractor={(item) => item}
+          />
+          <Dropdown
+            label='Interets'
+            placeholder='Interets'
+            value={selectedIntrests}
+            items={interets}
+            setValue={setSelectedIntrests}
+            setItems={setInterets}
+            maxHeight={120}
+            multiple={true}
+          />       
         </View>
 
         <Button
@@ -114,6 +201,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.white,
     fontWeight: '400',
+  },
+  linkContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  input: {
+    width:"100%",
+    fontWeight: '300',
+    borderBottomWidth: 2,
+    borderColor: COLORS.superLightGray,
+    paddingVertical: 0,
+    paddingLeft: 3,
+  },
+  label: {
+    marginRight: 10,
+    minWidth:70
   },
 });
 

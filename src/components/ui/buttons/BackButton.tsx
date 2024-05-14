@@ -4,12 +4,13 @@ import RnIcon from '../RnIcon'
 import { COLORS } from '../../../constants';
 
 interface BackProps {
-    onPress: () => void;
+    onPress?: () => void;
+    bgColor:string
   }
 
-const BackButton : React.FC<BackProps> = ({onPress}) => {
+const BackButton : React.FC<BackProps> = ({onPress,bgColor=COLORS.white}) => {
   return (    
-  <TouchableOpacity onPress={onPress} style={styles.container}>
+  <TouchableOpacity onPress={onPress} style={[styles.container,{backgroundColor:bgColor}]}>
     <RnIcon name='chevron-left' size={24}/>
   </TouchableOpacity>
   )
@@ -19,7 +20,6 @@ const styles = StyleSheet.create({
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:COLORS.white,
         width:33,
         height:33,
         paddingVertical:8,

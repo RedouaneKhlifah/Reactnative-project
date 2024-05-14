@@ -22,7 +22,7 @@ export default function Profile() {
       <ImageBackground style={styles.topSection} source={Images.milfayaBg}>
       <View style={styles.overlay}>
           <View style={styles.options}>
-            <BackButton onPress={handlePress}/>
+            <BackButton onPress={handlePress} bgColor='white'/>
             <SecondaryButton onPress={handlePress} title="aide" />
           </View>
           <View style={styles.profileOptions}>

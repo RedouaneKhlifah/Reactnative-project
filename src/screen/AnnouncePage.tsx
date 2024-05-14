@@ -1,7 +1,7 @@
 import {View, Text, ScrollView, Pressable} from 'react-native';
 import React from 'react';
 import {IoffreImagesData} from '../components/Home/BottomSection/OffreCard';
-import {COLORS, Icons, Images} from '../constants';
+import {COLORS, Icons, Images, SIZES} from '../constants';
 import SelectedOffreImages from '../components/AnnouncePage/TopSection.tsx/SelectedOffreImages';
 import SelectedOffreInfoSection from '../components/AnnouncePage/TopSection.tsx/SelectedOffreInfoSection';
 import OffreInfo from '../components/Home/BottomSection/OffreInfo';
@@ -9,6 +9,10 @@ import LineBetween from '../components/Home/BottomSection/LineBetween';
 import SocialMediaLinks from '../components/Home/BottomSection/SocialMediaLinks';
 import OffreRating from '../components/Home/BottomSection/OffreRating';
 import SimilairesOffre from '../components/AnnouncePage/buttomSection/SimilairesOffre';
+import DateInputWithLbel from '../components/ui/DateInputWithLbel';
+import InputWithLabel from '../components/ui/InputWithLabel';
+import { responsiveWidth } from '../utils/responsive';
+import SecondaryButton from '../components/ui/buttons/SecondaryButton';
 
 export const offreImagesData: IoffreImagesData[] = [
   {
@@ -25,6 +29,10 @@ export const offreImagesData: IoffreImagesData[] = [
   },
 ];
 const AnnouncePage = () => {
+  const handleSubmit = ()=>{
+    console.log("here");
+    
+  }
   return (
     <ScrollView>
       <View style={{marginBottom: 22}}>
@@ -76,6 +84,41 @@ const AnnouncePage = () => {
               score de 4, vous pouvez donc choisir ce lieu pour y passer du bon
               temps.
             </Text>
+          </View>
+          <View>
+            <Text
+                style={{fontSize: 18, fontWeight: '400', color: COLORS.black}}>
+                Formulaire:
+            </Text>
+            <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+              <View style={{width:SIZES.width * 0.4}}>
+                <DateInputWithLbel
+                  placeholder="Date"
+                  mode='date'
+                />
+              </View>
+              <View style={{width:SIZES.width * 0.4 }}>
+                <DateInputWithLbel
+                  placeholder="Heure"
+                  mode='time'
+                />
+              </View>
+            </View>
+              <InputWithLabel
+                placeholder="Nombre de personnes"
+                labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+                inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+                keyboardType='numeric'
+              />
+              <InputWithLabel
+                labelText="Message"
+                multiline={true}
+                numberOfLines={10}
+                placeholder="Ecrivez votre message ici …"
+                labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+                inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+              />
+              <SecondaryButton title='Envoyer' onPress={handleSubmit} buttonStyle={{backgroundColor:"#AB82FF",marginVertical:15}} textStyle={{color:'white'}}/>
           </View>
 
           <View>

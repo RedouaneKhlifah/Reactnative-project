@@ -1,35 +1,42 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  StyleProp,
-  TextStyle,
-} from 'react-native';
 import React from 'react';
-import {COLORS, FONTS, SIZES} from '../../constants';
-import {responsiveHeight} from '../../utils/responsive';
+import { View, Text, TextInput, StyleSheet, StyleProp, TextStyle, TextInputProps } from 'react-native';
+import { COLORS, FONTS } from '../../constants';
+import { responsiveHeight } from '../../utils/responsive';
 
-interface props {
-  labelText: string;
+interface Props extends TextInputProps {
+  labelText?: string;
   placeholder: string;
-  labelStyle: StyleProp<TextStyle>;
-  inputStyle: StyleProp<TextStyle>;
+  labelStyle?: StyleProp<TextStyle>;
+  inputStyle?: StyleProp<TextStyle>;
+  multiline?: boolean;
+  numberOfLines?: number;
+
 }
 
-const InputWithLabel: React.FC<props> = ({
+const InputWithLabel: React.FC<Props> = ({
   labelText,
   placeholder,
   labelStyle,
   inputStyle,
+  keyboardType = "default",
+  multiline = false,
+  numberOfLines = 4, // Adjust this as needed
+  ...props
 }) => {
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, labelStyle]}>{labelText}</Text>
+      {
+        labelText &&
+        <Text style={[styles.label, labelStyle]}>{labelText}</Text>
+      }
       <TextInput
-        style={[styles.input, inputStyle]}
+        style={[styles.input, inputStyle, multiline && styles.textArea]}
         placeholder={`${placeholder}`}
         placeholderTextColor={COLORS.grayHalfOpacity}
+        keyboardType={keyboardType}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
+        {...props}
       />
     </View>
   );
@@ -43,7 +50,7 @@ const styles = StyleSheet.create({
     ...FONTS.body3,
     fontWeight: '400',
     paddingLeft: 3,
-    transform: [{translateY: 5}],
+    transform: [{translateY: 15}],
   },
   input: {
     fontWeight: '300',
@@ -51,6 +58,11 @@ const styles = StyleSheet.create({
     borderColor: COLORS.superLightGray,
     paddingVertical: 0,
     paddingLeft: 3,
+  },
+  textArea: {
+    paddingTop:responsiveHeight(25),
+    height: responsiveHeight(150), // Adjust this as needed
+    textAlignVertical: 'top', // Start input from top
   },
 });
 
