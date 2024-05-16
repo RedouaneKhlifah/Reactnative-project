@@ -16,11 +16,13 @@ import SignupScreen from './src/screen/auth screens/SignupScreen';
 import Profile from "./src/screen/influencer/Profile";
 import RedirectMail from './src/screen/auth screens/RedirectMail';
 import ContactMail from './src/screen/mail/ContactMail';
+import BusinessDetails from './src/screen/buisness/BusinessDetails';
+import BusinessProfile from './src/screen/buisness/BusinessProfile';
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaView>
-        <AnnouncePage/>
+      <BusinessDetails/>
     </SafeAreaView>
   );
 }

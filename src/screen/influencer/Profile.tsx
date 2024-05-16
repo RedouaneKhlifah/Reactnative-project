@@ -1,16 +1,16 @@
 import {StyleSheet, ImageBackground, View, Text, Image} from 'react-native';
 import React from 'react';
-import {COLORS, FONTS, Images, SIZES} from '../../constants';
+import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
 
 export default function Profile() {
   const items = [
-    {icon:'link-variant',title:'Détails de profile'},
-    {icon:'share-variant',title:'Parrainez et gagnez'},
-    {icon:'share-variant',title:'Évaluez nous'},
-    {icon:'logout',title:'Se déconnecter'}
+    {icon:Icons.socialLinks,title:'Détails de profile',iconHeight:13},
+    {icon:Icons.share,title:'Parrainez et gagnez'},
+    {icon:Icons.starIcon,title:'Évaluez nous'},
+    {icon:Icons.signout,title:'Se déconnecter'}
   ]
   const handlePress = () => {
     // Your onPress logic here
@@ -42,8 +42,11 @@ export default function Profile() {
                   return(
                     <View style={styles.link} key={index}>
                       <View style={styles.userInfo}>
-                        <RnIcon name={item.icon} color='black' size={24}/>
-                        <Text style={{fontFamily:FONTS.body3.fontFamily,fontSize:SIZES.radius}}>{item.title}</Text>
+                      <Image
+                        source={item.icon}
+                        style={{width: 24, height: item.iconHeight ?? 24}}
+                      />                        
+                      <Text style={{fontFamily:FONTS.body3.fontFamily,fontSize:SIZES.radius}}>{item.title}</Text>
 
                       </View>
                       <RnIcon name='chevron-right' color='black' size={16}/>

@@ -35,7 +35,7 @@ const InputWithLabel: React.FC<Props> = ({
         placeholderTextColor={COLORS.grayHalfOpacity}
         keyboardType={keyboardType}
         multiline={multiline}
-        numberOfLines={numberOfLines}
+        numberOfLines={multiline ? numberOfLines : undefined}
         {...props}
       />
     </View>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     ...FONTS.body3,
     fontWeight: '400',
     paddingLeft: 3,
-    transform: [{translateY: 15}],
+    transform: [{translateY: 5}],
   },
   input: {
     fontWeight: '300',

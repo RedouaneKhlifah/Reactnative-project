@@ -5,13 +5,14 @@ import { COLORS } from '../../../constants';
 
 interface BackProps {
     onPress?: () => void;
-    bgColor:string
+    bgColor?:string;
+    color?:string
   }
 
-const BackButton : React.FC<BackProps> = ({onPress,bgColor=COLORS.white}) => {
+const BackButton : React.FC<BackProps> = ({onPress,bgColor=COLORS.white,color=COLORS.black}) => {
   return (    
   <TouchableOpacity onPress={onPress} style={[styles.container,{backgroundColor:bgColor}]}>
-    <RnIcon name='chevron-left' size={24}/>
+    <RnIcon name='chevron-left' size={24} color={color}/>
   </TouchableOpacity>
   )
 }
