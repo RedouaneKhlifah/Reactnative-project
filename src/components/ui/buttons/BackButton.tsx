@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import RnIcon from '../RnIcon'
 import { COLORS } from '../../../constants';
+import { useNavigationContext } from '../../../store/NavigationContext';
 
 interface BackProps {
     onPress?: () => void;
@@ -10,8 +11,14 @@ interface BackProps {
   }
 
 const BackButton : React.FC<BackProps> = ({onPress,bgColor=COLORS.white,color=COLORS.black}) => {
+  const { goBack } = useNavigationContext();
+  const setBackRoute =()=>{
+    console.log("heeeee");
+    
+    goBack()
+  }
   return (    
-  <TouchableOpacity onPress={onPress} style={[styles.container,{backgroundColor:bgColor}]}>
+  <TouchableOpacity onPress={setBackRoute} style={[styles.container,{backgroundColor:bgColor}]}>
     <RnIcon name='chevron-left' size={24} color={color}/>
   </TouchableOpacity>
   )
