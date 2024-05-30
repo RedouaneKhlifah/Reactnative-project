@@ -17,6 +17,7 @@ import OffreCard, {
 } from '../components/Home/BottomSection/OffreCard';
 import {responsiveWidth} from '../utils/responsive';
 import OffreCards from '../components/Home/BottomSection/OffreCards';
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export const dummyData = {
   title: 'Example Title',
@@ -30,8 +31,11 @@ const data = {
   offreImages: offreImagesData,
   offreData: dummyData,
 };
+type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
-const Home = () => {
+const Home: React.FC<Props> = ({ navigation: { navigate } }) => {
+  console.log(navigate);
+  
   return (
     <ScrollView style={{marginBottom: 20}}>
       <View style={styles.container}>
