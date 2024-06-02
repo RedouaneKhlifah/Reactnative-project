@@ -23,7 +23,7 @@ enum AuthType {
 const FormSection: FC<FormSectionProp> = ({type}) => {
   const apiClientWithoutToken = axiosConfig(false);
   const navigationRef = useNavigationRef();
-  const { isAuthenticated,checkAuthentication } = useAuth();
+  const { isAuthenticated,checkAuthentication,handleAuth } = useAuth();
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -48,34 +48,51 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
       navigationRef.current?.navigate('Login')
     }
   }
-  const handleAuth = async ()=>{
-    let url = ''
+  const onSubmit  = async()=>{
     if (type === AuthType.Login) {
-      url = '/login'
+      const result = await handleAuth('/login', formData);
+      if (result.success === false) {
+        setErrors(result.data.error)
+      }
+      
     }else{
-      url = '/register-influencer-user'
+      const result = await handleAuth('/register-influencer-user',formData)
+      if (result.success === false) {
+        setErrors(result.data?.errors)
+      }
+
     }
-    console.log(url);
-    
-    try {
-      const response = await apiClientWithoutToken.post(url, formData);
-      if (response.data) {
-        console.log(response.data);
-        
-        await AsyncStorage.setItem('data',JSON.stringify(response.data))
-        checkAuthentication()
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-        
-        // Axios error handling
-        if (error.response) {
-          setErrors(error.response.data);
-        }
-      }
   }
-}
+
+//   const handleAuth = async ()=>{
+//     let url = ''
+//     if (type === AuthType.Login) {
+//       url = '/login'
+//     }else{
+//       url = '/register-influencer-user'
+//     }
+//     console.log(url);
+    
+//     try {
+//       const response = await apiClientWithoutToken.post(url, formData);
+//       if (response.data) {
+//         console.log(response.data);
+              
+//         await AsyncStorage.setItem('data',JSON.stringify(response.data))
+//         checkAuthentication()
+//         navigationRef.current?.navigate('RedirectMail')
+//       }
+//     } catch (error) {
+//       if (axios.isAxiosError(error)) {
+//         console.log(error);
+        
+//         // Axios error handling
+//         if (error.response) {
+//           setErrors(error.response.data);
+//         }
+//       }
+//   }
+// }
   return (
     <View style={styles.formSection}>
       <InputWithLabel
@@ -131,7 +148,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
             paddingVertical: responsiveHeight(10),
           }}
           title="Continuer"
-          onPress={handleAuth}
+          onPress={onSubmit}
         />
         <View
           style={{

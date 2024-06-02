@@ -17,17 +17,15 @@ import BusinessProfile from './../screen/buisness/BusinessProfile';
 export const NavigationRoute: React.FC = () => {
     const { isAuthenticated } = useAuth();
     const Stack = createNativeStackNavigator<RootStackParamList>();
-
     return (
         <Stack.Navigator initialRouteName={isAuthenticated ? "RedirectMail" : "Login"}>
         {isAuthenticated ? (
             <>
-            <Stack.Screen name="ContactMail" component={ContactMail} options={{ headerShown: false }} />
-            <Stack.Screen name="RedirectMail" component={RedirectMail} options={{ headerShown: false }} />
+                <Stack.Screen name="RedirectMail" component={RedirectMail} options={{ headerShown: false }} />
+                <Stack.Screen name="ContactMail" component={ContactMail} options={{ headerShown: false }} />
             </>
         ) : (
             <>
-                <Stack.Screen name="AnnouncePage" component={AnnouncePage} options={{ headerShown: false }} />
                 <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
                 <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}/>
             </>
