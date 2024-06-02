@@ -5,6 +5,7 @@ import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
 import BackButton from '../../components/ui/buttons/BackButton';
 import { useAuth } from '../../store/AuthContext'; // Adjust the import path
 import axiosConfig from '../../api/axios.config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RedirectMail = () => {
   const { userData } = useAuth();
@@ -17,7 +18,7 @@ const RedirectMail = () => {
     console.log(isConfirmed);
     
     if (!isConfirmed) {
-      // sendEmailVerification()
+      sendEmailVerification()
     }
   }, [isConfirmed])
 
@@ -72,6 +73,13 @@ const RedirectMail = () => {
     try {
       const response = await apiClientWithToken.post(`/mail/confirm-mail/${code}`);
       console.log('Code submitted successfully:', response.data);
+      const storedData = await AsyncStorage.getItem('data');
+      if (storedData) {
+        const data = JSON.parse(storedData);
+        data.user.confirmed = true;
+        await AsyncStorage.setItem('data', JSON.stringify(data));
+        checkConfirmation()
+      }
     } catch (error) {
       console.error('Error submitting code:', error);
     }

@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const token = data && JSON.parse(data).token
       if (token) {
-        setIsAuthenticated(false);
+        setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
       }

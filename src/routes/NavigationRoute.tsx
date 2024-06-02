@@ -14,22 +14,48 @@ import ContactMail from './../screen/mail/ContactMail';
 import BusinessDetails from './../screen/buisness/BusinessDetails';
 import BusinessProfile from './../screen/buisness/BusinessProfile';
 
-export const NavigationRoute: React.FC = () => {
-    const { isAuthenticated } = useAuth();
-    const Stack = createNativeStackNavigator<RootStackParamList>();
-    return (
-        <Stack.Navigator initialRouteName={isAuthenticated ? "RedirectMail" : "Login"}>
-        {isAuthenticated ? (
-            <>
-                <Stack.Screen name="RedirectMail" component={RedirectMail} options={{ headerShown: false }} />
-                <Stack.Screen name="ContactMail" component={ContactMail} options={{ headerShown: false }} />
-            </>
-        ) : (
-            <>
-                <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
-                <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}/>
-            </>
-        )}
-        </Stack.Navigator>
-    );
+type ScreenMapItems = {
+    name: keyof RootStackParamList;
+    component: React.ComponentType<any>;  // Adjust this type based on your actual component type
   };
+export const NavigationRoute: React.FC = () => {
+    const { isAuthenticated,isConfirmed } = useAuth();
+    const Stack = createNativeStackNavigator<RootStackParamList>();
+    const unloggedScreens:ScreenMapItems[] = [
+        {name:'RoleSelectionScreen',component:RoleSelectionScreen},
+        {name:'Login',component:LoginScreen},
+        {name:'Signup',component:SignupScreen},
+    ]
+    return (
+    <Stack.Navigator>
+        {!isAuthenticated ? (
+        <>
+        {
+            unloggedScreens?.map((screen,index)=>{
+                return (
+                <Stack.Screen
+                    key={index}
+                    name={screen.name}
+                    component={screen.component}
+                    options={{ headerShown: false }}
+                />
+                )
+            })
+        }
+        </>
+        ) : isConfirmed ? (
+        <Stack.Screen
+            name="ContactMail"
+            component={ContactMail}
+            options={{ headerShown: false }}
+        />
+        ) : (
+        <Stack.Screen
+            name="RedirectMail"
+            component={RedirectMail}
+            options={{ headerShown: false }}
+        />
+        )}
+    </Stack.Navigator>
+    );
+};

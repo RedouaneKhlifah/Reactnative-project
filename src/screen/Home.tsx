@@ -33,8 +33,7 @@ const data = {
 };
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
-const Home: React.FC<Props> = ({ navigation: { navigate } }) => {
-  console.log(navigate);
+const Home: React.FC<Props> = () => {
   
   return (
     <ScrollView style={{marginBottom: 20}}>

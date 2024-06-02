@@ -3,13 +3,24 @@ import React, {useState} from 'react';
 import {appTheme} from '../../constants';
 import {Images} from '../../constants';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
+import { useNavigationRef } from '../../store/NavigationContext';
 
 const {COLORS, FONTS, SIZES} = appTheme;
 
 const OptionBox = () => {
+  const navigationRef = useNavigationRef();
+
+  const navigateLogin = ()=>{
+    console.log("hereee");
+    
+    navigationRef.current?.navigate('Login')
+  }
   return (
     <Pressable
-      style={({pressed}) => [style.container, {opacity: pressed ? 0.8 : 1}]}>
+      style={({pressed}) => [style.container, {opacity: pressed ? 0.8 : 1}]}
+      onPress={navigateLogin}
+    >
+        
       <Image style={style.image} source={Images.testImage} resizeMode="cover" />
       <View style={style.textContainer}>
         <Text style={{...FONTS.h2, color: COLORS.black}}>Influencer</Text>
