@@ -20,6 +20,7 @@ export const COLORS = {
   purple: '#AB82FF',
   superLightGray: '#EBEBEB',
   lightOrnange: '#FFF6E5',
+  mov:'#AB82FF'
 };
 
 export const SIZES = {

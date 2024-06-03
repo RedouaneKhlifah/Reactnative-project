@@ -22,6 +22,13 @@ import arrowDown from '../assets/icons/arrowDown.png';
 import mail from '../assets/icons/mail.png';
 import save from '../assets/icons/save.png';
 import backArrow2 from '../assets/icons/backArrow2.svg';
+import plusPn from '../assets/icons/plus.png';
+import location from '../assets/icons/location.png'
+import Lock from '../assets/icons/Lock.png'
+import share from '../assets/icons/share.png'
+import starIcon from '../assets/icons/starIcon.png'
+import signout from '../assets/icons/signout.png'
+import socialLinks from '../assets/icons/socialMediaLinks.png'
 
 export const Icons = {
   morroco,
@@ -48,4 +55,11 @@ export const Icons = {
   arrowDown,
   mail,
   save,
+  plusPn,
+  location,
+  Lock,
+  share,
+  starIcon,
+  signout,
+  socialLinks
 };
