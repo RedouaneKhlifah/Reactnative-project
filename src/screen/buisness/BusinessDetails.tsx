@@ -6,8 +6,10 @@ import BackButton from '../../components/ui/buttons/BackButton';
 import InputWithLabel from '../../components/ui/InputWithLabel';
 import Dropdown from '../../components/ui/Dropdown';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
+import { useNavigationRef } from '../../store/NavigationContext';
 
 const BusinessDetails = () => {
+  const navigationRef = useNavigationRef();
   const [selectedType, setSelectedType] = useState(null);  
   const [types, setTypes] = useState([
     {label: 'Type1', value: 'Type1'},
@@ -16,6 +18,7 @@ const BusinessDetails = () => {
 
   const saveChanges = ()=>{
 
+    navigationRef.current?.navigate('BusinessProfile')
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>

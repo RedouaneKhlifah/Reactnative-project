@@ -2,6 +2,7 @@ import {View, Text, StyleSheet, ImageBackground, Pressable} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import {responsiveWidth} from '../../utils/responsive';
+import BackButton from '../ui/buttons/BackButton';
 
 const ProfileHeader = () => {
   return (
@@ -10,13 +11,7 @@ const ProfileHeader = () => {
       resizeMode="cover"
       style={styles.container}>
       <View style={styles.innerContainer}>
-        <Pressable
-          style={({pressed}) => [
-            {opacity: pressed ? 0.8 : 1},
-            styles.pressableContainer,
-          ]}>
-          <Icons.backArrow style={styles.icon} />
-        </Pressable>
+        <BackButton/>
         <Text style={styles.text}>Détails de profile</Text>
       </View>
     </ImageBackground>

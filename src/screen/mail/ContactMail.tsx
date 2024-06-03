@@ -3,8 +3,11 @@ import {View, Text, StyleSheet, ImageBackground, Pressable} from 'react-native';
 import {FONTS, Images, SIZES} from '../../constants';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import RnIcon from '../../components/ui/RnIcon';
+import { useNavigationRef } from '../../store/NavigationContext';
 
 const ContactMail = () => {
+  const navigationRef = useNavigationRef();
+
   return (
     <ImageBackground source={Images.imgwithGrad} style={styles.background}>
       <View style={styles.container}>
@@ -47,7 +50,7 @@ const ContactMail = () => {
             paddingVertical: responsiveHeight(15),
           }}>
           <Text style={styles.Text3}>Vous n'avez pas encore de compte?</Text>
-          <Pressable>
+          <Pressable onPress={()=>{navigationRef.current?.navigate('Signup')}}>
             <Text style={styles.log}>S'inscrire</Text>
           </Pressable>
         </View>

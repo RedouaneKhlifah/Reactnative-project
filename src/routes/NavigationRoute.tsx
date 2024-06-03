@@ -20,11 +20,22 @@ type ScreenMapItems = {
   };
 export const NavigationRoute: React.FC = () => {
     const { isAuthenticated,isConfirmed } = useAuth();
+    
     const Stack = createNativeStackNavigator<RootStackParamList>();
     const unloggedScreens:ScreenMapItems[] = [
-        {name:'RoleSelectionScreen',component:RoleSelectionScreen},
+        {name:'ContactMail',component:ContactMail},
         {name:'Login',component:LoginScreen},
         {name:'Signup',component:SignupScreen},
+    ]
+    const loggedScreen :ScreenMapItems[] = [
+        {name:'RoleSelectionScreen',component:RoleSelectionScreen},
+        {name:'Profile',component:Profile},
+        {name:'ProfileScreen',component:ProfileScreen},
+        {name:'AnnouncePage',component:AnnouncePage},
+        {name:'CategorySection',component:CategorySection},
+        {name:'Home',component:Home},
+        {name:'BusinessDetails',component:BusinessDetails},
+        {name:'BusinessProfile',component:BusinessProfile},
     ]
     return (
     <Stack.Navigator>
@@ -44,11 +55,20 @@ export const NavigationRoute: React.FC = () => {
         }
         </>
         ) : isConfirmed ? (
-        <Stack.Screen
-            name="ContactMail"
-            component={ContactMail}
-            options={{ headerShown: false }}
-        />
+            <>
+            {
+                loggedScreen?.map((screen,index)=>{
+                    return (
+                    <Stack.Screen
+                        key={index}
+                        name={screen.name}
+                        component={screen.component}
+                        options={{ headerShown: false }}
+                    />
+                    )
+                })
+            }
+            </>
         ) : (
         <Stack.Screen
             name="RedirectMail"

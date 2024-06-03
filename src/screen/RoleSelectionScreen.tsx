@@ -13,14 +13,16 @@ import {responsiveHeight} from '../utils/responsive';
 
 const {COLORS, SIZES, FONTS} = appTheme;
 function RoleSelectionScreen() {
+  const influencerBox = {id:'',title:"Influencer",action:"Obtenez des collaborations Win Win",urlPic:"",link:"Profile" as keyof RootStackParamList }
+  const entrepriseBox = {id:'',title:"Propriétaire d'entreprise",action:"Créez votre compte Win Win",urlPic:"",link:"BusinessProfile" as keyof RootStackParamList }
   return (
     <ImageBackground
       source={Images.whiteBackground}
       resizeMode="cover"
       style={style.background}>
       <View style={style.container}>
-        <OptionBox />
-        <OptionBox />
+        <OptionBox {...influencerBox}/>
+        <OptionBox {...entrepriseBox} />
       </View>
     </ImageBackground>
   );
