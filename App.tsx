@@ -5,45 +5,27 @@ declare const global: {
 global.ignoreDatePickerWarning = true;
 
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import RoleSelectionScreen from './src/screen/RoleSelectionScreen';
-import ProfileScreen from './src/screen/ProfileScreen';
-import Home from './src/screen/Home';
-import CategorySection from './src/screen/CategorySection';
-import AnnouncePage from './src/screen/AnnouncePage';
-import LoginScreen from './src/screen/auth screens/LoginScreen';
-import SignupScreen from './src/screen/auth screens/SignupScreen';
-import Profile from "./src/screen/influencer/Profile";
-import RedirectMail from './src/screen/auth screens/RedirectMail';
-import ContactMail from './src/screen/mail/ContactMail';
-import BusinessDetails from './src/screen/buisness/BusinessDetails';
-import BusinessProfile from './src/screen/buisness/BusinessProfile';
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthProvider} from './src/store/AuthContext';
+import { NavigationProvider, useNavigationRef  } from './src/store/NavigationContext';
+import {NavigationRoute} from './src/routes/NavigationRoute'
+const App: React.FC = ()=> {
 
-function App(): React.JSX.Element {
   return (
-    <SafeAreaView>
-      <BusinessDetails/>
-    </SafeAreaView>
+    <AuthProvider>
+      <NavigationProvider>
+        <NavigationWrapper />
+      </NavigationProvider>
+    </AuthProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
+const NavigationWrapper: React.FC = () => {
+  const navigationRef = useNavigationRef();  
+  return (
+    <NavigationContainer ref={navigationRef}>
+      <NavigationRoute />
+    </NavigationContainer>
+  );
+};
 export default App;

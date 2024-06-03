@@ -10,6 +10,7 @@ interface Props extends TextInputProps {
   inputStyle?: StyleProp<TextStyle>;
   multiline?: boolean;
   numberOfLines?: number;
+  secureTextEntry?: boolean;
 
 }
 
@@ -20,6 +21,7 @@ const InputWithLabel: React.FC<Props> = ({
   inputStyle,
   keyboardType = "default",
   multiline = false,
+  secureTextEntry = false,
   numberOfLines = 4, // Adjust this as needed
   ...props
 }) => {
@@ -36,6 +38,7 @@ const InputWithLabel: React.FC<Props> = ({
         keyboardType={keyboardType}
         multiline={multiline}
         numberOfLines={multiline ? numberOfLines : undefined}
+        secureTextEntry={secureTextEntry}
         {...props}
       />
     </View>

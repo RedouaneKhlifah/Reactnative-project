@@ -2,6 +2,7 @@ import {View, StyleSheet, Text, Pressable} from 'react-native';
 import React, {FC} from 'react';
 import {COLORS, FONTS, Icons, SIZES} from '../../constants';
 import {responsiveWidth} from '../../utils/responsive';
+import BackButton from '../ui/buttons/BackButton';
 
 interface NavbarHeaderProp {
   title: string;
@@ -12,9 +13,10 @@ const NavbarHeader: FC<NavbarHeaderProp> = ({title, buttonTitle}) => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Pressable style={({pressed}) => [{opacity: pressed ? 0.8 : 1}]}>
+        {/* <Pressable style={({pressed}) => [{opacity: pressed ? 0.8 : 1}]}>
           <Icons.backArrow />
-        </Pressable>
+        </Pressable> */}
+        <BackButton/>
         <Text
           style={{
             ...FONTS.h3,
