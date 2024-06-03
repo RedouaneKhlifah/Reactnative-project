@@ -18,12 +18,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isConfirmed, setIsConfirmed] = useState< boolean>(false);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserAuth | null>(null);
   const apiClientWithoutToken = axiosConfig(false);
 
   
-  useEffect(() => {
+  useEffect(() => {    
     checkAuthentication();
     checkConfirmation();
   }, []);
@@ -46,17 +46,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const checkConfirmation = async () => {
     try {
       const data = await AsyncStorage.getItem('data');
-      setIsConfirmed(data && JSON.parse(data).user.confirmed)
-      setUserData(data && JSON.parse(data).user)
+      if (data) {
+        setIsConfirmed(JSON.parse(data).user.confirmed)
+        setUserData(JSON.parse(data).user)
+      }
     } catch (error) {
       console.error('Failed to check Confirmation', error);
       setIsConfirmed(false);
     }
   };
 
-  const handleAuth = async (url:string, formData:object) => {  
-    console.log(url);
-    
+  const handleAuth = async (url:string, formData:object) => {      
     try {
         const response = await apiClientWithoutToken.post(url, formData);
         if (response.data) {

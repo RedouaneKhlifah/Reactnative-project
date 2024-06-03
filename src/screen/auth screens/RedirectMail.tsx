@@ -13,10 +13,8 @@ const RedirectMail = () => {
   const [code, setCode] = useState(['', '', '', '']);
   const apiClientWithToken = axiosConfig(true);
   const { isConfirmed,checkConfirmation } = useAuth();
-
-  useEffect(() => {
-    console.log(isConfirmed);
-    
+  
+  useEffect(() => {    
     if (!isConfirmed) {
       sendEmailVerification()
     }

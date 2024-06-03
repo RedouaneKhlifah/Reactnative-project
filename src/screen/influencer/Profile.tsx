@@ -1,13 +1,16 @@
-import {StyleSheet, ImageBackground, View, Text, Image} from 'react-native';
+import {StyleSheet, ImageBackground, View, Text, Image, Pressable} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
+import { useNavigationRef } from '../../store/NavigationContext';
 
 export default function Profile() {
+  const navigationRef = useNavigationRef();
+
   const items = [
-    {icon:Icons.socialLinks,title:'Détails de profile',iconHeight:13},
+    {icon:Icons.socialLinks,title:'Détails de profile',iconHeight:13,link:'ProfileScreen' as keyof RootStackParamList},
     {icon:Icons.share,title:'Parrainez et gagnez'},
     {icon:Icons.starIcon,title:'Évaluez nous'},
     {icon:Icons.signout,title:'Se déconnecter'}
@@ -40,7 +43,7 @@ export default function Profile() {
               {
                 items.map((item,index)=>{
                   return(
-                    <View style={styles.link} key={index}>
+                    <Pressable style={styles.link} key={index} onPress={()=>{item.link && navigationRef.current?.navigate(item.link)}}>
                       <View style={styles.userInfo}>
                       <Image
                         source={item.icon}
@@ -50,7 +53,7 @@ export default function Profile() {
 
                       </View>
                       <RnIcon name='chevron-right' color='black' size={16}/>
-                    </View>
+                    </Pressable>
                   )
                 })
               }

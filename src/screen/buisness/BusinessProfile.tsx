@@ -1,14 +1,17 @@
-import {StyleSheet, ImageBackground, View, Text, Image} from 'react-native';
+import {StyleSheet, ImageBackground, View, Text, Image, Pressable} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
 import {responsiveWidth} from '../../utils/responsive';
+import { useNavigationRef } from '../../store/NavigationContext';
 
 const BusinessProfile = () => {
+  const navigationRef = useNavigationRef();
+
   const items = [
-    {icon: Icons.location, title: "Détails de l'entreprise"},
+    {icon: Icons.location, title: "Détails de l'entreprise",link:'BusinessDetails' as keyof RootStackParamList},
     {icon: Icons.Lock, title: 'Sécurité du compte'},
     {icon: Icons.share, title: 'Parrainez et gagnez'},
     {icon: Icons.starIcon, title: 'Évaluez nous'},
@@ -51,7 +54,7 @@ const BusinessProfile = () => {
             <View style={styles.linksHolder}>
               {items.map((item, index) => {
                 return (
-                  <View style={styles.link} key={index}>
+                  <Pressable style={styles.link} key={index} onPress={()=>{item.link && navigationRef.current?.navigate(item.link)}}>
                     <View style={styles.userInfo}>
                       <Image
                         source={item.icon}
@@ -66,7 +69,7 @@ const BusinessProfile = () => {
                       </Text>
                     </View>
                     <RnIcon name="chevron-right" color="black" size={16} />
-                  </View>
+                  </Pressable>
                 );
               })}
             </View>

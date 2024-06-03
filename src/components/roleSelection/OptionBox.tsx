@@ -6,26 +6,27 @@ import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import { useNavigationRef } from '../../store/NavigationContext';
 
 const {COLORS, FONTS, SIZES} = appTheme;
+type boxProps = {
+  id:string,
+  title:string,
+  action:string,
+  urlPic:string,
+  link:keyof RootStackParamList;
+}
 
-const OptionBox = () => {
+const OptionBox:React.FC<boxProps>= ({ id, title, action, urlPic, link }) => {
   const navigationRef = useNavigationRef();
-
-  const navigateLogin = ()=>{
-    console.log("hereee");
-    
-    navigationRef.current?.navigate('Login')
-  }
   return (
     <Pressable
       style={({pressed}) => [style.container, {opacity: pressed ? 0.8 : 1}]}
-      onPress={navigateLogin}
+      onPress={()=>{navigationRef.current?.navigate(link)}}
     >
         
       <Image style={style.image} source={Images.testImage} resizeMode="cover" />
       <View style={style.textContainer}>
-        <Text style={{...FONTS.h2, color: COLORS.black}}>Influencer</Text>
+        <Text style={{...FONTS.h2, color: COLORS.black}}>{title} </Text>
         <Text style={{...FONTS.h4, color: COLORS.black}}>
-          Obtenez des collaborations Win Win
+          {action}
         </Text>
       </View>
     </Pressable>
