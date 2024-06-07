@@ -8,10 +8,9 @@ import InputWithLabel from '../ui/InputWithLabel';
 import Button from '../ui/Button';
 import {AuthSectionProp} from './AuthSection';
 import { useNavigationRef } from '../../store/NavigationContext';
-import axiosConfig from '../../api/axios.config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../store/AuthContext'; // Adjust the import path
-import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 interface FormSectionProp extends AuthSectionProp {}
 
@@ -21,9 +20,9 @@ enum AuthType {
 }
 
 const FormSection: FC<FormSectionProp> = ({type}) => {
-  const apiClientWithoutToken = axiosConfig(false);
   const navigationRef = useNavigationRef();
-  const { isAuthenticated,checkAuthentication,handleAuth } = useAuth();
+  const {handleAuth } = useAuth();
+  const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -48,51 +47,34 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
       navigationRef.current?.navigate('Login')
     }
   }
-  const onSubmit  = async()=>{
-    if (type === AuthType.Login) {
-      const result = await handleAuth('/login', formData);
-      if (result.success === false) {
-        setErrors(result.data.error)
+  const onSubmit = async () => {
+    setLoading(true);
+    try {
+      let result;
+      if (type === AuthType.Login) {
+        result = await handleAuth('/login', formData);
+      } else {
+        const url = await AsyncStorage.getItem('registerUrl');
+        if (url) {
+          result = await handleAuth(url, formData);
+        } else {
+          throw new Error('Registration URL not found');
+        }
       }
-      
-    }else{
-      const result = await handleAuth('/register-influencer-user',formData)
-      if (result.success === false) {
-        setErrors(result.data?.errors)
+  
+      if (result.success === false) {        
+        setErrors(result.data?.errors || result.data?.error);
       }
-
+      if (result.success) {
+        result?.data.user.confirmed ==='true' ? navigationRef.current?.navigate('Home') : navigationRef.current?.navigate('RedirectMail')     
+      }
+    } catch (error) {
+      console.error('Error during authentication:', error);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-//   const handleAuth = async ()=>{
-//     let url = ''
-//     if (type === AuthType.Login) {
-//       url = '/login'
-//     }else{
-//       url = '/register-influencer-user'
-//     }
-//     console.log(url);
-    
-//     try {
-//       const response = await apiClientWithoutToken.post(url, formData);
-//       if (response.data) {
-//         console.log(response.data);
-              
-//         await AsyncStorage.setItem('data',JSON.stringify(response.data))
-//         checkAuthentication()
-//         navigationRef.current?.navigate('RedirectMail')
-//       }
-//     } catch (error) {
-//       if (axios.isAxiosError(error)) {
-//         console.log(error);
-        
-//         // Axios error handling
-//         if (error.response) {
-//           setErrors(error.response.data);
-//         }
-//       }
-//   }
-// }
   return (
     <View style={styles.formSection}>
       <InputWithLabel
@@ -117,6 +99,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         secureTextEntry= {true}
       />
       {errors.password && <Text style={styles.errorText}>{errors.password[0]}</Text>}
+      {typeof(errors) === 'string' && <Text style={styles.errorText}>{errors}</Text>}
 
       {type == AuthType.SignUp && (
         <>
@@ -135,7 +118,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
       )}
 
       <View style={{width: '100%'}}>
-        <Button
+        {/* <Button
           buttonStyle={{
             backgroundColor: COLORS.purple,
             borderRadius: 54,
@@ -149,6 +132,18 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
           }}
           title="Continuer"
           onPress={onSubmit}
+        /> */}
+        <PrimaryButton 
+          title='Continuer' 
+          loading={loading}
+          textStyle={{color:'white'}} 
+          buttonStyle={{            
+            backgroundColor: COLORS.purple,
+            borderRadius: 54,
+            width: '100%',
+            elevation:0
+          }}
+          onPress={onSubmit} 
         />
         <View
           style={{

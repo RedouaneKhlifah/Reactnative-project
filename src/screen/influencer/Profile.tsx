@@ -5,20 +5,31 @@ import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
 import { useNavigationRef } from '../../store/NavigationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../store/AuthContext';
 
 export default function Profile() {
   const navigationRef = useNavigationRef();
+  const { handleLogout} = useAuth();
 
   const items = [
     {icon:Icons.socialLinks,title:'Détails de profile',iconHeight:13,link:'ProfileScreen' as keyof RootStackParamList},
     {icon:Icons.share,title:'Parrainez et gagnez'},
     {icon:Icons.starIcon,title:'Évaluez nous'},
-    {icon:Icons.signout,title:'Se déconnecter'}
+    {icon:Icons.signout,title:'Se déconnecter',link:"Logout"}
   ]
   const handlePress = () => {
     // Your onPress logic here
     console.log('Button pressed!');
   };
+  const handleAction = async(action:string|undefined) =>{
+    if (action ==="Logout") {
+      handleLogout() 
+    }else{
+      const link =  action as keyof RootStackParamList 
+      navigationRef.current?.navigate(link)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -43,7 +54,7 @@ export default function Profile() {
               {
                 items.map((item,index)=>{
                   return(
-                    <Pressable style={styles.link} key={index} onPress={()=>{item.link && navigationRef.current?.navigate(item.link)}}>
+                    <Pressable style={styles.link} key={index} onPress={()=>handleAction(item.link)}>
                       <View style={styles.userInfo}>
                       <Image
                         source={item.icon}

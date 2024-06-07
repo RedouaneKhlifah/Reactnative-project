@@ -29,7 +29,7 @@ const ContactMail = () => {
           </Text>
         </View>
         <View style={{width: SIZES.width, alignItems: 'center'}}>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={()=>{navigationRef.current?.navigate('RoleSelectionScreen')}}>
             <View style={{paddingLeft: 22}}>
               <RnIcon name="email" size={21} color="white" />
             </View>
