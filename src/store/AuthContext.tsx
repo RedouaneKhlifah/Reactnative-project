@@ -13,7 +13,7 @@ type AuthContextType = {
   userData :UserAuth | null;
   handleAuth :(url:string,data:object)=> Promise<any>
 
-  handleLogout :()=> Promise<void>
+  handleLogout :()=> Promise<{ success: boolean, message: string}|undefined >
 
 };
 
@@ -65,7 +65,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const response = await apiClientWithoutToken.post(url, formData);
         if (response.data) {
             await AsyncStorage.setItem('data', JSON.stringify(response.data));
-            setIsAuthenticated(true);
             checkConfirmation()
             return { success: true, data: response.data };
         }
@@ -80,18 +79,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 };
 
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('data');
+  const handleLogout = async ():Promise<{ success: boolean; message: string }|undefined >=> {
     try {
         const response = await apiClientWithToken.post('/logout');
-        checkAuthentication();
-
+        
         if (response.data) {
+          await AsyncStorage.removeItem('data')
+          checkAuthentication()
           setIsAuthenticated(false);
-          console.log('Logout successful');
+          return { success: true, message: response.data.message };
         }
     } catch (error) {
-        console.log('Error logging out:', error);
+      if (axios.isAxiosError(error)){
+        console.log('Error logging out:', error.request);
+        console.log('Error logging out:', error.response);
+        return { success: false, message: 'unexpected error'};
+      } 
+      else {
+        return { success: false, message: 'unexpected error' };
+      }
     }
   };
 

@@ -24,7 +24,17 @@ export default function Profile() {
   };
   const handleAction = async(action:string|undefined) =>{
     if (action ==="Logout") {
-      handleLogout() 
+      try {
+        const result = await handleLogout()
+        if (result?.success === true) {
+          console.log(result.message);
+          navigationRef.current?.navigate('Login')
+          }else{
+          console.log(result?.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }else{
       const link =  action as keyof RootStackParamList 
       navigationRef.current?.navigate(link)

@@ -16,9 +16,7 @@ import OffreCard, {
   offreImagesData,
 } from '../components/Home/BottomSection/OffreCard';
 import {responsiveWidth} from '../utils/responsive';
-import OffreCards from '../components/Home/BottomSection/OffreCards';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import PrimaryButton from '../components/ui/buttons/PrimaryButton';
 import { useAuth } from '../store/AuthContext';
 
 export const dummyData = {
@@ -34,10 +32,8 @@ const data = {
   offreImages: offreImagesData,
   offreData: dummyData,
 };
-type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const Home: React.FC = () => {
-  const { handleLogout} = useAuth();
 
   return (
     <ScrollView style={{marginBottom: 20}}>
@@ -65,7 +61,6 @@ const Home: React.FC = () => {
           <Text style={{fontSize: 22, color: COLORS.black, fontWeight: '400'}}>
             Tu pourrais aimer!
           </Text>
-          <PrimaryButton onPress={handleLogout} title='meeww'/>
           <Text style={{fontSize: 12, color: COLORS.black, fontWeight: '300'}}>
             Découvrez les entreprises qui peuvent être les meilleures pour vous.
           </Text>

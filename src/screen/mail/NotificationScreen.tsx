@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { COLORS, Images } from '../../constants'; // Adjust the import path as necessary
 import BackButton from '../../components/ui/buttons/BackButton';
@@ -6,13 +6,33 @@ import { responsiveWidth } from '../../utils/responsive';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import { useNavigationRef } from '../../store/NavigationContext';
+import { useAuth } from '../../store/AuthContext';
 
 const NotificationScreen = () => {
     const navigationRef = useNavigationRef();
+    const { handleLogout } = useAuth();
+    const [loading, setLoading] = useState(false)
     const navigate = ()=>{
         console.log("meeew");
         
         navigationRef.current?.navigate('Home')
+    }
+    const submit = async()=>{
+      setLoading(true)
+      try {
+        const result = await handleLogout()
+        if (result?.success === true) {
+          console.log(result.message);
+          navigationRef.current?.navigate('Login')
+          }else{
+          console.log(result?.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      finally{
+        setLoading(false);
+      }
     }
   return (
     <SafeAreaView style={styles.container}>
@@ -40,7 +60,8 @@ const NotificationScreen = () => {
 
             <PrimaryButton 
                 title='Sign Out' 
-                onPress={()=>{}} 
+                onPress={submit} 
+                loading={loading}
                 buttonStyle={{width:'80%',elevation:0,borderRadius:54,marginTop:10 ,backgroundColor:'#FAD9323B'}}
             />
       </View>
