@@ -1,12 +1,15 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, TextStyle, ViewStyle } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text ,ActivityIndicator } from 'react-native';
 import { COLORS } from '../../../constants'
 
-
-const PrimaryButton: React.FC<ButtonProps> = ({ onPress, title, buttonStyle, textStyle }) => {
+const PrimaryButton: React.FC<ButtonProps> = ({ onPress, title, buttonStyle, textStyle, loading }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.button, buttonStyle]}>
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+    <TouchableOpacity onPress={onPress} style={[styles.button, buttonStyle]} disabled={loading}>
+      {loading ? (
+        <ActivityIndicator size="small" color={textStyle? textStyle.color : "black"} />
+      ) : (
+        <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 };

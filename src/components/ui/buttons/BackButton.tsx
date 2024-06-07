@@ -12,9 +12,7 @@ interface BackProps {
 
 const BackButton : React.FC<BackProps> = ({onPress,bgColor=COLORS.white,color=COLORS.black}) => {
   const { goBack } = useNavigationContext();
-  const setBackRoute =()=>{
-    console.log("heeeee");
-    
+  const setBackRoute =()=>{    
     goBack()
   }
   return (    
