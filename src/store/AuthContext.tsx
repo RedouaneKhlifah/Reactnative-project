@@ -12,6 +12,9 @@ type AuthContextType = {
 
   userData :UserAuth | null;
   handleAuth :(url:string,data:object)=> Promise<any>
+
+  handleLogout :()=> Promise<{ success: boolean, message: string}|undefined >
+
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,6 +24,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserAuth | null>(null);
   const apiClientWithoutToken = axiosConfig(false);
+  const apiClientWithToken = axiosConfig(true);
 
   
   useEffect(() => {    
@@ -29,7 +33,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const checkAuthentication = async () => {
-    const data = await AsyncStorage.getItem('data');
+    const data = await AsyncStorage.getItem('data');    
     try {
       const token = data && JSON.parse(data).token
       if (token) {
@@ -61,7 +65,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const response = await apiClientWithoutToken.post(url, formData);
         if (response.data) {
             await AsyncStorage.setItem('data', JSON.stringify(response.data));
-            checkAuthentication();
+            checkConfirmation()
             return { success: true, data: response.data };
         }
     } catch (error) {
@@ -75,9 +79,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 };
 
+  const handleLogout = async ():Promise<{ success: boolean; message: string }|undefined >=> {
+    try {
+        const response = await apiClientWithToken.post('/logout');
+        
+        if (response.data) {
+          await AsyncStorage.removeItem('data')
+          checkAuthentication()
+          setIsAuthenticated(false);
+          return { success: true, message: response.data.message };
+        }
+    } catch (error) {
+      if (axios.isAxiosError(error)){
+        console.log('Error logging out:', error.request);
+        console.log('Error logging out:', error.response);
+        return { success: false, message: 'unexpected error'};
+      } 
+      else {
+        return { success: false, message: 'unexpected error' };
+      }
+    }
+  };
+
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated,checkAuthentication,isConfirmed,checkConfirmation,userData,handleAuth }}>
+    <AuthContext.Provider value={{ isAuthenticated,checkAuthentication,isConfirmed,checkConfirmation,userData,handleAuth,handleLogout }}>
       {children}
     </AuthContext.Provider>
   );

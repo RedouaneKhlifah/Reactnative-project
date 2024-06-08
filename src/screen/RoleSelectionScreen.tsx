@@ -2,19 +2,17 @@ import React from 'react';
 import OptionBox from '../components/roleSelection/OptionBox';
 import {appTheme} from '../constants';
 import {
-  ScrollView,
   StyleSheet,
-  Text,
   View,
   ImageBackground,
 } from 'react-native';
 import {Images} from '../constants';
 import {responsiveHeight} from '../utils/responsive';
 
-const {COLORS, SIZES, FONTS} = appTheme;
+const {SIZES} = appTheme;
 function RoleSelectionScreen() {
-  const influencerBox = {id:'',title:"Influencer",action:"Obtenez des collaborations Win Win",urlPic:"",link:"Profile" as keyof RootStackParamList }
-  const entrepriseBox = {id:'',title:"Propriétaire d'entreprise",action:"Créez votre compte Win Win",urlPic:"",link:"BusinessProfile" as keyof RootStackParamList }
+  const influencerBox = {id:'',title:"Influencer",action:"Obtenez des collaborations Win Win",urlPic:"",link:"Login" as keyof RootStackParamList }
+  const entrepriseBox = {id:'',title:"Propriétaire d'entreprise",action:"Créez votre compte Win Win",urlPic:"",link:"Signup" as keyof RootStackParamList }
   return (
     <ImageBackground
       source={Images.whiteBackground}

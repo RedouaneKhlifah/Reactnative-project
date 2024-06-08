@@ -16,6 +16,7 @@ import milfayaBg from "../assets/images/milfaya.png"
 import milfayaPro from "../assets/images/milfayaProfile.png"
 import mails from "../assets/images/mails.png"
 import imgwithGrad from "../assets/images/imgwithGrad.png"
+import requestVerification from "../assets/images/requestVerification.png"
 
 // Define image sources with ImageSourcePropType
 const influencer = influencerSource as ImageSourcePropType;
@@ -46,5 +47,6 @@ export const Images = {
   milfayaBg,
   milfayaPro,
   mails,
-  imgwithGrad
+  imgwithGrad,
+  requestVerification
 };

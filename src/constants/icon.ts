@@ -29,6 +29,7 @@ import share from '../assets/icons/share.png'
 import starIcon from '../assets/icons/starIcon.png'
 import signout from '../assets/icons/signout.png'
 import socialLinks from '../assets/icons/socialMediaLinks.png'
+import profile from '../assets/icons/profile.png'
 
 export const Icons = {
   morroco,
@@ -61,5 +62,6 @@ export const Icons = {
   share,
   starIcon,
   signout,
-  socialLinks
+  socialLinks,
+  profile
 };

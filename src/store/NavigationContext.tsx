@@ -13,27 +13,6 @@ const NavigationContext = createContext<NavigationContextType | undefined>(undef
 
 export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>(null);
-  // const [currentRoute, setCurrentRoute] = useState<string | undefined>(undefined);
-  // const [previousRoute, setPreviousRoute] = useState<string | undefined>(undefined);
-
-  // useEffect(() => {
-  //   setCurrentRoute(navigationRef.current?.getCurrentRoute()?.name) 
-  //   const unsubscribe = navigationRef.current?.addListener(
-  //     'state',
-  //     (e) => {
-  //       const state = e.data.state
-  //       if (state && state.index !== undefined) {
-  //         const currentRouteName = state.routes[state.index]?.name;
-  //         setCurrentRoute(currentRouteName);
-  //         setPreviousRoute(currentRoute);
-  //       }
-  //     }
-  //   );
-
-  //   return () => {
-  //     if (unsubscribe) unsubscribe();
-  //   };
-  // }, [navigationRef, currentRoute]);
 
   const goBack = () => {
     if (navigationRef.current?.canGoBack()) {
