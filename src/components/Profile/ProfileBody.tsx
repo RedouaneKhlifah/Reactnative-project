@@ -7,9 +7,9 @@ import {
   Image,
   Pressable,
   FlatList,
-  TextInput
+  TextInput,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import InputWithLabel from '../ui/InputWithLabel';
 import DatePicker from 'react-native-date-picker';
@@ -23,54 +23,60 @@ import RnIcon from '../ui/RnIcon';
 type SocialMedia = 'facebook' | 'instagram' | 'youtube'; // Define the types of social media
 
 const ProfileBody = () => {
-  const [selectedGender, setSelectedGender] = useState(null);  
+  const [selectedGender, setSelectedGender] = useState(null);
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
-  const [links, setLinks] = useState<{ [key in SocialMedia]?: string }>({});
+  const [links, setLinks] = useState<{[key in SocialMedia]?: string}>({});
 
   const [selectedIntrests, setSelectedIntrests] = useState(null);
   const [genders, setgenders] = useState([
     {label: 'Male', value: 'Male'},
-    {label: 'female', value: 'banana'}
+    {label: 'female', value: 'banana'},
   ]);
   const [socialLinks, setSocialLinks] = useState([
     {
-      label: 'facebook', 
+      label: 'facebook',
       value: 'facebook',
-      icon: () => <RnIcon name='facebook'/>
+      icon: () => <RnIcon name="facebook" />,
     },
-    
+
     {
-      label: 'instagram', 
-      value: 'instagram',      
-      icon: () => <RnIcon name='instagram'/>
+      label: 'instagram',
+      value: 'instagram',
+      icon: () => <RnIcon name="instagram" />,
     },
     {
-      label: 'youtube', 
-      value: 'youtube',      
-      icon: () => <RnIcon name='youtube'/>
+      label: 'youtube',
+      value: 'youtube',
+      icon: () => <RnIcon name="youtube" />,
     },
   ]);
   const [interets, setInterets] = useState([
     {label: 'Restaurants', value: 'Restaurants'},
     {label: 'Hotels', value: 'Hotels'},
-    {label: 'Shops', value: 'Shops'}
+    {label: 'Shops', value: 'Shops'},
   ]);
 
-  const renderItem = ({ item }: { item: SocialMedia }) => (
+  const renderItem = ({item}: {item: SocialMedia}) => (
     <View style={styles.linkContainer}>
-      <View style={{display:'flex', flexDirection:'row',alignItems:'center', gap:5}}>
-        <RnIcon name={item} size={20}/>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 5,
+        }}>
+        <RnIcon name={item} size={20} />
         <TextInput
           style={styles.input}
           placeholder={`${item} link`}
           value={links[item] || ''}
-          onChangeText={(text:string) => handleLinkChange(item, text)}
+          onChangeText={(text: string) => handleLinkChange(item, text)}
         />
       </View>
     </View>
   );
   const handleLinkChange = (socialMedia: SocialMedia, link: string) => {
-    setLinks({ ...links, [socialMedia]: link });
+    setLinks({...links, [socialMedia]: link});
   };
 
   return (
@@ -107,8 +113,8 @@ const ProfileBody = () => {
         />
         <View style={styles.SelectorsContainer}>
           <Dropdown
-            label='Sexe'
-            placeholder='male'
+            label="Sexe"
+            placeholder="male"
             value={selectedGender}
             items={genders}
             setValue={setSelectedGender}
@@ -116,8 +122,8 @@ const ProfileBody = () => {
             maxHeight={120}
           />
           <Dropdown
-            label='Social Media'
-            placeholder='facebook ...'
+            label="Social Media"
+            placeholder="facebook ..."
             value={selectedSocialMedia}
             items={socialLinks}
             setValue={setSelectedSocialMedia}
@@ -128,18 +134,18 @@ const ProfileBody = () => {
           <FlatList
             data={selectedSocialMedia}
             renderItem={renderItem}
-            keyExtractor={(item) => item}
+            keyExtractor={item => item}
           />
           <Dropdown
-            label='Interets'
-            placeholder='Interets'
+            label="Interets"
+            placeholder="Interets"
             value={selectedIntrests}
             items={interets}
             setValue={setSelectedIntrests}
             setItems={setInterets}
             maxHeight={120}
             multiple={true}
-          />       
+          />
         </View>
 
         <Button
@@ -166,6 +172,7 @@ const styles = StyleSheet.create({
   container: {
     width: '90%',
     marginBottom: 40,
+    backgroundColor: COLORS.white,
   },
   ImageContainer: {
     height: SIZES.height * 0.2,
@@ -208,7 +215,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    width:"100%",
+    width: '100%',
     fontWeight: '300',
     borderBottomWidth: 2,
     borderColor: COLORS.superLightGray,
@@ -217,7 +224,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginRight: 10,
-    minWidth:70
+    minWidth: 70,
   },
 });
 
