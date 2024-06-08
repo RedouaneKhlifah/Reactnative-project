@@ -1,20 +1,32 @@
-import {StyleSheet, ImageBackground, View, Text, Image, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  View,
+  Text,
+  Image,
+  Pressable,
+} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
-import { useNavigationRef } from '../../store/NavigationContext';
+import {useNavigationRef} from '../../store/NavigationContext';
 
 export default function Profile() {
   const navigationRef = useNavigationRef();
 
   const items = [
-    {icon:Icons.socialLinks,title:'Détails de profile',iconHeight:13,link:'ProfileScreen' as keyof RootStackParamList},
-    {icon:Icons.share,title:'Parrainez et gagnez'},
-    {icon:Icons.starIcon,title:'Évaluez nous'},
-    {icon:Icons.signout,title:'Se déconnecter'}
-  ]
+    {
+      icon: Icons.socialLinks,
+      title: 'Détails de profile',
+      iconHeight: 13,
+      link: 'ProfileScreen' as keyof RootStackParamList,
+    },
+    {icon: Icons.share, title: 'Parrainez et gagnez'},
+    {icon: Icons.starIcon, title: 'Évaluez nous'},
+    {icon: Icons.signout, title: 'Se déconnecter'},
+  ];
   const handlePress = () => {
     // Your onPress logic here
     console.log('Button pressed!');
@@ -23,40 +35,59 @@ export default function Profile() {
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.topSection} source={Images.milfayaBg}>
-      <View style={styles.overlay}>
+        <View style={styles.overlay}>
           <View style={styles.options}>
-            <BackButton onPress={handlePress} bgColor='white'/>
+            <BackButton onPress={handlePress} bgColor="white" />
             <SecondaryButton onPress={handlePress} title="aide" />
           </View>
           <View style={styles.profileOptions}>
             <View style={styles.userCard}>
               <View style={styles.userInfo}>
-                <Image source={Images.milfayaPro} style={styles.profilePic}/>
+                <Image source={Images.milfayaPro} style={styles.profilePic} />
                 <View>
-                  <Text style={{fontSize:SIZES.radius,fontWeight:'700'}}>Milfaya</Text>
-                  <Text style={{fontSize:SIZES.middleRadius}}>+91 1234567890</Text>
+                  <Text style={{fontSize: SIZES.radius, fontWeight: '700'}}>
+                    Milfaya
+                  </Text>
+                  <Text style={{fontSize: SIZES.middleRadius}}>
+                    +91 1234567890
+                  </Text>
                 </View>
               </View>
-              <RnIcon name='pencil-outline' color='white' bgColor='#FAD932' width={45} height={45} size={20}/>
+              <RnIcon
+                name="pencil-outline"
+                color="white"
+                bgColor="#FAD932"
+                width={45}
+                height={45}
+                size={20}
+              />
             </View>
             <View style={styles.linksHolder}>
-              {
-                items.map((item,index)=>{
-                  return(
-                    <Pressable style={styles.link} key={index} onPress={()=>{item.link && navigationRef.current?.navigate(item.link)}}>
-                      <View style={styles.userInfo}>
+              {items.map((item, index) => {
+                return (
+                  <Pressable
+                    style={styles.link}
+                    key={index}
+                    onPress={() => {
+                      item.link && navigationRef.current?.navigate(item.link);
+                    }}>
+                    <View style={styles.userInfo}>
                       <Image
                         source={item.icon}
                         style={{width: 24, height: item.iconHeight ?? 24}}
-                      />                        
-                      <Text style={{fontFamily:FONTS.body3.fontFamily,fontSize:SIZES.radius}}>{item.title}</Text>
-
-                      </View>
-                      <RnIcon name='chevron-right' color='black' size={16}/>
-                    </Pressable>
-                  )
-                })
-              }
+                      />
+                      <Text
+                        style={{
+                          fontFamily: FONTS.body3.fontFamily,
+                          fontSize: SIZES.radius,
+                        }}>
+                        {item.title}
+                      </Text>
+                    </View>
+                    <RnIcon name="chevron-right" color="black" size={16} />
+                  </Pressable>
+                );
+              })}
             </View>
           </View>
         </View>
@@ -97,7 +128,7 @@ const styles = StyleSheet.create({
   },
   profileOptions: {
     position: 'absolute',
-    display:'flex',
+    display: 'flex',
     paddingHorizontal: 10,
     paddingVertical: 27,
     height: '70%',
@@ -107,37 +138,36 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 35,
     borderTopLeftRadius: 35,
   },
-  userCard:{
-    display:'flex',
-    flexDirection:'row',
-    width:'100%',
-    paddingBottom:16,
-    justifyContent:'space-between',
-    alignItems:'center',
-    borderBottomWidth:1,
-    borderBottomColor:'#EBEBEB'
+  userCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    paddingBottom: 16,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EBEBEB',
   },
-  userInfo:{
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    gap:16
+  userInfo: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
   },
-  profilePic:{
+  profilePic: {
     width: 80,
     height: 80,
     borderRadius: 1000,
   },
-  linksHolder:{
-    display:'flex',
+  linksHolder: {
+    display: 'flex',
     paddingHorizontal: 10,
   },
-  link:{
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between',
+  link: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 18,
-
-  }
+  },
 });
