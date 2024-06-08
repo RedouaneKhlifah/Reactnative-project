@@ -6,6 +6,7 @@ import BackButton from '../../components/ui/buttons/BackButton';
 import { useAuth } from '../../store/AuthContext'; // Adjust the import path
 import axiosConfig from '../../api/axios.config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigationRef } from '../../store/NavigationContext';
 
 const RedirectMail = () => {
   const { userData } = useAuth();
@@ -13,7 +14,8 @@ const RedirectMail = () => {
   const [code, setCode] = useState(['', '', '', '']);
   const apiClientWithToken = axiosConfig(true);
   const { isConfirmed,checkConfirmation } = useAuth();
-  
+  const navigationRef = useNavigationRef();
+
   useEffect(() => {    
     if (!isConfirmed) {
       sendEmailVerification()
@@ -77,6 +79,8 @@ const RedirectMail = () => {
         data.user.confirmed = true;
         await AsyncStorage.setItem('data', JSON.stringify(data));
         checkConfirmation()
+        data.user.role ==="business" ? navigationRef.current?.navigate('BusinessProfile') : navigationRef.current?.navigate('Profile')
+        
       }
     } catch (error) {
       console.error('Error submitting code:', error);

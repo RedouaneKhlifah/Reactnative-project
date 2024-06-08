@@ -11,6 +11,8 @@ type RootStackParamList = {
     CategorySection: undefined;
     BusinessDetails: undefined;
     BusinessProfile: undefined;
+    Protected: undefined;
+    Verification:undefined
   };
 
 type RootStackParamKeys = keyof RootStackParamList; 

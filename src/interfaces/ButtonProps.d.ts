@@ -3,4 +3,5 @@ interface ButtonProps {
     title: string;
     buttonStyle?: ViewStyle;
     textStyle?: TextStyle;
+    loading?: boolean;
   }
