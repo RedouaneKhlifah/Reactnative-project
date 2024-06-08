@@ -1,8 +1,6 @@
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 import React, {FC} from 'react';
 import {appTheme} from '../../constants';
-import InputWithLabel from '../ui/InputWithLabel';
-import Button from '../ui/Button';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import FormSection from './FormSection';
 
@@ -20,7 +18,7 @@ const AuthSection: FC<AuthSectionProp> = ({type}) => {
     <View style={styles.Contianer}>
       <View style={styles.header}>
         <Text style={styles.title}>Bienvenue</Text>
-        <Text style={styles.semiTitle}>Commençons par votre numéro</Text>
+        <Text style={styles.semiTitle}>Commençons par votre Emaail</Text>
       </View>
       <FormSection type={type} />
       <View style={styles.footer}>
@@ -86,7 +84,7 @@ const styles = StyleSheet.create({
   footerText: {
     textAlign: 'center',
     ...FONTS.h4,
-    fontSize: responsiveWidth(14),
+    fontSize: responsiveWidth(11),
     fontWeight: '300',
     color: COLORS.defaultGray,
   },

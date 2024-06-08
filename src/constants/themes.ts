@@ -20,7 +20,7 @@ export const COLORS = {
   purple: '#AB82FF',
   superLightGray: '#EBEBEB',
   lightOrnange: '#FFF6E5',
-  mov:'#AB82FF'
+  mov: '#AB82FF',
 };
 
 export const SIZES = {
@@ -30,7 +30,7 @@ export const SIZES = {
   radius: 16,
   smallRadius: 8,
   middleRadius: 12,
-  sm:13,
+  sm: 13,
   fullRadius: 999,
   padding: 24,
   padding2: 36,
@@ -56,37 +56,37 @@ export const SIZES = {
 
 export const FONTS = {
   largeTitle: {
-    fontFamily: 'BubblegumSans-Regular',
+    fontFamily: 'Comfortaa-Bold',
     fontSize: SIZES.largeTitle,
     lineHeight: 55,
   },
-  semiLargeTitle: {fontFamily: 'BubblegumSans-Regular', fontSize: SIZES.body0},
-  h1: {fontFamily: 'BubblegumSans-Regular', fontSize: SIZES.h1},
-  h2: {fontFamily: 'BubblegumSans-Regular', fontSize: SIZES.h2},
-  h3: {fontFamily: 'BubblegumSans-Regular', fontSize: SIZES.h3},
-  h4: {fontFamily: 'BubblegumSans-Regular', fontSize: SIZES.h4},
-  h5: {fontFamily: 'BubblegumSans-Regular', fontSize: SIZES.h5},
+  semiLargeTitle: {fontFamily: 'Comfortaa-Bold', fontSize: SIZES.body0},
+  h1: {fontFamily: 'Comfortaa-Bold', fontSize: SIZES.h1},
+  h2: {fontFamily: 'Comfortaa-SemiBold', fontSize: SIZES.h2},
+  h3: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h3},
+  h4: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h4},
+  h5: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h5},
 
   body1: {
-    fontFamily: 'BubblegumSans-Regular',
+    fontFamily: 'Poppins-Bold',
     fontSize: SIZES.body1,
     lineHeight: 36,
   },
   body2: {
-    fontFamily: 'BubblegumSans-Regular',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: SIZES.body2,
     lineHeight: 30,
   },
   body3: {
-    fontFamily: 'BubblegumSans-Regular',
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body3,
   },
   body4: {
-    fontFamily: 'BubblegumSans-Regular',
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body4,
   },
   body5: {
-    fontFamily: 'BubblegumSans-Regular',
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body5,
     lineHeight: 22,
   },
