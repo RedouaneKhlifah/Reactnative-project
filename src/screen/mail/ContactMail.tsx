@@ -59,7 +59,7 @@ const ContactMail = () => {
           <Pressable
             style={({pressed}) => [{paddingTop: 5, opacity: pressed ? 0.7 : 1}]}
             onPress={() => {
-              navigationRef.current?.navigate('Signup');
+              navigationRef.current?.navigate('RoleSelectionScreen');
             }}>
             <Text style={styles.log}>S'inscrire</Text>
           </Pressable>
