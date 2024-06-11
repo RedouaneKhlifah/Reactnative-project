@@ -8,29 +8,61 @@ import {
   Pressable,
   FlatList,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import InputWithLabel from '../ui/InputWithLabel';
-import DatePicker from 'react-native-date-picker';
 import DateInputWithLbel from '../ui/DateInputWithLbel';
-import Selector from '../ui/Selector';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
-import Button from '../ui/Button';
 import Dropdown from '../ui/Dropdown';
 import RnIcon from '../ui/RnIcon';
+import {useAuth} from '../../store/AuthContext';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
+import {launchImageLibrary} from 'react-native-image-picker';
+import axiosConfig from '../../api/axios.config';
+import axios from 'axios';
+import { useNavigationRef } from '../../store/NavigationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SocialMedia = 'facebook' | 'instagram' | 'youtube'; // Define the types of social media
 
 const ProfileBody = () => {
+  const {userData,checkConfirmation} = useAuth();
+
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
   const [links, setLinks] = useState<{[key in SocialMedia]?: string}>({});
-
   const [selectedIntrests, setSelectedIntrests] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [imageUri, setImageUri] = useState<string | null | undefined>(null);
+  const [loading, setloading] = useState(false);
+  const [imgloading, setImgloading] = useState(false);
+  const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
+
+  const [errors, setErrors] = useState({
+    email:'',
+    phone:'',
+    first_name:'',
+    last_name:'',
+    date_of_birth:'',
+    gender:'',
+    image:'',
+    interests:'',
+  })
+  const navigationRef = useNavigationRef();
+
+  const [profileData, setProfileData] = useState({
+    firstName: '',
+    lastName: '',
+    email: userData?.email || '',
+    phone: '',
+    birthDate: '',
+  });
+
   const [genders, setgenders] = useState([
     {label: 'Male', value: 'Male'},
-    {label: 'female', value: 'banana'},
+    {label: 'female', value: 'female'},
   ]);
   const [socialLinks, setSocialLinks] = useState([
     {
@@ -78,39 +110,167 @@ const ProfileBody = () => {
   const handleLinkChange = (socialMedia: SocialMedia, link: string) => {
     setLinks({...links, [socialMedia]: link});
   };
+  const handleImagePick = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 300,
+        maxHeight: 300,
+        quality: 1,
+      },
+      response => {
+        setImgloading(true);
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+          console.log('ImagePicker Error: ', response.errorCode);
+        } else if (response.assets && response.assets.length > 0) {
+          const selectedImage = response.assets[0];
+          setImageUri(selectedImage.uri);
+          setImgloading(false);
+        }
+      },
+    );
+  };
 
+  const handleInputChange = (name: string, value: any) => {
+    setProfileData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    if (imageUri) {
+      const file = {
+        uri: imageUri,
+        type: 'image/jpeg', // or the appropriate mime type for your image
+        name: 'profile.jpg', // you can give any name to the image
+      };
+      formData.append('image', file);
+    }
+
+    formData.append('email', profileData.email);
+    formData.append('phone', profileData.phone);
+    formData.append('first_name', profileData.firstName);
+    formData.append('last_name', profileData.lastName);
+    formData.append('date_of_birth', selectedDate);
+    formData.append('gender', selectedGender);
+
+    Object.keys(links).forEach(key => {
+      formData.append(key, links[key]);
+    });
+
+    selectedIntrests?.forEach((interest: string) => {
+      formData.append('interests[]', interest);
+    });
+    setloading(true);
+    try {
+      const response = await apiClientWithToken.post(
+        '/influencer/submit',
+        formData,
+      );
+      if (response.data) {
+        const storedData = await AsyncStorage.getItem('data');
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          data.user.completed = true;
+          await AsyncStorage.setItem('data', JSON.stringify(data));
+          checkConfirmation();
+          navigationRef.current?.navigate('Verification');
+        }
+      }
+      setloading(false);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log('Error request:', error.request);
+        console.log('Error response:', error.response?.data);
+        if (error.response?.data) {
+          setErrors(error.response?.data.errors);
+        }
+      }
+      console.error('Error submitting form:', error);
+    } finally {
+      setloading(false);
+    }
+  };
   return (
     <ScrollView style={styles.container}>
+
       <View style={styles.ImageContainer}>
         <ImageBackground
           style={styles.ImageInnerContainer}
-          source={Images.testImage}
+          source={imageUri ? {uri: imageUri} : Images.testImage}
           resizeMode="cover"></ImageBackground>
-        <Icons.pen style={{position: 'absolute', bottom: 15, right: 0}} />
+        <Pressable
+          onPress={handleImagePick}
+          style={{position: 'absolute', bottom: 15, right: 0}}>
+          <Icons.pen />
+        </Pressable>
       </View>
+        {errors?.image && <Text style={styles.errorText}>{errors.image[0]}</Text>}
+
       <View style={styles.fomContainer}>
-        <InputWithLabel
-          labelText="Nome et Prenom"
-          placeholder="Nome et Prenom"
-          labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
-          inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
-        />
+        <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
+          <View style={{width: '50%'}}>
+            <InputWithLabel
+              labelText="Nome"
+              placeholder="Nome"
+              value={profileData.lastName}
+              onChangeText={text => handleInputChange('lastName', text)}
+              labelStyle={{
+                fontSize: responsiveWidth(13),
+                color: COLORS.darkGray,
+              }}
+              inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+            />
+            {errors?.last_name && <Text style={styles.errorText}>{errors.last_name[0]}</Text>}
+          </View>
+
+          <View style={{width: '50%'}}>
+            <InputWithLabel
+              labelText="Prenom"
+              placeholder="Prenom"
+              value={profileData.firstName}
+              onChangeText={text => handleInputChange('firstName', text)}
+              labelStyle={{
+                fontSize: responsiveWidth(13),
+                color: COLORS.darkGray,
+              }}
+              inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+            />
+            {errors?.first_name && <Text style={styles.errorText}>{errors.first_name[0]}</Text>}
+          </View>
+
+        </View>
         <InputWithLabel
           labelText="Email"
-          placeholder="Text@gmail.com"
+          placeholder={userData?.email ?? ''}
+          
+          disabled={userData?.email ? true:false}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
         />
+        {errors?.email && <Text style={styles.errorText}>{errors.email[0]}</Text>}
         <InputWithLabel
           labelText="Numéro de téléphone"
           placeholder="+212 666666666"
+          onChangeText={text => handleInputChange('phone', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
         />
+        {errors?.phone && <Text style={styles.errorText}>{errors.phone[0]}</Text>}
+
         <DateInputWithLbel
           labelText="Date de Naissance"
           placeholder="jj/mm/aaaa"
+          mode="date"
+          onDateChange={formattedDate => {
+            setSelectedDate(formattedDate);
+          }}
         />
+        {errors?.date_of_birth && <Text style={styles.errorText}>{errors.date_of_birth[0]}</Text>}
+
         <View style={styles.SelectorsContainer}>
           <Dropdown
             label="Sexe"
@@ -120,7 +280,10 @@ const ProfileBody = () => {
             setValue={setSelectedGender}
             setItems={setgenders}
             maxHeight={120}
+            labelTextStyle={{fontSize: 16, color: COLORS.darkGray}}
           />
+          {errors?.gender && <Text style={styles.errorText}>{errors.gender[0]}</Text>}
+
           <Dropdown
             label="Social Media"
             placeholder="facebook ..."
@@ -146,22 +309,14 @@ const ProfileBody = () => {
             maxHeight={120}
             multiple={true}
           />
+         {errors?.interests && <Text style={styles.errorText}>{errors.interests[0]}</Text>}
         </View>
-
-        <Button
-          buttonStyle={{
-            backgroundColor: COLORS.yellow,
-            borderRadius: 20,
-            marginTop: 10,
-          }}
-          titleStyle={{
-            fontSize: 18,
-            paddingVertical: 10,
-            color: COLORS.white,
-            fontWeight: '400',
-          }}
-          title={'Save changes'}
-          onPress={() => {}}
+        <PrimaryButton
+          onPress={handleSubmit}
+          loading={loading}
+          title="Save changes"
+          textStyle={{color: COLORS.white}}
+          buttonStyle={{elevation: 0, borderRadius: 20}}
         />
       </View>
     </ScrollView>
@@ -225,6 +380,11 @@ const styles = StyleSheet.create({
   label: {
     marginRight: 10,
     minWidth: 70,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: responsiveWidth(11),
+    marginTop: responsiveHeight(1),
   },
 });
 

@@ -1,12 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const axiosConfig = (requireToken: boolean): AxiosInstance => {
+const axiosConfig = (requireToken: boolean,contentType = 'application/json'): AxiosInstance => {
   const apiClient = axios.create({
     baseURL: 'https://winwin-media.com/api/app', // Replace with your API base URL
     timeout: 10000, // Set a timeout for requests (optional)
     headers: {
-      'Content-Type': 'application/json', // Set common headers
+      'Content-Type': contentType, // Set common headers
       'Accept': 'application/json',
     },
   });

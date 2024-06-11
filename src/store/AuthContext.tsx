@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import axiosConfig from '../api/axios.config';
 import axios from 'axios';
+import { UserAuth } from '../interfaces/User';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -13,7 +14,8 @@ type AuthContextType = {
   userData :UserAuth | null;
   handleAuth :(url:string,data:object)=> Promise<any>
 
-  handleLogout :()=> Promise<{ success: boolean, message: string}|undefined >
+  // handleLogout :()=> Promise<{ success: boolean, message: string}|undefined >
+  handleLogout : ()=> void
 
 };
 
@@ -78,28 +80,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return { success: false, data: error };
     }
 };
+  const handleLogout = async ()=> {
+      await AsyncStorage.removeItem('data')
+  }
 
-  const handleLogout = async ():Promise<{ success: boolean; message: string }|undefined >=> {
-    try {
-        const response = await apiClientWithToken.post('/logout');
+
+  // const handleLogout = async ():Promise<{ success: boolean; message: string }|undefined >=> {
+  //   await AsyncStorage.removeItem('data')
+
+  //   try {
+  //       const response = await apiClientWithToken.post('/logout');
         
-        if (response.data) {
-          await AsyncStorage.removeItem('data')
-          checkAuthentication()
-          setIsAuthenticated(false);
-          return { success: true, message: response.data.message };
-        }
-    } catch (error) {
-      if (axios.isAxiosError(error)){
-        console.log('Error logging out:', error.request);
-        console.log('Error logging out:', error.response);
-        return { success: false, message: 'unexpected error'};
-      } 
-      else {
-        return { success: false, message: 'unexpected error' };
-      }
-    }
-  };
+  //       if (response.data) {
+  //         await AsyncStorage.removeItem('data')
+  //         checkAuthentication()
+  //         setIsAuthenticated(false);
+  //         return { success: true, message: response.data.message };
+  //       }
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)){
+  //       console.log('Error logging out:', error.request);
+  //       console.log('Error logging out:', error.response);
+  //       return { success: false, message: 'unexpected error'};
+  //     } 
+  //     else {
+  //       return { success: false, message: 'unexpected error' };
+  //     }
+  //   }
+  // };
 
 
   return (
