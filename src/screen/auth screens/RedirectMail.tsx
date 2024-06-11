@@ -93,7 +93,12 @@ const RedirectMail = () => {
         data.user.confirmed = true;
         await AsyncStorage.setItem('data', JSON.stringify(data));
         checkConfirmation();
-        navigationRef.current?.navigate('Verification');
+        if (data.user.role ==='business') {
+          navigationRef.current?.navigate('BusinessDetails');
+          }
+        else if (data.user.role ==='influencer') {
+          navigationRef.current?.navigate('ProfileScreen');
+        }
       }
     } catch (error) {
       console.error('Error submitting code:', error);
