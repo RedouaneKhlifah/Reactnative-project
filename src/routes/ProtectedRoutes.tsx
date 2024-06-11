@@ -43,6 +43,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
 
       // user logged in and confirmed by email code and verified by admin
       else if (userData.status === 'verified' && userData.confirmed === true) {
+        console.log('tesr');
+
         navigationRef.current?.navigate('Home');
       }
     }
