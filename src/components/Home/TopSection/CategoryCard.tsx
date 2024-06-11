@@ -1,11 +1,13 @@
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import React, {FC} from 'react';
 import {COLORS, FONTS, Images, SIZES} from '../../../constants';
-import {bestOfferCardT} from '../../../interfaces/bestOfferCardT';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
+import {CategoryCardT} from '../../../interfaces/bestOfferCardT';
 
-const BestOfferCard: FC<{OffreData: bestOfferCardT}> = ({OffreData}) => {
-  const {image, title} = OffreData;
+const CategoryCardCard: FC<{categoryData: CategoryCardT}> = ({
+  categoryData,
+}) => {
+  const {image, title} = categoryData;
   console.log(SIZES.width);
   return (
     <View style={styles.card}>
@@ -37,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BestOfferCard;
+export default CategoryCardCard;

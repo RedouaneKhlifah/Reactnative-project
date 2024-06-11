@@ -1,10 +1,10 @@
 import {Animated, FlatList, View} from 'react-native';
 import React, {useRef, useState} from 'react';
-import BestOfferCard from './BestOfferCard';
-import {bestOfferCardT} from '../../../interfaces/bestOfferCardT';
+import {CategoryCardT} from '../../../interfaces/bestOfferCardT';
 import {Images} from '../../../constants';
+import CategoryCard from './CategoryCard';
 
-export const OffreData: bestOfferCardT[] = [
+export const categoryData: CategoryCardT[] = [
   {
     id: 1,
     title: 'Restaurant',
@@ -37,7 +37,7 @@ export const OffreData: bestOfferCardT[] = [
   },
 ];
 
-const BestOfferCards = () => {
+const CategoryCards = () => {
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -68,14 +68,14 @@ const BestOfferCards = () => {
     itemVisiblePercentThreshold: 50,
   }).current;
 
-  const renderItem = ({item}: {item: bestOfferCardT}) => (
-    <BestOfferCard OffreData={item} />
+  const renderItem = ({item}: {item: CategoryCardT}) => (
+    <CategoryCard categoryData={item} />
   );
 
   return (
     <View>
       <FlatList
-        data={OffreData}
+        data={categoryData}
         renderItem={renderItem}
         horizontal
         pagingEnabled
@@ -90,4 +90,4 @@ const BestOfferCards = () => {
   );
 };
 
-export default BestOfferCards;
+export default CategoryCards;
