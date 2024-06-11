@@ -1,24 +1,154 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, ImageBackground } from 'react-native';
-import { COLORS, Icons, Images, SIZES } from '../../constants';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Image , ScrollView, StyleSheet, ImageBackground } from 'react-native';
+import { COLORS, FONTS, Icons, Images, SIZES } from '../../constants';
 import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
 import BackButton from '../../components/ui/buttons/BackButton';
 import InputWithLabel from '../../components/ui/InputWithLabel';
 import Dropdown from '../../components/ui/Dropdown';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import { useNavigationRef } from '../../store/NavigationContext';
+import { useAuth } from '../../store/AuthContext';
+import { launchImageLibrary } from 'react-native-image-picker';
+import axiosConfig from '../../api/axios.config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { Picker } from '@react-native-picker/picker';
 
 const BusinessDetails = () => {
   const navigationRef = useNavigationRef();
+  const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
+
+  const {userData,checkConfirmation} = useAuth();
+  const [imageUris, setImageUris] = useState<string[]>([]);
+
   const [selectedType, setSelectedType] = useState(null);  
+  const [loading, setloading] = useState(false);
+  const [categoriesData, setCategoriesData] = useState([]);
+
+  useEffect(() => {
+    getCategories()
+  },[])
+  
+  const getCategories = async ()=>{
+    await apiClientWithToken.get('/categories/index')
+    .then((res)=>{
+      setCategoriesData(res.data.business_categories)      
+    }).catch((e)=>{
+      console.log(e);
+    })
+
+  }
   const [types, setTypes] = useState([
     {label: 'Type1', value: 'Type1'},
     {label: 'Type2', value: 'Type2'}
   ]);
+  const [businessData, setBusinessData] = useState({
+    name: '',
+    ice: '',
+    email: userData?.email || '',
+    phone: '',
+    patent: '',
+    address: '',
+    description: '',
+    category_id:0
+  });
 
-  const saveChanges = ()=>{
+  const [errors, setErrors] = useState({
+    name: '',
+    ice: '',
+    email:'',
+    phone: '',
+    patent: '',
+    address: '',
+    description: '',
+    category_id:''
+  });
 
-    navigationRef.current?.navigate('BusinessProfile')
+  const handleInputChange = (name: string, value: any) => {
+    setBusinessData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleImagePick = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 300,
+        maxHeight: 300,
+        quality: 1,
+        selectionLimit: 0, // Set to 0 for multiple images
+      },
+      response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+          console.log('ImagePicker Error: ', response.errorCode);
+        } else if (response.assets && response.assets.length > 0) {
+          const selectedImages = response.assets
+          .map(asset => asset.uri)
+          .filter((uri): uri is string => uri !== undefined);
+          
+          setImageUris(prevUris => [...prevUris, ...selectedImages]);
+        }
+      },
+    );
+  };
+  const handleCategoryChange = (itemValue: number|null) => {
+    if (itemValue) {
+      setBusinessData((prevData)=>({
+        ...prevData,category_id:itemValue
+      }))
+    }
+  };
+
+  const saveChanges = async()=>{    
+    const formData = new FormData();
+    imageUris.forEach((uri, index) => {
+      formData.append('images[]', {
+        uri,
+        name: `photo_${index}.jpg`,
+        type: 'image/jpeg'
+      });
+    });
+    
+    formData.append('email', businessData.email);
+    formData.append('phone', businessData.phone);
+    formData.append('address', businessData.address);
+    formData.append('category_id', businessData.category_id);
+    formData.append('ice', businessData.ice);
+    formData.append('patent', businessData.patent);
+    formData.append('patent', businessData.description);
+    formData.append('name', businessData.name);
+    setloading(true);
+    try {
+      const response = await apiClientWithToken.post(
+        '/business/submit',
+        formData,
+      );
+      if (response.data) {
+        const storedData = await AsyncStorage.getItem('data');
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          data.user.completed = true;
+          await AsyncStorage.setItem('data', JSON.stringify(data));
+          checkConfirmation();
+          navigationRef.current?.navigate('Verification');
+        }
+      }
+      setloading(false);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log('Error request:', error.request);
+        console.log('Error response:', error.response?.data);
+        if (error.response?.data) {
+          setErrors(error.response?.data.errors);
+        }
+      }
+      console.error('Error submitting form:', error);
+    } finally {
+      setloading(false);
+    }
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -36,7 +166,7 @@ const BusinessDetails = () => {
 
       <Text style={[styles.galleryTitle,{marginTop: 20,}]}>Galerie d'images</Text>
       <ScrollView horizontal contentContainerStyle={styles.imageGallery}>
-        <TouchableOpacity style={styles.imageContainer}>
+        <TouchableOpacity style={styles.imageContainer} onPress={handleImagePick}>
         <Image
                 source={Icons.plusPn}
                 style={{
@@ -45,10 +175,11 @@ const BusinessDetails = () => {
                 }}
                 resizeMode="contain"
               />        
-              </TouchableOpacity>
-        <Image source={Images.restaurant} style={styles.image} />
-        <Image source={Images.restaurant} style={styles.image} />
-        <Image source={Images.restaurant} style={styles.image} />
+        </TouchableOpacity>
+        {imageUris.map((uri, index) => (
+          <Image key={index} source={{ uri }} style={styles.image} />
+        ))}
+
       </ScrollView>
 
       <Text style={styles.galleryTitle}>Logo d'entreprise</Text>
@@ -61,16 +192,22 @@ const BusinessDetails = () => {
       <InputWithLabel
           labelText="Nom légal de l'entreprise"
           placeholder="Sombara"
+          onChangeText={text => handleInputChange('name', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',marginBottom:20}}
         />
+        {errors?.name && <Text style={styles.errorText}>{errors.name[0]}</Text>}
+
       
       <InputWithLabel
           labelText="ICE"
           placeholder="ICE..."
+          onChangeText={text => handleInputChange('ice', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',marginBottom:20}}
         />
+        {errors?.ice && <Text style={styles.errorText}>{errors.ice[0]}</Text>}
+
       {/* <Dropdown
             label="Type d'entreprise"
             placeholder='Text'
@@ -82,39 +219,65 @@ const BusinessDetails = () => {
       /> */}
 
       <InputWithLabel
-          labelText="Brevet"
+          labelText="Patent"
           placeholder="Text"
+          onChangeText={text => handleInputChange('patent', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',marginBottom:20}}
         />
+        {errors?.patent && <Text style={styles.errorText}>{errors.patent[0]}</Text>}
 
       <InputWithLabel
           labelText="Numéro de téléphone"
           keyboardType='phone-pad'
           placeholder="+212 666666666"
+          onChangeText={text => handleInputChange('phone', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',marginBottom:20}}
         />
+        {errors?.phone && <Text style={styles.errorText}>{errors.phone[0]}</Text>}
+
       
       <InputWithLabel
           labelText="Email"
-          placeholder="Text@gmail.com"
+          placeholder={userData?.email ?? ''}
+          disabled={userData?.email ? true:false}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',marginBottom:20}}
       />
+      {errors?.email && <Text style={styles.errorText}>{errors.email[0]}</Text>}
+
 
       <InputWithLabel
           labelText="Adresse d'affaires"
           placeholder="Rue ....."
+          onChangeText={text => handleInputChange('address', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',marginBottom:20}}
       />
+      {errors?.address && <Text style={styles.errorText}>{errors.address[0]}</Text>}
+
+      
       <InputWithLabel
-          labelText="Type d'entreprise"
-          placeholder="Text"
+          labelText="Description"
+          placeholder="..."
+          onChangeText={text => handleInputChange('description', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',marginBottom:20}}
       />
+      {errors?.description && <Text style={styles.errorText}>{errors.description[0]}</Text>}
+
+      <Picker
+        selectedValue={businessData.category_id}
+        onValueChange={(itemValue:number | null) => handleCategoryChange(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Select a category" value={null} style={styles.pickerInput} />
+        {categoriesData.map((category:{id:number,name:string}) => (
+          <Picker.Item key={category.id} label={category.name} value={category.id} />
+        ))}
+      </Picker>
+      {errors?.category_id && <Text style={styles.errorText}>{errors.category_id[0]}</Text>}
 
       <SecondaryButton title='Save changes' onPress={saveChanges} buttonStyle={styles.saveButton} textStyle={styles.saveButtonText}/>
 
@@ -245,6 +408,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  picker: {
+    width: '100%',
+    borderBottomWidth: 2,
+    borderColor: COLORS.superLightGray,
+    paddingLeft: 3,
+    ...FONTS.body3,
+    fontWeight: '300',
+  },
+  selectedText: {
+    fontSize: 18,
+    marginTop: 20,
+  },
+  pickerInput: {
+    fontWeight: '300',
+    borderBottomWidth: 2,
+    borderColor: COLORS.superLightGray,
+    paddingVertical: 0,
+    paddingLeft: 3,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: responsiveWidth(11),
+    marginTop: responsiveHeight(1),
+  },
 });
-
 export default BusinessDetails;
