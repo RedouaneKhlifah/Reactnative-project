@@ -58,16 +58,23 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
       } else {
         const url = await AsyncStorage.getItem('registerUrl');
         if (url) {
-          result = await handleAuth(url, formData);
+          if (formData.password !== formData.confirmPassword) {
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              confirmPassword: 'Password not confirmed',
+            }));
+          }else{
+            result = await handleAuth(url, formData);
+          }
         } else {
           throw new Error('Registration URL not found');
         }
       }
 
-      if (result.success === false) {
+      if (result?.success === false) {
         setErrors(result.data?.errors || result.data?.error);
       }
-      if (result.success) {
+      if (result?.success) {
         // no user logged and confirmed
         if (result?.data.user.confirmed === true) {
           if (result?.data.user.status === 'verified') {
@@ -127,7 +134,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
             secureTextEntry={true}
           />
           {errors.confirmPassword && (
-            <Text style={styles.errorText}>{errors.confirmPassword[0]}</Text>
+            <Text style={styles.errorText}>{errors.confirmPassword}</Text>
           )}
         </>
       )}

@@ -17,7 +17,7 @@ import {useAuth} from '../../store/AuthContext';
 
 export default function Profile() {
   const navigationRef = useNavigationRef();
-  const {handleLogout} = useAuth();
+  // const {handleLogout} = useAuth();
 
   const items = [
     {
@@ -37,17 +37,19 @@ export default function Profile() {
   };
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
-      try {
-        const result = await handleLogout();
-        if (result?.success === true) {
-          console.log(result.message);
-          navigationRef.current?.navigate('Login');
-        } else {
-          console.log(result?.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      await AsyncStorage.removeItem('data')
+      navigationRef.current?.navigate('ContactMail')
+      // try {
+      //   const result = await handleLogout();
+      //   if (result?.success === true) {
+      //     console.log(result.message);
+      //     navigationRef.current?.navigate('Login');
+      //   } else {
+      //     console.log(result?.message);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
     } else {
       const link = action as keyof RootStackParamList;
       navigationRef.current?.navigate(link);

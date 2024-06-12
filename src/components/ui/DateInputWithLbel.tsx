@@ -16,9 +16,11 @@ interface Props {
   labelText?: string;
   placeholder: string;
   mode?:"date"|"time"|"datetime"
+  onDateChange?: (formattedDate: string) => void; // Updated prop for formatted date string
+
 }
 
-const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datetime'}) => {
+const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datetime',onDateChange}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
@@ -26,6 +28,15 @@ const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datet
   const formatDate = (date: Date) => {
     // Format the date as needed, for example:
     return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+  };
+
+  const handleDateChange = (selectedDate: Date) => {
+    const formattedDate = formatDate(selectedDate);
+    setDate(selectedDate);
+    setValue(formattedDate);
+    if (onDateChange) {
+      onDateChange(formattedDate);
+    }
   };
 
   return (
@@ -60,18 +71,25 @@ const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datet
         open={open}
         date={date}
         mode={mode}
-        onDateChange={selectedDate => {
-          setDate(selectedDate);
-          setValue(formatDate(selectedDate));
-        }}
+        onDateChange={handleDateChange}
+        // onDateChange={selectedDate => {
+        //   setDate(selectedDate);
+        //   setValue(formatDate(selectedDate));
+
+        // }}
         onCancel={() => {
           setOpen(false);
         }}
-        onConfirm={selectedDate => {
-          setOpen(false);
-          setDate(selectedDate);
-          setValue(formatDate(selectedDate));
-        }}
+        onConfirm={handleDateChange}
+
+        // onConfirm={selectedDate => {
+        //   setOpen(false);
+        //   setDate(selectedDate);
+        //   setValue(formatDate(selectedDate));
+        //   if (onDateChange) {
+        //     onDateChange(selectedDate);
+        //   }
+        // }}
       />
     </View>
   );

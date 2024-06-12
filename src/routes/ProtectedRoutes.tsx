@@ -25,6 +25,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
   }, [navigationRef]);
 
   useEffect(() => {
+    console.log(userData);
+    
     if (isNavigationReady) {
       // no user lnot logged in
       if (!userData) {
@@ -37,7 +39,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
       }
 
       // user logged in and confirmed by email code but not verified by admin
-      else if (userData.confirmed === true && userData.status == 'pending') {
+      else if (userData.confirmed === true && userData.status == 'pending' && userData.completed=== false) {
+        if (userData.role ==='influencer') {
+          navigationRef.current?.navigate('ProfileScreen');
+        }
+        if (userData.role ==='business') {
+          navigationRef.current?.navigate('BusinessDetails');
+        }
+      }
+      else if(userData.confirmed === true && userData.status == 'pending' && userData.completed ===true){
         navigationRef.current?.navigate('Verification');
       }
 

@@ -4,6 +4,7 @@ interface UserAuth {
   user_id: number;
   role: string;
   status: string;
+  completed:boolean
 }
 interface UserTokenAuth {
   token: string;
