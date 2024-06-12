@@ -163,7 +163,7 @@ const ProfileBody = () => {
 
     selectedIntrests?.forEach((interest: string) => {
       formData.append('interests[]', interest);
-    });
+    });    
     setloading(true);
     try {
       const response = await apiClientWithToken.post(

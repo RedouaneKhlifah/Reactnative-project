@@ -104,21 +104,26 @@ const BusinessDetails = () => {
 
   const saveChanges = async()=>{    
     const formData = new FormData();
+    
     imageUris.forEach((uri, index) => {
-      formData.append('images[]', {
+      const uriParts = uri.split('.');
+      const fileType = uriParts[uriParts.length - 1];
+      formData.append('images[]'
+        , {
         uri,
-        name: `photo_${index}.jpg`,
-        type: 'image/jpeg'
-      });
+        name: `photo_${index}.${fileType}`,
+        type: `image/${fileType}`
+      }
+    );
     });
     
     formData.append('email', businessData.email);
     formData.append('phone', businessData.phone);
     formData.append('address', businessData.address);
-    formData.append('category_id', businessData.category_id);
+    formData.append('category_id', String(businessData.category_id));
     formData.append('ice', businessData.ice);
     formData.append('patent', businessData.patent);
-    formData.append('patent', businessData.description);
+    formData.append('description', businessData.description);
     formData.append('name', businessData.name);
     setloading(true);
     try {
@@ -181,13 +186,13 @@ const BusinessDetails = () => {
         ))}
 
       </ScrollView>
-
+{/* 
       <Text style={styles.galleryTitle}>Logo d'entreprise</Text>
       <View style={{width:'100%',display:'flex'}}>
         <TouchableOpacity style={styles.uploadButton}>
           <Text style={styles.uploadButtonText}>Télécharger ici</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <InputWithLabel
           labelText="Nom légal de l'entreprise"

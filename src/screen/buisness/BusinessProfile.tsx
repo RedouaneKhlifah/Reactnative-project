@@ -6,6 +6,7 @@ import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
 import {responsiveWidth} from '../../utils/responsive';
 import { useNavigationRef } from '../../store/NavigationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
@@ -15,8 +16,28 @@ const BusinessProfile = () => {
     {icon: Icons.Lock, title: 'Sécurité du compte'},
     {icon: Icons.share, title: 'Parrainez et gagnez'},
     {icon: Icons.starIcon, title: 'Évaluez nous'},
-    {icon: Icons.signout, title: 'Se déconnecter'},
+    {icon: Icons.signout, title: 'Se déconnecter', link: 'Logout'},
   ];
+  const handleAction = async (action: string | undefined) => {
+    if (action === 'Logout') {
+      await AsyncStorage.removeItem('data')
+      navigationRef.current?.navigate('ContactMail')
+      // try {
+      //   const result = await handleLogout();
+      //   if (result?.success === true) {
+      //     console.log(result.message);
+      //     navigationRef.current?.navigate('Login');
+      //   } else {
+      //     console.log(result?.message);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    } else {
+      const link = action as keyof RootStackParamList;
+      navigationRef.current?.navigate(link);
+    }
+  };
   const handlePress = () => {
     // Your onPress logic here
     console.log('Button pressed!');
@@ -41,7 +62,7 @@ const BusinessProfile = () => {
                 <View>
                   <Text
                     style={{
-                      fontSize: SIZES.body2,
+                      fontSize: SIZES.body3,
                       fontWeight: '400',
                       color: 'black',
                     }}>
@@ -54,7 +75,7 @@ const BusinessProfile = () => {
             <View style={styles.linksHolder}>
               {items.map((item, index) => {
                 return (
-                  <Pressable style={styles.link} key={index} onPress={()=>{item.link && navigationRef.current?.navigate(item.link)}}>
+                  <Pressable style={styles.link} key={index} onPress={() => handleAction(item.link)}>
                     <View style={styles.userInfo}>
                       <Image
                         source={item.icon}
@@ -62,7 +83,7 @@ const BusinessProfile = () => {
                       />
                       <Text
                         style={{
-                          fontFamily: FONTS.body3.fontFamily,
+                          fontFamily: FONTS.body4.fontFamily,
                           fontSize: SIZES.radius,
                         }}>
                         {item.title}
