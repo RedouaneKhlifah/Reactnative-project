@@ -9,27 +9,46 @@ import Facbook from '../assets/icons/Facebook.svg';
 import Email from '../assets/icons/Email.svg';
 import pen from '../assets/icons/edit.svg';
 import search from '../assets/icons/search.svg';
-import verify from '../assets/icons/verify.png';
+import verifySource from '../assets/icons/verify.png';
 import star from '../assets/icons/star.svg';
-import facbookLink from '../assets/icons/Facebook.png';
-import instagramLink from '../assets/icons/Instagramlink.png';
-import Tiktok from '../assets/icons/Tiktok.png';
-import gougleMap from '../assets/icons/GoogleMaps.png';
+import facbookLinkSource from '../assets/icons/Facebook.png';
+import instagramLinkSource from '../assets/icons/Instagramlink.png';
+import TiktokSource from '../assets/icons/Tiktok.png';
+import gougleMapSource from '../assets/icons/GoogleMaps.png';
 import trier from '../assets/icons/trier.svg';
 import filter from '../assets/icons/filter.svg';
-import youtub from '../assets/icons/youtub.png';
-import arrowDown from '../assets/icons/arrowDown.png';
-import mail from '../assets/icons/mail.png';
-import save from '../assets/icons/save.png';
+import youtubSource from '../assets/icons/youtub.png';
+import arrowDownSource from '../assets/icons/arrowDown.png';
+import mailSource from '../assets/icons/mail.png';
+import saveSource from '../assets/icons/save.png';
 import backArrow2 from '../assets/icons/backArrow2.svg';
-import plusPn from '../assets/icons/plus.png';
-import location from '../assets/icons/location.png'
-import Lock from '../assets/icons/Lock.png'
-import share from '../assets/icons/share.png'
-import starIcon from '../assets/icons/starIcon.png'
-import signout from '../assets/icons/signout.png'
-import socialLinks from '../assets/icons/socialMediaLinks.png'
-import profile from '../assets/icons/profile.png'
+import plusPnSource from '../assets/icons/plus.png';
+import locationSource from '../assets/icons/location.png';
+import LockSource from '../assets/icons/Lock.png';
+import shareSource from '../assets/icons/share.png';
+import starIconSource from '../assets/icons/starIcon.png';
+import signoutSource from '../assets/icons/signout.png';
+import socialLinksSource from '../assets/icons/socialMediaLinks.png';
+import profileSource from '../assets/icons/profile.png';
+import {ImageSourcePropType} from 'react-native';
+
+const verify = verifySource as ImageSourcePropType;
+const facbookLink = facbookLinkSource as ImageSourcePropType;
+const instagramLink = instagramLinkSource as ImageSourcePropType;
+const Tiktok = TiktokSource as ImageSourcePropType;
+const gougleMap = gougleMapSource as ImageSourcePropType;
+const youtub = youtubSource as ImageSourcePropType;
+const arrowDown = arrowDownSource as ImageSourcePropType;
+const mail = mailSource as ImageSourcePropType;
+const save = saveSource as ImageSourcePropType;
+const plusPn = plusPnSource as ImageSourcePropType;
+const location = locationSource as ImageSourcePropType;
+const Lock = LockSource as ImageSourcePropType;
+const share = shareSource as ImageSourcePropType;
+const starIcon = starIconSource as ImageSourcePropType;
+const signout = signoutSource as ImageSourcePropType;
+const socialLinks = socialLinksSource as ImageSourcePropType;
+const profile = profileSource as ImageSourcePropType;
 
 export const Icons = {
   morroco,
@@ -63,5 +82,5 @@ export const Icons = {
   starIcon,
   signout,
   socialLinks,
-  profile
+  profile,
 };

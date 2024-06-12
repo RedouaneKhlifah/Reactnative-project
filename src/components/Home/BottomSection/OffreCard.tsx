@@ -12,7 +12,6 @@ import {COLORS, Icons, Images} from '../../../constants';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
 import SocialMediaLinks from './SocialMediaLinks';
 import OffreInfo from './OffreInfo';
-import LineBetween from './LineBetween';
 import OffreRating from './OffreRating';
 
 export interface IoffreImagesData {

@@ -47,8 +47,8 @@ const OfferImages: FC<{data: IoffreImagesData[]}> = ({data}) => {
   };
 
   const handleOnViewableItemsChanged = useRef(
-    ({viewableItems}: {viewableItems: any}) => {
-      if (viewableItems.length > 0) {
+    ({viewableItems}: {viewableItems: Array<{index: number | null}>}) => {
+      if (viewableItems.length > 0 && viewableItems[0].index !== null) {
         setIndex(viewableItems[0].index);
       }
     },

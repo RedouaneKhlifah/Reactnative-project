@@ -1,18 +1,21 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, {AxiosInstance} from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const axiosConfig = (requireToken: boolean,contentType = 'application/json'): AxiosInstance => {
+const axiosConfig = (
+  requireToken: boolean,
+  contentType = 'application/json',
+): AxiosInstance => {
   const apiClient = axios.create({
     baseURL: 'https://winwin-media.com/api/app', // Replace with your API base URL
     timeout: 10000, // Set a timeout for requests (optional)
     headers: {
       'Content-Type': contentType, // Set common headers
-      'Accept': 'application/json',
+      Accept: 'application/json',
     },
   });
 
   apiClient.interceptors.request.use(
-    async (config) => {
+    async config => {
       if (requireToken) {
         const token = await getToken(); // Replace with your token fetching logic
         if (token) {
@@ -21,9 +24,9 @@ const axiosConfig = (requireToken: boolean,contentType = 'application/json'): Ax
       }
       return config;
     },
-    (error) => {
+    error => {
       return Promise.reject(error);
-    }
+    },
   );
 
   return apiClient;
@@ -32,7 +35,7 @@ const axiosConfig = (requireToken: boolean,contentType = 'application/json'): Ax
 const getToken = async (): Promise<string | null> => {
   try {
     const data = await AsyncStorage.getItem('data');
-    const token = data && JSON.parse(data).token
+    const token = data && JSON.parse(data).token;
     return token;
   } catch (error) {
     console.error('Failed to fetch token', error);

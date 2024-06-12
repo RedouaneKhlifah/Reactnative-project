@@ -12,11 +12,11 @@ import UnionSource from '../assets/images/Union.png';
 import restaurantSource from '../assets/images/restaurant.png';
 import offreImageSource from '../assets/images/offreImage.png';
 import selctedImageSource from '../assets/images/selctedImage.png';
-import milfayaBg from "../assets/images/milfaya.png"
-import milfayaPro from "../assets/images/milfayaProfile.png"
-import mails from "../assets/images/mails.png"
-import imgwithGrad from "../assets/images/imgwithGrad.png"
-import requestVerification from "../assets/images/requestVerification.png"
+import milfayaBgSource from '../assets/images/milfaya.png';
+import milfayaProSource from '../assets/images/milfayaProfile.png';
+import mailsSource from '../assets/images/mails.png';
+import imgwithGradSource from '../assets/images/imgwithGrad.png';
+import requestVerificationSource from '../assets/images/requestVerification.png';
 
 // Define image sources with ImageSourcePropType
 const influencer = influencerSource as ImageSourcePropType;
@@ -30,6 +30,11 @@ const Union = UnionSource as ImageSourcePropType;
 const restaurant = restaurantSource as ImageSourcePropType;
 const offreImage = offreImageSource as ImageSourcePropType;
 const selctedImage = selctedImageSource as ImageSourcePropType;
+const milfayaBg = milfayaBgSource as ImageSourcePropType;
+const milfayaPro = milfayaProSource as ImageSourcePropType;
+const mails = mailsSource as ImageSourcePropType;
+const imgwithGrad = imgwithGradSource as ImageSourcePropType;
+const requestVerification = requestVerificationSource as ImageSourcePropType;
 
 // Export Images object with image sources
 export const Images = {
@@ -48,5 +53,5 @@ export const Images = {
   milfayaPro,
   mails,
   imgwithGrad,
-  requestVerification
+  requestVerification,
 };
