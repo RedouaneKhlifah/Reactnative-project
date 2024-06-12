@@ -1,6 +1,5 @@
 import {StyleSheet, Animated, View, Dimensions} from 'react-native';
 import React, {FC} from 'react';
-import {offreImagesDataT} from './OfferImages';
 import {SIZES} from '../../../constants';
 import {IoffreImagesData} from './OffreCard';
 

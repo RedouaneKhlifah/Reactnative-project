@@ -1,7 +1,6 @@
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import OffreInfo from '../../Home/BottomSection/OffreInfo';
-import {Icons} from '../../../constants';
 
 const SelectedOffreInfoSection = () => {
   return (

@@ -1,4 +1,11 @@
-import {StyleSheet, ImageBackground, View, Text, Image, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  View,
+  Text,
+  Image,
+  Pressable,
+} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
@@ -8,11 +15,16 @@ import {responsiveWidth} from '../../utils/responsive';
 import { useNavigationRef } from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
 
   const items = [
-    {icon: Icons.location, title: "Détails de l'entreprise",link:'BusinessDetails' as keyof RootStackParamList},
+    {
+      icon: Icons.location,
+      title: "Détails de l'prise",
+      link: 'BusinessDetails' as keyof RootStackParamList,
+    },
     {icon: Icons.Lock, title: 'Sécurité du compte'},
     {icon: Icons.share, title: 'Parrainez et gagnez'},
     {icon: Icons.starIcon, title: 'Évaluez nous'},
@@ -53,7 +65,11 @@ const BusinessProfile = () => {
               color={COLORS.white}
             />
             <Text style={styles.title}>Sambara</Text>
-            <SecondaryButton onPress={handlePress} title="aide" buttonStyle={{elevation: 0}}/>
+            <SecondaryButton
+              onPress={handlePress}
+              title="aide"
+              buttonStyle={{elevation: 0}}
+            />
           </View>
           <View style={styles.profileOptions}>
             <View style={styles.userCard}>
@@ -66,9 +82,11 @@ const BusinessProfile = () => {
                       fontWeight: '400',
                       color: 'black',
                     }}>
-                    Nom de l'entreprise
+                    {"Nom de l'entreprise"}
                   </Text>
-                  <Text style={{fontSize: SIZES.middleRadius,color:'black'}}>category</Text>
+                  <Text style={{fontSize: SIZES.middleRadius, color: 'black'}}>
+                    category
+                  </Text>
                 </View>
               </View>
             </View>
@@ -76,6 +94,7 @@ const BusinessProfile = () => {
               {items.map((item, index) => {
                 return (
                   <Pressable style={styles.link} key={index} onPress={() => handleAction(item.link)}>
+
                     <View style={styles.userInfo}>
                       <Image
                         source={item.icon}

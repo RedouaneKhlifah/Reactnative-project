@@ -1,6 +1,6 @@
 // NavigationContext.tsx
-import React, { createContext, useContext, useRef, ReactNode, useState, useEffect } from 'react';
-import { NavigationContainerRef } from '@react-navigation/native';
+import React, {createContext, useContext, useRef, ReactNode} from 'react';
+import {NavigationContainerRef} from '@react-navigation/native';
 
 type NavigationContextType = {
   navigationRef: React.RefObject<NavigationContainerRef<RootStackParamList>>;
@@ -9,10 +9,15 @@ type NavigationContextType = {
   goBack: () => void;
 };
 
-const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
+const NavigationContext = createContext<NavigationContextType | undefined>(
+  undefined,
+);
 
-export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>(null);
+export const NavigationProvider: React.FC<{children: ReactNode}> = ({
+  children,
+}) => {
+  const navigationRef =
+    useRef<NavigationContainerRef<RootStackParamList>>(null);
 
   const goBack = () => {
     if (navigationRef.current?.canGoBack()) {
@@ -21,7 +26,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   return (
-    <NavigationContext.Provider value={{ navigationRef, goBack }}>
+    <NavigationContext.Provider value={{navigationRef, goBack}}>
       {children}
     </NavigationContext.Provider>
   );
@@ -30,7 +35,9 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
 export const useNavigationRef = () => {
   const context = useContext(NavigationContext);
   if (!context) {
-    throw new Error('useNavigationRef must be used within a NavigationProvider');
+    throw new Error(
+      'useNavigationRef must be used within a NavigationProvider',
+    );
   }
   return context.navigationRef;
 };
@@ -38,7 +45,9 @@ export const useNavigationRef = () => {
 export const useNavigationContext = () => {
   const context = useContext(NavigationContext);
   if (!context) {
-    throw new Error('useNavigationContext must be used within a NavigationProvider');
+    throw new Error(
+      'useNavigationContext must be used within a NavigationProvider',
+    );
   }
   return context;
 };

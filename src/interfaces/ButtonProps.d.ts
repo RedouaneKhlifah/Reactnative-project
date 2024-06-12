@@ -1,7 +1,7 @@
 interface ButtonProps {
-    onPress: () => void;
-    title: string;
-    buttonStyle?: ViewStyle;
-    textStyle?: TextStyle;
-    loading?: boolean;
-  }
+  onPress: (() => void) | (() => Promise<void>);
+  title: string;
+  buttonStyle?: ViewStyle;
+  textStyle?: TextStyle;
+  loading?: boolean;
+}

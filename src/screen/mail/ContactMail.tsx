@@ -1,10 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet, ImageBackground, Pressable} from 'react-native';
-import {COLORS, FONTS, Images, SIZES} from '../../constants';
+import {FONTS, Images, SIZES} from '../../constants';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import RnIcon from '../../components/ui/RnIcon';
 import {useNavigationRef} from '../../store/NavigationContext';
-import {opacity} from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
 
 const ContactMail = () => {
   const navigationRef = useNavigationRef();
@@ -26,7 +25,7 @@ const ContactMail = () => {
             Win Win
           </Text>
           <Text style={styles.Text3}>
-            L'application préférée des influenceurs
+            {"L'application préférée des influenceurs"}
           </Text>
         </View>
         <View style={{width: SIZES.width, alignItems: 'center'}}>
@@ -55,13 +54,15 @@ const ContactMail = () => {
             paddingVertical: responsiveHeight(15),
             marginBottom: 10,
           }}>
-          <Text style={styles.Text3}>Vous n'avez pas encore de compte?</Text>
+          <Text style={styles.Text3}>
+            {"Vous n'avez pas encore de compte?"}
+          </Text>
           <Pressable
             style={({pressed}) => [{paddingTop: 5, opacity: pressed ? 0.7 : 1}]}
             onPress={() => {
               navigationRef.current?.navigate('RoleSelectionScreen');
             }}>
-            <Text style={styles.log}>S'inscrire</Text>
+            <Text style={styles.log}>{"S'inscrire"}</Text>
           </Pressable>
         </View>
       </View>

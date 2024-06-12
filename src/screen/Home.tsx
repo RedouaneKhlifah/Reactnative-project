@@ -4,20 +4,17 @@ import {
   ScrollView,
   StyleSheet,
   ImageBackground,
-  Image,
 } from 'react-native';
 import React from 'react';
 import {COLORS, Images, SIZES} from '../constants';
-import Input from '../components/ui/Input';
-import SearchInput from '../components/ui/SearchInput';
 import Header from '../components/Home/TopSection/Header';
-import BestOfferSection from '../components/Home/TopSection/BestOfferSection';
 import OffreCard, {
   offreImagesData,
 } from '../components/Home/BottomSection/OffreCard';
 import {responsiveWidth} from '../utils/responsive';
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useAuth } from '../store/AuthContext';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useAuth} from '../store/AuthContext';
+import CategoriesSection from '../components/Home/TopSection/CategoriesSection';
 
 export const dummyData = {
   title: 'Example Title',
@@ -26,7 +23,6 @@ export const dummyData = {
   type: 'Example Type',
 };
 
-
 const data = {
   id: 1,
   offreImages: offreImagesData,
@@ -34,7 +30,6 @@ const data = {
 };
 
 const Home: React.FC = () => {
-
   return (
     <ScrollView style={{marginBottom: 20}}>
       <View style={styles.container}>
@@ -45,8 +40,8 @@ const Home: React.FC = () => {
             <Header />
           </View>
 
-          <View style={styles.BestOfferSection}>
-            <BestOfferSection />
+          <View style={styles.CategoriesSection}>
+            <CategoriesSection />
           </View>
         </ImageBackground>
       </View>
@@ -109,7 +104,7 @@ const styles = StyleSheet.create({
   HeaderContainer: {
     alignItems: 'center',
   },
-  BestOfferSection: {
+  CategoriesSection: {
     flex: 1,
     alignItems: 'center',
     marginLeft: 15,
