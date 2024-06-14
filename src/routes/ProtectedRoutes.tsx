@@ -26,9 +26,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
 
   useEffect(() => {
     console.log(userData);
-    
+
     if (isNavigationReady) {
       // no user lnot logged in
+
       if (!userData) {
         navigationRef.current?.navigate('ContactMail');
       }
@@ -39,22 +40,27 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
       }
 
       // user logged in and confirmed by email code but not verified by admin
-      else if (userData.confirmed === true && userData.status == 'pending' && userData.completed=== false) {
-        if (userData.role ==='influencer') {
+      else if (userData.confirmed === true && userData.completed === false) {
+        if (userData.role === 'influencer') {
           navigationRef.current?.navigate('ProfileScreen');
         }
-        if (userData.role ==='business') {
+        if (userData.role === 'business') {
           navigationRef.current?.navigate('BusinessDetails');
         }
-      }
-      else if(userData.confirmed === true && userData.status == 'pending' && userData.completed ===true){
+      } else if (
+        userData.confirmed === true &&
+        userData.status !== 'approved' &&
+        userData.completed === true
+      ) {
         navigationRef.current?.navigate('Verification');
       }
 
       // user logged in and confirmed by email code and verified by admin
-      else if (userData.status === 'verified' && userData.confirmed === true) {
-        console.log('tesr');
-
+      else if (
+        userData.status === 'approved' &&
+        userData.confirmed === true &&
+        userData.completed === true
+      ) {
         navigationRef.current?.navigate('Home');
       }
     }

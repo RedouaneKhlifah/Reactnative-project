@@ -31,7 +31,7 @@ const data = {
 
 const Home: React.FC = () => {
   return (
-    <ScrollView style={{marginBottom: 20}}>
+    <ScrollView style={{marginBottom: 20, backgroundColor: COLORS.white}}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.topSection}

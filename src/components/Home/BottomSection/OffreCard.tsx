@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
     padding: responsiveWidth(13),
     gap: 15,
     flex: 1,
+    marginBottom: 20,
   },
   imagesContainer: {
     width: responsiveWidth(298),

@@ -31,6 +31,7 @@ import signoutSource from '../assets/icons/signout.png';
 import socialLinksSource from '../assets/icons/socialMediaLinks.png';
 import profileSource from '../assets/icons/profile.png';
 import {ImageSourcePropType} from 'react-native';
+import skeltonCategoriesSource from '../assets/images/skeltonCategories.png';
 
 const verify = verifySource as ImageSourcePropType;
 const facbookLink = facbookLinkSource as ImageSourcePropType;
@@ -49,6 +50,7 @@ const starIcon = starIconSource as ImageSourcePropType;
 const signout = signoutSource as ImageSourcePropType;
 const socialLinks = socialLinksSource as ImageSourcePropType;
 const profile = profileSource as ImageSourcePropType;
+const skeltonCategories = skeltonCategoriesSource as ImageSourcePropType;
 
 export const Icons = {
   morroco,
@@ -83,4 +85,5 @@ export const Icons = {
   signout,
   socialLinks,
   profile,
+  skeltonCategories,
 };

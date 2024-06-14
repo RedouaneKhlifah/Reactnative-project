@@ -87,7 +87,6 @@ const OffreCards = () => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        horizontal
         pagingEnabled
         snapToAlignment="center"
         keyExtractor={item => item.id.toString()}

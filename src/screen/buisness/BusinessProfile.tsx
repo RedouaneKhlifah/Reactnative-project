@@ -12,9 +12,8 @@ import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
 import {responsiveWidth} from '../../utils/responsive';
-import { useNavigationRef } from '../../store/NavigationContext';
+import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
@@ -32,19 +31,8 @@ const BusinessProfile = () => {
   ];
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
-      await AsyncStorage.removeItem('data')
-      navigationRef.current?.navigate('ContactMail')
-      // try {
-      //   const result = await handleLogout();
-      //   if (result?.success === true) {
-      //     console.log(result.message);
-      //     navigationRef.current?.navigate('Login');
-      //   } else {
-      //     console.log(result?.message);
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
+      await AsyncStorage.removeItem('data');
+      navigationRef.current?.navigate('ContactMail');
     } else {
       const link = action as keyof RootStackParamList;
       navigationRef.current?.navigate(link);
@@ -93,8 +81,10 @@ const BusinessProfile = () => {
             <View style={styles.linksHolder}>
               {items.map((item, index) => {
                 return (
-                  <Pressable style={styles.link} key={index} onPress={() => handleAction(item.link)}>
-
+                  <Pressable
+                    style={styles.link}
+                    key={index}
+                    onPress={() => handleAction(item.link)}>
                     <View style={styles.userInfo}>
                       <Image
                         source={item.icon}
