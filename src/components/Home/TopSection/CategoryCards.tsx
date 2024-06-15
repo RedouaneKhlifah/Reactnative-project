@@ -15,8 +15,8 @@ const CategoryCards = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiClientWithToken = axiosConfig(true); // Initialize axios with token
-        const res = await apiClientWithToken.get('/categories/index'); // Fetch data with the token
+        const apiClientWithToken = axiosConfig(true);
+        const res = await apiClientWithToken.get('/categories/index');
 
         console.log(res.data.business_categories);
         setData(res.data.business_categories);

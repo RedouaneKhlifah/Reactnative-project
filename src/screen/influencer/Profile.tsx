@@ -6,7 +6,7 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
@@ -14,10 +14,58 @@ import BackButton from '../../components/ui/buttons/BackButton';
 import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAuth} from '../../store/AuthContext';
+import axiosConfig from '../../api/axios.config';
 
 export default function Profile() {
   const navigationRef = useNavigationRef();
   // const {handleLogout} = useAuth();
+
+  interface ISocialMediaLinks {
+    facebook: string | null;
+    instagram: string | null;
+    youtube: string | null;
+  }
+
+  interface IUserProfile {
+    id: number;
+    profile_image_url: string;
+    email: string;
+    phone: string;
+    first_name: string;
+    last_name: string;
+    date_of_birth: string;
+    gender: 'male' | 'female' | 'other';
+    social_media_links: ISocialMediaLinks;
+    interests: string[];
+    status: string | null;
+    completed: boolean;
+    created_at: string;
+    updated_at: string;
+  }
+
+  const [data, setData] = useState<IUserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiClientWithToken = axiosConfig(true); // Initialize axios with token
+        const res = await apiClientWithToken.get(`/influencer/get/`);
+        if (res.data) {
+          setData(res.data);
+        } else {
+          setData(null);
+        }
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const items = [
     {
@@ -37,19 +85,8 @@ export default function Profile() {
   };
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
-      await AsyncStorage.removeItem('data')
-      navigationRef.current?.navigate('ContactMail')
-      // try {
-      //   const result = await handleLogout();
-      //   if (result?.success === true) {
-      //     console.log(result.message);
-      //     navigationRef.current?.navigate('Login');
-      //   } else {
-      //     console.log(result?.message);
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
+      await AsyncStorage.removeItem('data');
+      navigationRef.current?.navigate('ContactMail');
     } else {
       const link = action as keyof RootStackParamList;
       navigationRef.current?.navigate(link);
@@ -58,7 +95,9 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
-      <ImageBackground style={styles.topSection} source={Images.milfayaBg}>
+      <ImageBackground
+        style={styles.topSection}
+        source={{uri: data?.profile_image_url}}>
         <View style={styles.overlay}>
           <View style={styles.options}>
             <BackButton onPress={handlePress} bgColor="white" />
@@ -67,13 +106,16 @@ export default function Profile() {
           <View style={styles.profileOptions}>
             <View style={styles.userCard}>
               <View style={styles.userInfo}>
-                <Image source={Images.milfayaPro} style={styles.profilePic} />
+                <Image
+                  source={{uri: data?.profile_image_url}}
+                  style={styles.profilePic}
+                />
                 <View>
                   <Text style={{fontSize: SIZES.radius, fontWeight: '700'}}>
-                    Milfaya
+                    {data?.first_name}
                   </Text>
                   <Text style={{fontSize: SIZES.middleRadius}}>
-                    +91 1234567890
+                    {data?.phone}
                   </Text>
                 </View>
               </View>
@@ -129,7 +171,7 @@ const styles = StyleSheet.create({
     width: SIZES.width,
     height: SIZES.height * 0.35,
     flexDirection: 'column',
-    resizeMode: 'cover', // or 'stretch' or 'contain'
+    resizeMode: 'cover',
     gap: 65,
     position: 'relative',
   },
@@ -137,7 +179,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust opacity as needed
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   options: {
     display: 'flex',

@@ -1,7 +1,15 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, StyleProp, TextStyle, TextInputProps } from 'react-native';
-import { COLORS, FONTS } from '../../constants';
-import { responsiveHeight } from '../../utils/responsive';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  StyleProp,
+  TextStyle,
+  TextInputProps,
+} from 'react-native';
+import {COLORS, FONTS} from '../../constants';
+import {responsiveHeight} from '../../utils/responsive';
 
 interface Props extends TextInputProps {
   labelText?: string;
@@ -12,7 +20,6 @@ interface Props extends TextInputProps {
   numberOfLines?: number;
   secureTextEntry?: boolean;
   disabled?: boolean; // Add the disabled prop
-
 }
 
 const InputWithLabel: React.FC<Props> = ({
@@ -20,33 +27,26 @@ const InputWithLabel: React.FC<Props> = ({
   placeholder,
   labelStyle,
   inputStyle,
-  keyboardType = "default",
+  keyboardType = 'default',
   multiline = false,
   secureTextEntry = false,
-  numberOfLines = 4, // Adjust this as needed
+  numberOfLines = 0, // Adjust this as needed
   disabled = false, // Default value for disabled prop
 
   ...props
 }) => {
   return (
     <View style={styles.container}>
-      {
-        labelText &&
-        <Text style={[styles.label, labelStyle]}>{labelText}</Text>
-      }
+      {labelText && <Text style={[styles.label, labelStyle]}>{labelText}</Text>}
       <TextInput
-        style={[
-          styles.input, 
-          inputStyle, 
-          multiline && styles.textArea,          
-        ]}
+        style={[styles.input, inputStyle, multiline && styles.textArea]}
         placeholder={`${placeholder}`}
         placeholderTextColor={COLORS.grayHalfOpacity}
         keyboardType={keyboardType}
         multiline={multiline}
         numberOfLines={multiline ? numberOfLines : undefined}
         secureTextEntry={secureTextEntry}
-        editable={!disabled} // Set editable based on disabled prop
+        editable={!disabled}
         {...props}
       />
     </View>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
   },
   textArea: {
-    paddingTop:responsiveHeight(25),
+    paddingTop: responsiveHeight(25),
     height: responsiveHeight(150), // Adjust this as needed
     textAlignVertical: 'top', // Start input from top
   },

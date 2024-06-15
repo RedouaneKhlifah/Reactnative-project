@@ -1,9 +1,5 @@
 import {View, Text, ScrollView, Pressable} from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
-import OffreCard, {
-  IoffreCard,
-  offreImagesData,
-} from '../components/Home/BottomSection/OffreCard';
 import {COLORS, Icons, FONTS} from '../constants';
 import ActionButton from '../components/CategorySection/ActionButton';
 import BackButton from '../components/ui/buttons/BackButton';
@@ -11,26 +7,7 @@ import {useNavigationRef} from '../store/NavigationContext';
 import OffreCardV from '../components/OffresScreenC/OffreCardV';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import axiosConfig from '../api/axios.config';
-
-export const dummyData = {
-  title: 'Example Title',
-  location: 'Example Location',
-  rating: 4.5,
-  type: 'Example Type',
-};
-
-const data = [
-  {
-    id: 1,
-    offreImages: offreImagesData,
-    offreData: dummyData,
-  },
-  {
-    id: 2,
-    offreImages: offreImagesData,
-    offreData: dummyData,
-  },
-];
+import {IoffreData} from '../components/Home/BottomSection/OffreCard';
 
 type OffersScreenProp = RouteProp<RootStackParamList, 'OffersScreen'>;
 
@@ -38,7 +15,7 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
   const {categoryId} = route.params;
   const navigationRef = useNavigationRef();
 
-  const [data, setData] = useState<IoffreCard[]>([]);
+  const [data, setData] = useState<IoffreData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,8 +26,11 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
         const res = await apiClientWithToken.get(
           `/influencer/get-category-businesses/${categoryId}/asc`,
         );
-
-        setData(res.data.businesses);
+        if (res.data.businesses) {
+          setData(res.data.businesses);
+        } else {
+          setData([]);
+        }
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch data');

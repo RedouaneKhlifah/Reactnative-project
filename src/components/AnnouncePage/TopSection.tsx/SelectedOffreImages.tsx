@@ -1,32 +1,20 @@
 import {FC} from 'react';
-import {
-  Animated,
-  FlatList,
-  View,
-  ImageSourcePropType,
-  Image,
-} from 'react-native';
+import {Animated, FlatList, View, Image} from 'react-native';
 import React, {useRef, useState} from 'react';
-import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
-import {IoffreImagesData} from '../../Home/BottomSection/OffreCard';
+import {responsiveWidth} from '../../../utils/responsive';
 import ImagesPagination from '../../Home/BottomSection/ImagesPagination';
 import {COLORS, SIZES} from '../../../constants';
 
-export interface offreImagesDataT {
-  id: number;
-  image: ImageSourcePropType;
-}
-
-const ImageComponent: FC<{data: IoffreImagesData}> = ({data}) => {
+const ImageComponent: FC<{data: string}> = ({data}) => {
   return (
     <Image
       style={{width: responsiveWidth(390), height: SIZES.height * 0.39}}
-      source={data.image}
+      source={{uri: data}}
     />
   );
 };
 
-const SelectedOffreImages: FC<{data: IoffreImagesData[]}> = ({data}) => {
+const SelectedOffreImages: FC<{data: string[]}> = ({data}) => {
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -59,9 +47,7 @@ const SelectedOffreImages: FC<{data: IoffreImagesData[]}> = ({data}) => {
     itemVisiblePercentThreshold: 50,
   }).current;
 
-  const renderItem = ({item}: {item: IoffreImagesData}) => (
-    <ImageComponent data={item} />
-  );
+  const renderItem = ({item}: {item: string}) => <ImageComponent data={item} />;
 
   return (
     <View>
@@ -71,7 +57,7 @@ const SelectedOffreImages: FC<{data: IoffreImagesData[]}> = ({data}) => {
         horizontal
         pagingEnabled
         snapToAlignment="center"
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         onScroll={handleOnScroll}
         onViewableItemsChanged={handleOnViewableItemsChanged}

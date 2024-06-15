@@ -1,9 +1,7 @@
 import {View, Text, ScrollView, Pressable} from 'react-native';
-import React from 'react';
-import {IoffreImagesData} from '../components/Home/BottomSection/OffreCard';
+import React, {FC, useEffect, useState} from 'react';
 import {COLORS, Icons, Images, SIZES} from '../constants';
 import SelectedOffreImages from '../components/AnnouncePage/TopSection.tsx/SelectedOffreImages';
-import SelectedOffreInfoSection from '../components/AnnouncePage/TopSection.tsx/SelectedOffreInfoSection';
 import OffreInfo from '../components/Home/BottomSection/OffreInfo';
 import LineBetween from '../components/Home/BottomSection/LineBetween';
 import SocialMediaLinks from '../components/Home/BottomSection/SocialMediaLinks';
@@ -11,10 +9,13 @@ import OffreRating from '../components/Home/BottomSection/OffreRating';
 import SimilairesOffre from '../components/AnnouncePage/buttomSection/SimilairesOffre';
 import DateInputWithLbel from '../components/ui/DateInputWithLbel';
 import InputWithLabel from '../components/ui/InputWithLabel';
-import { responsiveWidth } from '../utils/responsive';
+import {responsiveWidth} from '../utils/responsive';
 import SecondaryButton from '../components/ui/buttons/SecondaryButton';
+import {RouteProp} from '@react-navigation/native';
+import axiosConfig from '../api/axios.config';
+import {IoffreData} from '../components/Home/BottomSection/OffreCard';
 
-export const offreImagesData: IoffreImagesData[] = [
+export const offreImagesData = [
   {
     id: 1,
     image: Images.selctedImage,
@@ -28,15 +29,68 @@ export const offreImagesData: IoffreImagesData[] = [
     image: Images.offreImage,
   },
 ];
-const AnnouncePage = () => {
-  const handleSubmit = ()=>{
-    console.log("here");
-    
+
+type OffersScreenProp = RouteProp<RootStackParamList, 'AnnouncePage'>;
+
+const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
+  const {id} = route.params;
+
+  const [data, setData] = useState<IoffreData | null>(null);
+  const [suggestedBusinesses, setSuggestedBusinesses] = useState<
+    IoffreData[] | null
+  >(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiClientWithToken = axiosConfig(true); // Initialize axios with token
+        const res = await apiClientWithToken.get(
+          `/influencer/get-business/${id}`,
+        );
+
+        if (res.data.business) {
+          setData(res.data.business);
+          setSuggestedBusinesses(res.data.suggested_businesses);
+        } else {
+          setData(null);
+          setSuggestedBusinesses(null);
+        }
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch data');
+        setLoading(false);
+        setData(null);
+        setSuggestedBusinesses(null);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSubmit = () => {};
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
+
+  if (!data) {
+    return (
+      <View>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: COLORS.white}}>
       <View style={{marginBottom: 22}}>
-        <SelectedOffreImages data={offreImagesData} />
+        <SelectedOffreImages data={data.gallery_images_filenames} />
         <Pressable
           style={({pressed}) => [
             {opacity: pressed ? 0.8 : 1},
@@ -45,7 +99,7 @@ const AnnouncePage = () => {
           <Icons.backArrow2 />
         </Pressable>
       </View>
-      <View style={{gap: 22}}>
+      <View style={{gap: 22, backgroundColor: COLORS.white}}>
         <View style={{width: '90%', alignSelf: 'center'}}>
           <View
             style={{
@@ -53,72 +107,69 @@ const AnnouncePage = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <OffreInfo title="Sambara" location="Tetouan, MA" iconSize={18} />
+            <OffreInfo
+              title={data.name}
+              location={data.address}
+              iconSize={18}
+            />
             <OffreRating rating={4.5} />
           </View>
         </View>
         <LineBetween lineStyle={{borderWidth: 1}} />
         <View style={{width: '90%', alignSelf: 'center', gap: 15}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <SocialMediaLinks icon={Icons.instagramLink} size={33} />
-            <SocialMediaLinks icon={Icons.Tiktok} size={33} />
-            <SocialMediaLinks icon={Icons.gougleMap} size={33} />
-            <SocialMediaLinks icon={Icons.youtub} size={33} />
-            <SocialMediaLinks icon={Icons.facbookLink} size={33} />
-          </View>
-
           <View>
             <Text
               style={{fontSize: 18, fontWeight: '400', color: COLORS.black}}>
               Description:
             </Text>
             <Text style={{fontSize: 14, fontWeight: '300', lineHeight: 22}}>
-              Ce restaurant pourrait vous faire plaisir avec un poulet
-              délectable. Un personnel qualifié attend les clients tout au long
-              de l'année. Un service luxueux est toujours un plaisir. Sombara
-              Martil est connu pour une atmosphère calme. Google lui donne un
-              score de 4, vous pouvez donc choisir ce lieu pour y passer du bon
-              temps.
+              {data.description}
             </Text>
           </View>
           <View>
             <Text
-                style={{fontSize: 18, fontWeight: '400', color: COLORS.black}}>
-                Formulaire:
+              style={{fontSize: 18, fontWeight: '400', color: COLORS.black}}>
+              Formulaire:
             </Text>
-            <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-              <View style={{width:SIZES.width * 0.4}}>
-                <DateInputWithLbel
-                  placeholder="Date"
-                  mode='date'
-                />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{width: SIZES.width * 0.4}}>
+                <DateInputWithLbel placeholder="Date" mode="date" />
               </View>
-              <View style={{width:SIZES.width * 0.4 }}>
-                <DateInputWithLbel
-                  placeholder="Heure"
-                  mode='time'
-                />
+              <View style={{width: SIZES.width * 0.4}}>
+                <DateInputWithLbel placeholder="Heure" mode="time" />
               </View>
             </View>
-              <InputWithLabel
-                placeholder="Nombre de personnes"
-                labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
-                inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
-                keyboardType='numeric'
-              />
-              <InputWithLabel
-                labelText="Message"
-                multiline={true}
-                numberOfLines={10}
-                placeholder="Ecrivez votre message ici …"
-                labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
-                inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
-              />
-              <SecondaryButton title='Envoyer' onPress={handleSubmit} buttonStyle={{backgroundColor:"#AB82FF",marginVertical:15}} textStyle={{color:'white'}}/>
+            <InputWithLabel
+              placeholder="Nombre de personnes"
+              labelStyle={{
+                fontSize: responsiveWidth(13),
+                color: COLORS.darkGray,
+              }}
+              inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+              keyboardType="numeric"
+            />
+            <InputWithLabel
+              labelText="Message"
+              multiline={true}
+              numberOfLines={10}
+              placeholder="Ecrivez votre message ici …"
+              labelStyle={{
+                fontSize: responsiveWidth(13),
+                color: COLORS.darkGray,
+              }}
+              inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+            />
+            <SecondaryButton
+              title="Envoyer"
+              onPress={handleSubmit}
+              buttonStyle={{backgroundColor: '#AB82FF', marginVertical: 15}}
+              textStyle={{color: 'white'}}
+            />
           </View>
 
           <View>
@@ -135,10 +186,9 @@ const AnnouncePage = () => {
               flexWrap: 'wrap',
               rowGap: 10,
             }}>
-            <SimilairesOffre />
-            <SimilairesOffre />
-            <SimilairesOffre />
-            <SimilairesOffre />
+            {suggestedBusinesses?.map((item, index) => (
+              <SimilairesOffre key={index} data={item} />
+            ))}
           </View>
         </View>
       </View>
