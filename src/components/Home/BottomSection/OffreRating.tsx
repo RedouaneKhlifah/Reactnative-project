@@ -6,7 +6,7 @@ import {COLORS, Icons} from '../../../constants';
 const OffreRating: FC<{rating: number}> = ({rating}) => {
   return (
     <View style={styles.rating}>
-      <Icons.star />
+      {/* <Icons.star /> */}
       <Text style={styles.ratingText}>{rating}</Text>
     </View>
   );
@@ -14,8 +14,8 @@ const OffreRating: FC<{rating: number}> = ({rating}) => {
 
 const styles = StyleSheet.create({
   rating: {
-    width: responsiveWidth(87.73),
-    height: responsiveHeight(45),
+    width: responsiveWidth(80),
+    height: responsiveHeight(40),
     backgroundColor: COLORS.lightOrnange,
     borderRadius: 20.5,
     flexDirection: 'row',
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     color: COLORS.orange,
-    fontSize: responsiveWidth(21),
+    fontSize: responsiveWidth(15),
     fontWeight: '900',
     fontFamily: 'Holly Groove',
   },

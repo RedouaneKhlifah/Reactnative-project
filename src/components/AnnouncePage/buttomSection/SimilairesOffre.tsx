@@ -1,10 +1,15 @@
 import {ImageBackground, Pressable, View} from 'react-native';
-import React from 'react';
+import React, {FC} from 'react';
 import {COLORS, Images} from '../../../constants';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
 import OffreInfo from '../../Home/BottomSection/OffreInfo';
+import {IoffreData} from '../../Home/BottomSection/OffreCard';
 
-const SimilairesOffre = () => {
+const SimilairesOffre: FC<{data: IoffreData | null}> = ({data}) => {
+  if (!data) {
+    return null;
+  }
+
   return (
     <Pressable
       style={({pressed}) => [
@@ -20,7 +25,7 @@ const SimilairesOffre = () => {
         },
       ]}>
       <ImageBackground
-        source={Images.testImage}
+        source={{uri: data.gallery_images_filenames[0]}}
         style={{
           width: responsiveWidth(147),
           height: responsiveHeight(165),
@@ -37,8 +42,8 @@ const SimilairesOffre = () => {
           marginTop: responsiveHeight(10),
         }}>
         <OffreInfo
-          title="Parmigiano"
-          location="Tetouan, MA"
+          title={data.name}
+          location={data.address}
           titleStyle={{
             fontSize: responsiveWidth(13),
             lineHeight: 12,

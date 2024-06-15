@@ -7,7 +7,7 @@ import {
   Image,
 } from 'react-native';
 import React, {FC} from 'react';
-import {COLORS, Icons, Images} from '../../../constants';
+import {COLORS, Icons} from '../../../constants';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
 
 interface OffreInfoProp {
@@ -28,7 +28,12 @@ const OffreInfo: FC<OffreInfoProp> = ({
   return (
     <View>
       <View style={styles.titleContainer}>
-        <Text style={[styles.title, titleStyle]}>{title}</Text>
+        <Text
+          style={[styles.title, titleStyle]}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {title}
+        </Text>
         <Image
           source={Icons.verify}
           style={{
@@ -39,7 +44,12 @@ const OffreInfo: FC<OffreInfoProp> = ({
         />
       </View>
       <View>
-        <Text style={[styles.location, locationStyle]}>{location}</Text>
+        <Text
+          style={[styles.location, locationStyle]}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {location}
+        </Text>
       </View>
     </View>
   );
@@ -52,16 +62,18 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   title: {
-    fontSize: responsiveWidth(21),
+    fontSize: responsiveWidth(16),
     fontWeight: '400',
     color: COLORS.black,
     lineHeight: 22,
+    maxWidth: responsiveWidth(120), // Set a maxWidth to ensure ellipsis
   },
   location: {
-    fontSize: responsiveWidth(13),
+    fontSize: responsiveWidth(11),
     fontWeight: '300',
     transform: [{translateY: 4}],
     lineHeight: 12,
+    maxWidth: responsiveWidth(100), // Set a maxWidth to ensure ellipsis
   },
 });
 

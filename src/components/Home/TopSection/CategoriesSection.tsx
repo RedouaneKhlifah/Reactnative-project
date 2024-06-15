@@ -1,10 +1,10 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, SIZES} from '../../../constants';
-import BestOfferCards from './BestOfferCards';
 import {responsiveWidth} from '../../../utils/responsive';
+import CategoryCards from './CategoryCards';
 
-const BestOfferSection = () => {
+const CategoriesSection = () => {
   return (
     <View style={styles.container}>
       <View>
@@ -13,7 +13,7 @@ const BestOfferSection = () => {
       </View>
       <View>
         <View style={styles.cardConatiner}>
-          <BestOfferCards />
+          <CategoryCards />
         </View>
       </View>
     </View>
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
     fontSize: responsiveWidth(11),
     color: COLORS.white,
     fontWeight: '400',
-    width: '42%',
-    textAlign: 'center',
     backgroundColor: COLORS.purple,
     borderRadius: SIZES.fullRadius,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
   },
   cardConatiner: {
     height: '92%',
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BestOfferSection;
+export default CategoriesSection;

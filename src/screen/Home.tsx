@@ -8,30 +8,15 @@ import {
 import React from 'react';
 import {COLORS, Images, SIZES} from '../constants';
 import Header from '../components/Home/TopSection/Header';
-import OffreCard, {
-  offreImagesData,
-} from '../components/Home/BottomSection/OffreCard';
+import OffreCard from '../components/Home/BottomSection/OffreCard';
 import {responsiveWidth} from '../utils/responsive';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAuth} from '../store/AuthContext';
 import CategoriesSection from '../components/Home/TopSection/CategoriesSection';
 
-export const dummyData = {
-  title: 'Example Title',
-  location: 'Example Location',
-  rating: 4.5,
-  type: 'Example Type',
-};
-
-const data = {
-  id: 1,
-  offreImages: offreImagesData,
-  offreData: dummyData,
-};
-
 const Home: React.FC = () => {
   return (
-    <ScrollView style={{marginBottom: 20}}>
+    <ScrollView style={{marginBottom: 20, backgroundColor: COLORS.white}}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.topSection}
@@ -63,7 +48,7 @@ const Home: React.FC = () => {
       </View>
 
       <View style={{alignItems: 'center'}}>
-        <OffreCard data={data} />
+        {/* <OffreCard data={[]} /> */}
       </View>
 
       <View
@@ -84,7 +69,7 @@ const Home: React.FC = () => {
       </View>
 
       <View style={{alignItems: 'center'}}>
-        <OffreCard data={data} />
+        {/* <OffreCard data={data} /> */}
       </View>
     </ScrollView>
   );

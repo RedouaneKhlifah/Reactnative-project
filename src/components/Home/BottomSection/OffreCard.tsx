@@ -13,52 +13,47 @@ import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
 import SocialMediaLinks from './SocialMediaLinks';
 import OffreInfo from './OffreInfo';
 import OffreRating from './OffreRating';
+import {useNavigationRef} from '../../../store/NavigationContext';
 
-export interface IoffreImagesData {
+export interface IoffreData extends suggested_businessesI {
   id: number;
+  name: string;
+  address: string;
+  category: category;
+  description: string;
+}
+
+interface suggested_businessesI {
+  suggested_businesses?: IoffreData[];
+}
+
+interface category {
+  id: number;
+  name: string;
   image: ImageSourcePropType | undefined;
 }
 
-export const offreImagesData: IoffreImagesData[] = [
-  {
-    id: 1,
-    image: Images.testImage,
-  },
-  {
-    id: 2,
-    image: Images.testImage,
-  },
-  {
-    id: 3,
-    image: Images.testImage,
-  },
-];
+const OffreCard: FC<{data?: IoffreData}> = ({data}) => {
+  if (!data) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.noDataText}>No data available</Text>
+      </View>
+    );
+  }
 
-export interface IoffreData {
-  title: string;
-  location: string;
-  rating: number;
-  type: string;
-}
+  const {id, gallery_images_filenames, name, address, category} = data;
 
-export interface IoffreCard {
-  id: number;
-  offreImages: IoffreImagesData[];
-  offreData: IoffreData;
-}
+  const navigationRef = useNavigationRef();
 
-interface IoffreCardData {
-  data: IoffreCard;
-}
-
-const OffreCard: FC<IoffreCardData> = ({data}) => {
-  const {offreImages, offreData} = data;
-  const {title, location, rating, type} = offreData;
+  const handlePress = () => {
+    navigationRef.current?.navigate('AnnouncePage', {id: id});
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.imagesContainer}>
-        <OfferImages data={offreImages} />
+        <OfferImages data={gallery_images_filenames} />
       </View>
       <View style={{flex: 1, width: '82%', alignSelf: 'center', gap: 15}}>
         <View
@@ -68,16 +63,16 @@ const OffreCard: FC<IoffreCardData> = ({data}) => {
             width: '100%',
           }}>
           <OffreInfo
-            title={'Sambara'}
-            location={'Tetouan, MA'}
-            iconSize={responsiveWidth(18)}
+            title={name}
+            location={address}
+            iconSize={responsiveWidth(15)}
           />
           <OffreRating rating={4.5} />
         </View>
 
         <View style={styles.line}></View>
-        <View style={styles.socialMediaLinksConatiner}>
-          <View style={styles.socialMediaLinksInnerConatiner}>
+        <View style={styles.socialMediaLinksContainer}>
+          <View style={styles.socialMediaLinksInnerContainer}>
             <SocialMediaLinks icon={Icons.facbookLink} size={25} />
             <SocialMediaLinks icon={Icons.instagramLink} size={25} />
             <SocialMediaLinks icon={Icons.gougleMap} size={25} />
@@ -90,7 +85,7 @@ const OffreCard: FC<IoffreCardData> = ({data}) => {
                 fontSize: responsiveWidth(11),
                 fontWeight: '600',
               }}>
-              Snack
+              {category?.name}
             </Text>
           </View>
         </View>
@@ -141,6 +136,7 @@ const OffreCard: FC<IoffreCardData> = ({data}) => {
             </Pressable>
           </View>
           <Pressable
+            onPress={handlePress}
             style={({pressed}) => [
               {opacity: pressed ? 0.8 : 1},
               {
@@ -174,6 +170,7 @@ const styles = StyleSheet.create({
     padding: responsiveWidth(13),
     gap: 15,
     flex: 1,
+    marginBottom: 20,
   },
   imagesContainer: {
     width: responsiveWidth(298),
@@ -217,12 +214,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: COLORS.superLightGray,
   },
-  socialMediaLinksConatiner: {
+  socialMediaLinksContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  socialMediaLinksInnerConatiner: {
+  socialMediaLinksInnerContainer: {
     flexDirection: 'row',
     gap: 6,
   },
@@ -233,6 +230,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 7,
     justifyContent: 'center',
+  },
+  noDataText: {
+    fontSize: responsiveWidth(16),
+    color: COLORS.gray,
+    textAlign: 'center',
+    marginTop: responsiveHeight(20),
   },
 });
 

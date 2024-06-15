@@ -2,6 +2,6 @@ import {ImageSourcePropType} from 'react-native';
 
 export interface CategoryCardT {
   id: number;
-  title: string;
+  name: string;
   image: ImageSourcePropType | undefined;
 }

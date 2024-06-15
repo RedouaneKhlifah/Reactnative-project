@@ -1,45 +1,35 @@
-import {Animated, FlatList, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {Animated, FlatList, View, Text, StyleSheet} from 'react-native';
 import {CategoryCardT} from '../../../interfaces/bestOfferCardT';
-import {Images} from '../../../constants';
 import CategoryCard from './CategoryCard';
-
-export const categoryData: CategoryCardT[] = [
-  {
-    id: 1,
-    title: 'Restaurant',
-    image: Images.restaurant,
-  },
-  {
-    id: 2,
-    title: 'Hotel',
-    image: Images.restaurant,
-  },
-  {
-    id: 3,
-    title: 'Restaurant',
-    image: Images.restaurant,
-  },
-  {
-    id: 4,
-    title: 'Restaurant',
-    image: Images.restaurant,
-  },
-  {
-    id: 5,
-    title: 'Restaurant',
-    image: Images.restaurant,
-  },
-  {
-    id: 6,
-    title: 'Restaurant',
-    image: Images.restaurant,
-  },
-];
+import SkeletonCard from './SkeletonCard';
+import axiosConfig from '../../../api/axios.config';
 
 const CategoryCards = () => {
+  const [data, setData] = useState<CategoryCardT[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiClientWithToken = axiosConfig(true);
+        const res = await apiClientWithToken.get('/categories/index');
+
+        console.log(res.data.business_categories);
+        setData(res.data.business_categories);
+
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleOnScroll = (event: any) => {
     Animated.event(
@@ -72,10 +62,24 @@ const CategoryCards = () => {
     <CategoryCard categoryData={item} />
   );
 
+  if (loading) {
+    return (
+      <View style={styles.skeletonContainer}>
+        {Array.from({length: 3}).map((_, index) => (
+          <SkeletonCard key={index} />
+        ))}
+      </View>
+    );
+  }
+
+  if (error) {
+    return <Text>{error}</Text>;
+  }
+
   return (
     <View>
       <FlatList
-        data={categoryData}
+        data={data}
         renderItem={renderItem}
         horizontal
         pagingEnabled
@@ -89,5 +93,12 @@ const CategoryCards = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  skeletonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});
 
 export default CategoryCards;

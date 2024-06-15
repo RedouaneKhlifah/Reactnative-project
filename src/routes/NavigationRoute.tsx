@@ -2,7 +2,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RoleSelectionScreen from '../screen/RoleSelectionScreen';
 import ProfileScreen from '../screen/ProfileScreen';
 import Home from '../screen/Home';
-import CategorySection from '../screen/CategorySection';
 import AnnouncePage from './../screen/AnnouncePage';
 import LoginScreen from './../screen/auth screens/LoginScreen';
 import SignupScreen from './../screen/auth screens/SignupScreen';
@@ -13,6 +12,7 @@ import BusinessDetails from './../screen/buisness/BusinessDetails';
 import BusinessProfile from './../screen/buisness/BusinessProfile';
 import ProtectedRoute from './ProtectedRoutes';
 import NotificationScreen from '../screen/mail/NotificationScreen';
+import OffersScreen from '../screen/OffersScreen';
 
 type ScreenMapItems = {
   name: keyof RootStackParamList;
@@ -29,7 +29,7 @@ export const NavigationRoute: React.FC = () => {
     {name: 'Profile', component: Profile},
     {name: 'ProfileScreen', component: ProfileScreen},
     {name: 'AnnouncePage', component: AnnouncePage},
-    {name: 'CategorySection', component: CategorySection},
+    {name: 'OffersScreen', component: OffersScreen},
     {name: 'RedirectMail', component: RedirectMail},
     {name: 'Verification', component: NotificationScreen},
     {name: 'BusinessDetails', component: BusinessDetails},

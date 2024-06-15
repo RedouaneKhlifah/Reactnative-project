@@ -1,12 +1,16 @@
-import {StyleSheet, Animated, View, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  Animated,
+  View,
+  Dimensions,
+  ImageSourcePropType,
+} from 'react-native';
 import React, {FC} from 'react';
 import {SIZES} from '../../../constants';
-import {IoffreImagesData} from './OffreCard';
-
 const {width} = Dimensions.get('screen');
 
 interface IPagination {
-  data: IoffreImagesData[];
+  data: string[];
   scrollX: Animated.Value;
   index: number;
   unactiveDotWidth: number;
