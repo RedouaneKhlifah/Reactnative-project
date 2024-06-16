@@ -33,7 +33,14 @@ const DateInputWithLabel: React.FC<Props> = ({ labelText, placeholder, mode = 'd
   }, [initialValue]);
 
   const formatDate = (date: Date) => {
-    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    console.log();
+    if (mode ==='datetime') {
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+    }else if (mode ==='date') {
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    }else{
+      return `${date.getHours()}:${date.getMinutes()}`;
+    }
   };
 
   const handleDateChange = (selectedDate: Date) => {
