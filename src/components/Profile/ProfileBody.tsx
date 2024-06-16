@@ -93,7 +93,6 @@ const ProfileBody = () => {
     if (userData?.status === 'approved' && userData.completed && userData.confirmed) {
       getProfileData()
       setIsEdit(true)
-      
     }
   }, [userData])
   useEffect(() => {
@@ -119,7 +118,7 @@ const ProfileBody = () => {
       })
       setSelectedSocialMedia(data)
       // setSelectedSocialMedia(influencerData.social_media_links||null)
-      setImageUri(influencerData.profile_image_url || null);      
+      // setImageUri(influencerData.profile_image_url || null);      
     }
   }, [influencerData]);
   const getProfileData = async()=>{
@@ -133,8 +132,6 @@ const ProfileBody = () => {
         console.log(error.message);
       }
     }
-
-
   }
   const renderItem = ({item}: {item: SocialMedia}) => (
     <View style={styles.linkContainer}>

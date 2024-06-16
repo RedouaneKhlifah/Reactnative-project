@@ -33,3 +33,17 @@ interface InfluencerData {
   interests: string[];
   social_media_links
 }
+
+interface BusinessData {
+  name:string;
+  ice:string;
+  email:string;
+  phone:string;
+  patent:string;
+  address:string;
+  description:string;
+  category:{
+    id:number
+  };
+  gallery_image_urls?:string[]
+}
