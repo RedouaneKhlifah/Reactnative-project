@@ -108,6 +108,7 @@ const ProfileBody = () => {
       setSelectedGender(influencerData.gender || null);
       setSelectedIntrests(influencerData.interests || null);
       setSelectedDate(influencerData.date_of_birth || null)
+      setImageUri(null)
       const data:string[] = []
       Object.keys(influencerData.social_media_links).map((key)=>{
         data.push(key)
@@ -214,7 +215,7 @@ const ProfileBody = () => {
     setloading(true);
     try {
       const response = await apiClientWithToken.post(
-        '/influencer/submit',
+        isEdit?'/influencer/update':'influencer/submit',
         formData,
       );
       if (response.data) {
@@ -224,7 +225,11 @@ const ProfileBody = () => {
           data.user.completed = true;
           await AsyncStorage.setItem('data', JSON.stringify(data));
           checkConfirmation();
-          navigationRef.current?.navigate('Verification');
+          isEdit
+          ?
+          navigationRef.current?.navigate('Home')
+          :
+          navigationRef.current?.navigate('Verification')
         }
       }
       setloading(false);
