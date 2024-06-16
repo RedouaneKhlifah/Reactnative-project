@@ -1,4 +1,3 @@
-// ProtectedRoute.js
 import React, {ReactNode, useEffect, useState} from 'react';
 import {useAuth} from '../store/AuthContext';
 import {useNavigationRef} from '../store/NavigationContext';
@@ -12,6 +11,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
   const navigationRef = useNavigationRef();
   const {userData} = useAuth();
   const [isNavigationReady, setIsNavigationReady] = useState(false);
+
   useEffect(() => {
     const checkNavigation = () => {
       if (navigationRef.current && navigationRef.current.isReady()) {
@@ -25,46 +25,39 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
   }, [navigationRef]);
 
   useEffect(() => {
+    console.log('good');
     console.log(userData);
 
     if (isNavigationReady) {
-      // no user lnot logged in
-
-      if (!userData) {
-        navigationRef.current?.navigate('ContactMail');
-      }
-
-      // user logged in but not confirmed by email code
-      else if (userData.confirmed === false) {
-        navigationRef.current?.navigate('RedirectMail');
-      }
-
-      // user logged in and confirmed by email code but not verified by admin
-      else if (userData.confirmed === true && userData.completed === false) {
-        if (userData.role === 'influencer') {
-          navigationRef.current?.navigate('ProfileScreen');
-        }
-        if (userData.role === 'business') {
-          navigationRef.current?.navigate('BusinessDetails');
-        }
-      } else if (
-        userData.confirmed === true &&
-        userData.status !== 'approved' &&
-        userData.completed === true
-      ) {
-        navigationRef.current?.navigate('Verification');
-      }
-
-      // user logged in and confirmed by email code and verified by admin
-      else if (
-        userData.status === 'approved' &&
-        userData.confirmed === true &&
-        userData.completed === true
-      ) {
-        navigationRef.current?.navigate('Home');
-      }
+      handleNavigation(userData);
     }
-  }, [userData, navigationRef, isNavigationReady]);
+  }, [userData, isNavigationReady]);
+
+  const handleNavigation = (userData: any) => {
+    if (!userData) {
+      navigationRef.current?.navigate('ContactMail');
+    } else if (userData.confirmed === false) {
+      navigationRef.current?.navigate('RedirectMail');
+    } else if (userData.confirmed === true && userData.completed === false) {
+      if (userData.role === 'influencer') {
+        navigationRef.current?.navigate('ProfileScreen');
+      } else if (userData.role === 'business') {
+        navigationRef.current?.navigate('BusinessDetails');
+      }
+    } else if (
+      userData.confirmed === true &&
+      userData.status !== 'approved' &&
+      userData.completed === true
+    ) {
+      navigationRef.current?.navigate('Verification');
+    } else if (
+      userData.status === 'approved' &&
+      userData.confirmed === true &&
+      userData.completed === true
+    ) {
+      navigationRef.current?.navigate('Home');
+    }
+  };
 
   if (!isNavigationReady) {
     return (

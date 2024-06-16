@@ -9,7 +9,7 @@ const SkeletonOffreCard: FC = () => {
       <View style={styles.imagesContainer}>
         <Animated.View style={styles.skeletonImage} />
       </View>
-      <View style={{flex: 1, width: '82%', alignSelf: 'center', gap: 15}}>
+      <View style={{flex: 1, width: '87%', alignSelf: 'center', gap: 15}}>
         <View
           style={{
             flexDirection: 'row',
@@ -21,26 +21,11 @@ const SkeletonOffreCard: FC = () => {
         </View>
 
         <View style={styles.line}></View>
-        <View style={styles.socialMediaLinksConatiner}>
-          <View style={styles.socialMediaLinksInnerConatiner}>
-            <Animated.View style={styles.skeletonIcon} />
-            <Animated.View style={styles.skeletonIcon} />
-            <Animated.View style={styles.skeletonIcon} />
-            <Animated.View style={styles.skeletonIcon} />
-          </View>
-          <Animated.View style={styles.skeletonType} />
-        </View>
         <View
           style={{
             flex: 1,
-            flexDirection: 'row',
-            gap: 6,
           }}>
-          <View style={{flexDirection: 'row', gap: 6}}>
-            <Animated.View style={styles.skeletonButton} />
-            <Animated.View style={styles.skeletonButton} />
-          </View>
-          <Animated.View style={styles.skeletonButton} />
+          <Animated.View style={styles.skeletonMainButton} />
         </View>
       </View>
     </View>
@@ -55,6 +40,7 @@ const styles = StyleSheet.create({
     padding: responsiveWidth(13),
     gap: 15,
     flex: 1,
+    marginBottom: 20,
   },
   imagesContainer: {
     width: responsiveWidth(298),
@@ -62,31 +48,32 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   skeletonImage: {
-    height: responsiveHeight(200),
+    height: responsiveHeight(400),
     backgroundColor: '#E0E0E0',
+    borderRadius: 12,
   },
   skeletonTitle: {
     width: '60%',
-    height: responsiveHeight(30),
+    height: responsiveHeight(25),
     backgroundColor: '#E0E0E0',
     borderRadius: 5,
   },
   skeletonRating: {
-    width: responsiveWidth(90),
-    height: responsiveHeight(35),
+    width: responsiveWidth(35),
+    height: responsiveHeight(25),
     backgroundColor: '#E0E0E0',
-    borderRadius: 20,
+    borderRadius: 12,
   },
   line: {
     borderBottomWidth: 2,
     borderColor: COLORS.superLightGray,
   },
-  socialMediaLinksConatiner: {
+  socialMediaLinksContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  socialMediaLinksInnerConatiner: {
+  socialMediaLinksInnerContainer: {
     flexDirection: 'row',
     gap: 6,
   },
@@ -97,16 +84,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   skeletonType: {
-    width: responsiveWidth(60),
-    height: responsiveHeight(35),
+    width: responsiveWidth(50),
+    height: responsiveHeight(25),
     backgroundColor: '#E0E0E0',
-    borderRadius: 20,
+    borderRadius: 12,
   },
   skeletonButton: {
-    width: responsiveWidth(50),
+    width: responsiveWidth(30),
+    height: responsiveHeight(25),
+    backgroundColor: '#E0E0E0',
+    borderRadius: 11,
+  },
+  skeletonMainButton: {
+    flex: 1,
     height: responsiveHeight(50),
     backgroundColor: '#E0E0E0',
-    borderRadius: 15,
+    borderRadius: 12,
   },
 });
 

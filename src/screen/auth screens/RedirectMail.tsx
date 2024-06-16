@@ -39,7 +39,7 @@ const RedirectMail = () => {
         `/mail/send-mail-confirmation`,
       );
       console.log('Code sent successfully:', response.data);
-      checkConfirmation();
+      await checkConfirmation();
     } catch (error) {
       console.error('Error submitting code:', error);
     }
@@ -87,16 +87,18 @@ const RedirectMail = () => {
       const response = await apiClientWithToken.post(
         `/mail/confirm-mail/${code}`,
       );
+
+      console.log(response);
+
       const storedData = await AsyncStorage.getItem('data');
       if (storedData) {
         const data = JSON.parse(storedData);
         data.user.confirmed = true;
         await AsyncStorage.setItem('data', JSON.stringify(data));
-        checkConfirmation();
-        if (data.user.role ==='business') {
+        await checkConfirmation();
+        if (data.user.role === 'business') {
           navigationRef.current?.navigate('BusinessDetails');
-          }
-        else if (data.user.role ==='influencer') {
+        } else if (data.user.role === 'influencer') {
           navigationRef.current?.navigate('ProfileScreen');
         }
       }

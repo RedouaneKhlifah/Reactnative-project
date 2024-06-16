@@ -17,7 +17,7 @@ type AuthContextType = {
   isConfirmed: boolean;
   checkConfirmation: () => Promise<void>;
 
-  userData: UserAuth | null;
+  userData: UserAuth | undefined | null;
   handleAuth: (url: string, data: object) => Promise<any>;
 
   // handleLogout :()=> Promise<{ success: boolean, message: string}|undefined >
@@ -29,7 +29,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-  const [userData, setUserData] = useState<UserAuth | null>(null);
+  const [userData, setUserData] = useState<UserAuth | undefined | null>(
+    undefined,
+  );
   const apiClientWithoutToken = axiosConfig(false);
   const apiClientWithToken = axiosConfig(true);
 
@@ -71,7 +73,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
       const response = await apiClientWithoutToken.post(url, formData);
       if (response.data) {
         await AsyncStorage.setItem('data', JSON.stringify(response.data));
-        checkConfirmation();
+        await checkConfirmation();
         return {success: true, data: response.data};
       }
     } catch (error) {

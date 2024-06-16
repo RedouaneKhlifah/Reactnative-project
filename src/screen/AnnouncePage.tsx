@@ -1,5 +1,5 @@
 import {View, Text, ScrollView, Pressable} from 'react-native';
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {COLORS, Icons, Images, SIZES} from '../constants';
 import SelectedOffreImages from '../components/AnnouncePage/TopSection.tsx/SelectedOffreImages';
 import OffreInfo from '../components/Home/BottomSection/OffreInfo';
@@ -14,6 +14,8 @@ import SecondaryButton from '../components/ui/buttons/SecondaryButton';
 import {RouteProp} from '@react-navigation/native';
 import axiosConfig from '../api/axios.config';
 import {IoffreData} from '../components/Home/BottomSection/OffreCard';
+import {useNavigationRef} from '../store/NavigationContext';
+import SkeletonAnnouncePage from '../skelton/SkeletonAnnouncePage';
 
 export const offreImagesData = [
   {
@@ -42,10 +44,13 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const scrollViewRef = useRef<ScrollView>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiClientWithToken = axiosConfig(true); // Initialize axios with token
+        setLoading(true);
+        const apiClientWithToken = axiosConfig(true);
         const res = await apiClientWithToken.get(
           `/influencer/get-business/${id}`,
         );
@@ -65,18 +70,17 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         setSuggestedBusinesses(null);
       }
     };
-
     fetchData();
-  }, []);
+
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({y: 0, animated: true});
+    }
+  }, [id]);
 
   const handleSubmit = () => {};
 
   if (loading) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+    return <SkeletonAnnouncePage />;
   }
 
   if (!data) {
@@ -87,11 +91,19 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
     );
   }
 
+  const navigationRef = useNavigationRef();
+
   return (
-    <ScrollView style={{backgroundColor: COLORS.white}}>
+    <ScrollView ref={scrollViewRef} style={{backgroundColor: COLORS.white}}>
       <View style={{marginBottom: 22}}>
         <SelectedOffreImages data={data.gallery_images_filenames} />
         <Pressable
+          onPress={() =>
+            navigationRef.current?.navigate('OffersScreen', {
+              categoryId: data.category.id,
+              name: data.category.name,
+            })
+          }
           style={({pressed}) => [
             {opacity: pressed ? 0.8 : 1},
             {position: 'absolute', top: 20, left: 15},
@@ -112,7 +124,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               location={data.address}
               iconSize={18}
             />
-            <OffreRating rating={4.5} />
+            <OffreRating views={data.views} />
           </View>
         </View>
         <LineBetween lineStyle={{borderWidth: 1}} />

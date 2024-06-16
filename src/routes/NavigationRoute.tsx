@@ -13,6 +13,7 @@ import BusinessProfile from './../screen/buisness/BusinessProfile';
 import ProtectedRoute from './ProtectedRoutes';
 import NotificationScreen from '../screen/mail/NotificationScreen';
 import OffersScreen from '../screen/OffersScreen';
+import {useAuth} from '../store/AuthContext';
 
 type ScreenMapItems = {
   name: keyof RootStackParamList;
@@ -20,6 +21,7 @@ type ScreenMapItems = {
 };
 export const NavigationRoute: React.FC = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
+  const {userData} = useAuth();
 
   const loggedScreen: ScreenMapItems[] = [
     {name: 'ContactMail', component: ContactMail},
@@ -35,8 +37,9 @@ export const NavigationRoute: React.FC = () => {
     {name: 'BusinessDetails', component: BusinessDetails},
     {name: 'BusinessProfile', component: BusinessProfile},
   ];
+
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName={'Home'}>
       {loggedScreen?.map((screen, index) => {
         return (
           <Stack.Screen

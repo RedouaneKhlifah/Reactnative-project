@@ -4,14 +4,22 @@ import {COLORS, Images} from '../../../constants';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
 import OffreInfo from '../../Home/BottomSection/OffreInfo';
 import {IoffreData} from '../../Home/BottomSection/OffreCard';
+import {useNavigationRef} from '../../../store/NavigationContext';
 
 const SimilairesOffre: FC<{data: IoffreData | null}> = ({data}) => {
   if (!data) {
     return null;
   }
 
+  const navigationRef = useNavigationRef();
+
+  const handlePress = () => {
+    navigationRef.current?.navigate('AnnouncePage', {id: data.id});
+  };
+
   return (
     <Pressable
+      onPress={handlePress}
       style={({pressed}) => [
         {opacity: pressed ? 0.8 : 1},
         {
@@ -45,15 +53,13 @@ const SimilairesOffre: FC<{data: IoffreData | null}> = ({data}) => {
           title={data.name}
           location={data.address}
           titleStyle={{
-            fontSize: responsiveWidth(13),
-            lineHeight: 12,
+            fontSize: responsiveWidth(11),
           }}
           locationStyle={{
-            fontSize: responsiveWidth(11),
-            lineHeight: 10,
-            transform: [{translateY: 0}],
+            fontSize: responsiveWidth(10),
+            transform: [{translateY: -2}],
           }}
-          iconSize={16}
+          iconSize={responsiveWidth(13)}
         />
       </View>
     </Pressable>

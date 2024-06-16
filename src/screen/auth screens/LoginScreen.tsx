@@ -1,4 +1,10 @@
-import {View, Text, ImageBackground, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import React from 'react';
 import {Images, appTheme} from '../../constants';
 import NavbarHeader from '../../components/welcom/NavbarHeader';
@@ -16,13 +22,13 @@ const LoginScreen = () => {
     <ImageBackground
       source={Images.yellowBackground}
       resizeMode="cover"
-      style={{height: SIZES.height, backgroundColor: 'red'}}>
+      style={{height: SIZES.height, flex: 1}}>
       <View style={styles.navbarContainer}>
         <NavbarHeader title="Login" />
       </View>
-      <View style={styles.LoginSectionContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <AuthSection type={AuthType.Login} />
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -31,7 +37,11 @@ const styles = StyleSheet.create({
   navbarContainer: {
     flex: 1,
   },
-  LoginSectionContainer: {
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  loginSectionContainer: {
     flex: 5,
   },
 });

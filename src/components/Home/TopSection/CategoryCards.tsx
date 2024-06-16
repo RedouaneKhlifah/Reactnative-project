@@ -18,8 +18,8 @@ const CategoryCards = () => {
         const apiClientWithToken = axiosConfig(true);
         const res = await apiClientWithToken.get('/categories/index');
 
-        console.log(res.data.business_categories);
         setData(res.data.business_categories);
+        console.log('res', res.data.business_categories);
 
         setLoading(false);
       } catch (err) {

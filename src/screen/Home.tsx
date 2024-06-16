@@ -5,16 +5,51 @@ import {
   StyleSheet,
   ImageBackground,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS, Images, SIZES} from '../constants';
 import Header from '../components/Home/TopSection/Header';
-import OffreCard from '../components/Home/BottomSection/OffreCard';
+import OffreCard, {
+  IoffreData,
+} from '../components/Home/BottomSection/OffreCard';
 import {responsiveWidth} from '../utils/responsive';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useAuth} from '../store/AuthContext';
 import CategoriesSection from '../components/Home/TopSection/CategoriesSection';
+import axiosConfig from '../api/axios.config';
+import SkeletonOffreCard from '../components/Home/BottomSection/SkeletonOffreCard';
 
 const Home: React.FC = () => {
+  const [data, setData] = useState<IoffreData[] | null>(null);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const apiClientWithToken = axiosConfig(true);
+        const res = await apiClientWithToken.get(
+          `/influencer/suggest-two-businesses`,
+        );
+
+        console.log('res', res.data);
+
+        if (res.data) {
+          setData(res.data);
+        } else {
+          setData(null);
+        }
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch data');
+        setLoading(false);
+        setData(null);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <ScrollView style={{marginBottom: 20, backgroundColor: COLORS.white}}>
       <View style={styles.container}>
@@ -41,6 +76,7 @@ const Home: React.FC = () => {
           <Text style={{fontSize: 22, color: COLORS.black, fontWeight: '400'}}>
             Tu pourrais aimer!
           </Text>
+
           <Text style={{fontSize: 12, color: COLORS.black, fontWeight: '300'}}>
             Découvrez les entreprises qui peuvent être les meilleures pour vous.
           </Text>
@@ -48,7 +84,7 @@ const Home: React.FC = () => {
       </View>
 
       <View style={{alignItems: 'center'}}>
-        {/* <OffreCard data={[]} /> */}
+        {loading ? <SkeletonOffreCard /> : data && <OffreCard data={data[0]} />}
       </View>
 
       <View
@@ -69,7 +105,7 @@ const Home: React.FC = () => {
       </View>
 
       <View style={{alignItems: 'center'}}>
-        {/* <OffreCard data={data} /> */}
+        {loading ? <SkeletonOffreCard /> : data && <OffreCard data={data[1]} />}
       </View>
     </ScrollView>
   );

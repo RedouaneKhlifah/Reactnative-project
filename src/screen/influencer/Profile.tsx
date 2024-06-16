@@ -13,12 +13,10 @@ import RnIcon from '../../components/ui/RnIcon';
 import BackButton from '../../components/ui/buttons/BackButton';
 import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAuth} from '../../store/AuthContext';
 import axiosConfig from '../../api/axios.config';
 
 export default function Profile() {
   const navigationRef = useNavigationRef();
-  // const {handleLogout} = useAuth();
 
   interface ISocialMediaLinks {
     facebook: string | null;
@@ -80,9 +78,9 @@ export default function Profile() {
   ];
 
   const handlePress = () => {
-    // Your onPress logic here
     console.log('Button pressed!');
   };
+
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
       await AsyncStorage.removeItem('data');
@@ -100,7 +98,7 @@ export default function Profile() {
         source={{uri: data?.profile_image_url}}>
         <View style={styles.overlay}>
           <View style={styles.options}>
-            <BackButton onPress={handlePress} bgColor="white" />
+            <BackButton bgColor="white" />
             <SecondaryButton onPress={handlePress} title="aide" />
           </View>
           <View style={styles.profileOptions}>
@@ -164,6 +162,7 @@ const styles = StyleSheet.create({
   container: {
     height: SIZES.height,
     display: 'flex',
+    backgroundColor: COLORS.white,
   },
   topSection: {
     flex: 1,
