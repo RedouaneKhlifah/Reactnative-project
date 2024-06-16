@@ -77,7 +77,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
       if (result?.success) {
         // no user logged and confirmed
         if (result?.data.user.confirmed === true) {
-          if (result?.data.user.status === 'verified') {
+          if (result?.data.user.status === 'approved') {
             navigationRef.current?.navigate('Home');
           } else {
             navigationRef.current?.navigate('Verification');

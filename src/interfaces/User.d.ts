@@ -21,3 +21,15 @@ export enum userRole {
   business = 'business',
   influencer = 'influencer',
 }
+
+interface InfluencerData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  date_of_birth: string;
+  gender: string;
+  profile_image_url: string;
+  interests: string[];
+  social_media_links
+}
