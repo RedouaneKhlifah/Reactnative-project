@@ -10,21 +10,18 @@ import React, {FC} from 'react';
 import OfferImages from './OfferImages';
 import {COLORS, Icons, Images} from '../../../constants';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
-import SocialMediaLinks from './SocialMediaLinks';
 import OffreInfo from './OffreInfo';
 import OffreRating from './OffreRating';
 import {useNavigationRef} from '../../../store/NavigationContext';
 
-export interface IoffreData extends suggested_businessesI {
+export interface IoffreData {
   id: number;
   name: string;
   address: string;
   category: category;
+  gallery_images_filenames: string[];
   description: string;
-}
-
-interface suggested_businessesI {
-  suggested_businesses?: IoffreData[];
+  views: number;
 }
 
 interface category {
@@ -33,7 +30,7 @@ interface category {
   image: ImageSourcePropType | undefined;
 }
 
-const OffreCard: FC<{data?: IoffreData}> = ({data}) => {
+const OffreCard: FC<{data?: IoffreData | null}> = ({data}) => {
   if (!data) {
     return (
       <View style={styles.container}>
@@ -55,7 +52,7 @@ const OffreCard: FC<{data?: IoffreData}> = ({data}) => {
       <View style={styles.imagesContainer}>
         <OfferImages data={gallery_images_filenames} />
       </View>
-      <View style={{flex: 1, width: '82%', alignSelf: 'center', gap: 15}}>
+      <View style={{flex: 1, width: '87%', alignSelf: 'center', gap: 13}}>
         <View
           style={{
             flexDirection: 'row',
@@ -67,74 +64,14 @@ const OffreCard: FC<{data?: IoffreData}> = ({data}) => {
             location={address}
             iconSize={responsiveWidth(15)}
           />
-          <OffreRating rating={4.5} />
+          <OffreRating views={data.views} />
         </View>
 
         <View style={styles.line}></View>
-        <View style={styles.socialMediaLinksContainer}>
-          <View style={styles.socialMediaLinksInnerContainer}>
-            <SocialMediaLinks icon={Icons.facbookLink} size={25} />
-            <SocialMediaLinks icon={Icons.instagramLink} size={25} />
-            <SocialMediaLinks icon={Icons.gougleMap} size={25} />
-            <SocialMediaLinks icon={Icons.Tiktok} size={25} />
-          </View>
-          <View style={styles.offreType}>
-            <Text
-              style={{
-                color: 'rgba(241, 59, 58, 0.80)',
-                fontSize: responsiveWidth(11),
-                fontWeight: '600',
-              }}>
-              {category?.name}
-            </Text>
-          </View>
-        </View>
         <View
           style={{
             flex: 1,
-            flexDirection: 'row',
-            gap: 6,
           }}>
-          <View style={{flexDirection: 'row', gap: 6}}>
-            <Pressable
-              style={({pressed}) => [
-                {opacity: pressed ? 0.8 : 1},
-                {
-                  padding: 11,
-                  borderWidth: 1,
-                  borderColor: '#EBEBEB',
-                  borderRadius: 11,
-                },
-              ]}>
-              <Image
-                source={Icons.mail}
-                style={{
-                  width: responsiveWidth(19),
-                  height: responsiveHeight(25),
-                }}
-                resizeMode="contain"
-              />
-            </Pressable>
-            <Pressable
-              style={({pressed}) => [
-                {opacity: pressed ? 0.8 : 1},
-                {
-                  padding: 11,
-                  borderWidth: 1,
-                  borderColor: '#EBEBEB',
-                  borderRadius: 11,
-                },
-              ]}>
-              <Image
-                source={Icons.save}
-                style={{
-                  width: responsiveWidth(17),
-                  height: responsiveHeight(25),
-                }}
-                resizeMode="contain"
-              />
-            </Pressable>
-          </View>
           <Pressable
             onPress={handlePress}
             style={({pressed}) => [
@@ -145,6 +82,7 @@ const OffreCard: FC<{data?: IoffreData}> = ({data}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 12,
+                height: responsiveHeight(60),
               },
             ]}>
             <Text

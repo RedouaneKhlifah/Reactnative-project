@@ -17,11 +17,12 @@ type RootStackParamList = {
   RoleSelectionScreen: undefined;
   ProfileScreen: undefined;
   Profile: {id: number};
-  OffersScreen: {categoryId: number};
+  OffersScreen: {categoryId: number; name: string};
   BusinessDetails: undefined;
   BusinessProfile: {id: number};
   Protected: undefined;
   Verification: undefined;
+  '': undefined;
 };
 
 type RootStackParamKeys = keyof RootStackParamList;

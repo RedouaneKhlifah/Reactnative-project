@@ -30,15 +30,12 @@ const NotificationScreen = () => {
       .then(() => {
         navigationRef.current?.navigate('ContactMail');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.backButton}>
-        <BackButton bgColor={COLORS.yellow} color={COLORS.white} />
-      </View>
       <View style={styles.content}>
         <Image source={Images.requestVerification} style={styles.image} />
 
@@ -81,14 +78,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 50,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-    marginLeft: 20,
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: COLORS.yellow,
   },
   image: {
     width: 200,

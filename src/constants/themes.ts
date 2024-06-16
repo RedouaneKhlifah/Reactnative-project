@@ -7,7 +7,7 @@ export const COLORS = {
   secondary: '', // gray
 
   // colors
-  white: '#FFFFFF',
+  white: '#ffffff',
   black: '#000000',
   yellow: '#FAD932',
   gray: '#454545',
@@ -42,7 +42,7 @@ export const SIZES = {
   h3: 16,
   h4: 14,
   h5: 12,
-  hs:18,
+  hs: 18,
   body0: 32,
   body1: 30,
   body2: 20,

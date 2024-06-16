@@ -1,13 +1,16 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import React, {FC} from 'react';
 import {responsiveHeight, responsiveWidth} from '../../../utils/responsive';
 import {COLORS, Icons} from '../../../constants';
 
-const OffreRating: FC<{rating: number}> = ({rating}) => {
+const OffreRating: FC<{views: number}> = ({views}) => {
   return (
     <View style={styles.rating}>
-      {/* <Icons.star /> */}
-      <Text style={styles.ratingText}>{rating}</Text>
+      <Image
+        style={{width: responsiveWidth(15), height: responsiveHeight(15)}}
+        source={Icons.eye}
+      />
+      <Text style={styles.ratingText}>{views}</Text>
     </View>
   );
 };

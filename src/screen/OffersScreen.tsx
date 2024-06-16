@@ -12,19 +12,21 @@ import {IoffreData} from '../components/Home/BottomSection/OffreCard';
 type OffersScreenProp = RouteProp<RootStackParamList, 'OffersScreen'>;
 
 const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
-  const {categoryId} = route.params;
+  const {categoryId, name} = route.params;
   const navigationRef = useNavigationRef();
 
   const [data, setData] = useState<IoffreData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [Order, setOrder] = useState<string>('asc');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiClientWithToken = axiosConfig(true); // Initialize axios with token
+        setLoading(true);
+        const apiClientWithToken = axiosConfig(true);
         const res = await apiClientWithToken.get(
-          `/influencer/get-category-businesses/${categoryId}/asc`,
+          `/influencer/get-category-businesses/${categoryId}/${Order}`,
         );
         if (res.data.businesses) {
           setData(res.data.businesses);
@@ -39,10 +41,10 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
     };
 
     fetchData();
-  }, []);
+  }, [Order]);
 
   return (
-    <ScrollView style={{marginTop: 10, backgroundColor: '#FFF'}}>
+    <ScrollView style={{paddingTop: 10, backgroundColor: COLORS.white}}>
       <View
         style={{
           width: '90%',
@@ -56,7 +58,7 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
           color={COLORS.white}
         />
         <Text style={{fontSize: 22, fontWeight: '400', color: COLORS.black}}>
-          Restaurant
+          {name}
         </Text>
       </View>
       <View
@@ -67,8 +69,13 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
           flexDirection: 'row',
           gap: 6,
         }}>
-        <ActionButton Icon={Icons.trier} title="Trier" onPress={() => {}} />
-        <ActionButton Icon={Icons.filter} title="Filter" onPress={() => {}} />
+        <ActionButton
+          Icon={Order === 'asc' ? Icons.trier : Icons.trierWhite}
+          title="Trier"
+          textColor={Order === 'asc' ? COLORS.black : COLORS.white}
+          bg={Order === 'asc' ? COLORS.white : COLORS.black}
+          onPress={() => setOrder(Order === 'asc' ? 'desc' : 'asc')}
+        />
       </View>
       <View
         style={{
@@ -77,11 +84,11 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
           paddingBottom: 10,
         }}>
         <Text style={{color: COLORS.black, fontSize: 22, fontWeight: '400'}}>
-          Affichage de 40 propriétés
+          Affichage de {data.length} propriétés
         </Text>
       </View>
       <View style={{alignItems: 'center', gap: 20}}>
-        <OffreCardV data={data} />
+        <OffreCardV data={data} loading={loading} error={error} />
       </View>
     </ScrollView>
   );
