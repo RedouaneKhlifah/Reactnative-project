@@ -10,7 +10,7 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {Key, useEffect, useState} from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import InputWithLabel from '../ui/InputWithLabel';
 import DateInputWithLbel from '../ui/DateInputWithLbel';
@@ -24,22 +24,24 @@ import axiosConfig from '../../api/axios.config';
 import axios from 'axios';
 import { useNavigationRef } from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { InfluencerData } from '../../interfaces/User';
 
 type SocialMedia = 'facebook' | 'instagram' | 'youtube'; // Define the types of social media
 
 const ProfileBody = () => {
   const {userData,checkConfirmation} = useAuth();
 
-  const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+  const [selectedGender, setSelectedGender] = useState<string|null>(null);
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState<string[]>([]);
   const [links, setLinks] = useState<{[key in SocialMedia]?: string}>({});
-  const [selectedIntrests, setSelectedIntrests] = useState(null);
+  const [selectedIntrests, setSelectedIntrests] = useState<string[]|null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [imageUri, setImageUri] = useState<string | null | undefined>(null);
   const [loading, setloading] = useState(false);
   const [imgloading, setImgloading] = useState(false);
   const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
-
+  const [isEdit, setIsEdit] = useState(false)
+  const [influencerData, setinfluencerData] = useState<InfluencerData | null>(null);
   const [errors, setErrors] = useState({
     email:'',
     phone:'',
@@ -53,11 +55,11 @@ const ProfileBody = () => {
   const navigationRef = useNavigationRef();
 
   const [profileData, setProfileData] = useState({
-    firstName: '',
+    firstName: isEdit ? influencerData?.first_name : '',
     lastName: '',
     email: userData?.email || '',
     phone: '',
-    birthDate: '',
+    date_of_birth:''
   });
 
   const [genders, setgenders] = useState([
@@ -87,7 +89,52 @@ const ProfileBody = () => {
     {label: 'Hotels', value: 'Hotels'},
     {label: 'Shops', value: 'Shops'},
   ]);
+  useEffect(() => {
+    if (userData?.status === 'approved' && userData.completed && userData.confirmed) {
+      getProfileData()
+      setIsEdit(true)
+      
+    }
+  }, [userData])
+  useEffect(() => {
+    if (influencerData) {
+      setProfileData({
+        firstName: influencerData.first_name || '',
+        lastName: influencerData.last_name || '',
+        email: influencerData.email || userData?.email || '',
+        phone: influencerData.phone || '',
+        date_of_birth: influencerData.date_of_birth || '',
+      });
+      setSelectedGender(influencerData.gender || null);
+      setSelectedIntrests(influencerData.interests || null);
+      setSelectedDate(influencerData.date_of_birth || null)
+      const data:string[] = []
+      Object.keys(influencerData.social_media_links).map((key)=>{
+        data.push(key)
+        setLinks((prevStat)=>({
+          ...prevStat,
+          [key]:influencerData.social_media_links[key]
+        }))
+      })
+      setSelectedSocialMedia(data)
+      // setSelectedSocialMedia(influencerData.social_media_links||null)
+      setImageUri(influencerData.profile_image_url || null);      
+    }
+  }, [influencerData]);
+  const getProfileData = async()=>{
+    try {
+      const res = await apiClientWithToken.get('/influencer/get')
+      setinfluencerData(res.data)
+      console.log('influencerDatainfluencerDatainfluencerData',influencerData);
+      
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.message);
+      }
+    }
 
+
+  }
   const renderItem = ({item}: {item: SocialMedia}) => (
     <View style={styles.linkContainer}>
       <View
@@ -158,7 +205,7 @@ const ProfileBody = () => {
     formData.append('gender', selectedGender);
 
     Object.keys(links).forEach(key => {
-      formData.append(key, links[key]);
+      formData.append(key, links[key as SocialMedia] || '');
     });
 
     selectedIntrests?.forEach((interest: string) => {
@@ -255,6 +302,7 @@ const ProfileBody = () => {
         <InputWithLabel
           labelText="Numéro de téléphone"
           placeholder="+212 666666666"
+          value={profileData.phone}
           onChangeText={text => handleInputChange('phone', text)}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
@@ -265,6 +313,7 @@ const ProfileBody = () => {
           labelText="Date de Naissance"
           placeholder="jj/mm/aaaa"
           mode="date"
+          initialValue={profileData.date_of_birth || ''}
           onDateChange={formattedDate => {
             setSelectedDate(formattedDate);
           }}
@@ -314,7 +363,7 @@ const ProfileBody = () => {
         <PrimaryButton
           onPress={handleSubmit}
           loading={loading}
-          title="Save changes"
+          title={isEdit ? "update changes" : "Save changes"} 
           textStyle={{color: COLORS.white}}
           buttonStyle={{elevation: 0, borderRadius: 20}}
         />
