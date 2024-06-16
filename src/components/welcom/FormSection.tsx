@@ -73,6 +73,8 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
 
       if (result?.success) {
         // no user logged and confirmed
+        console.log('good');
+
         if (result?.data.user.confirmed === true) {
           if (result?.data.user.status === 'approved') {
             navigationRef.current?.navigate('Home');
@@ -108,8 +110,8 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
       {errors?.email && <Text style={styles.errorText}>{errors.email[0]}</Text>}
 
       <InputWithLabel
-        labelText={'Password'}
-        placeholder={'Your password ...'}
+        labelText={'Mot de passe'}
+        placeholder={'Votre mot de passe ...'}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.black}}
         inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
         onChangeText={text => handleChange('password', text)}

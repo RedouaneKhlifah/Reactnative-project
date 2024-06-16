@@ -14,6 +14,7 @@ import ProtectedRoute from './ProtectedRoutes';
 import NotificationScreen from '../screen/mail/NotificationScreen';
 import OffersScreen from '../screen/OffersScreen';
 import {useAuth} from '../store/AuthContext';
+import {ActivityIndicator, View} from 'react-native';
 
 type ScreenMapItems = {
   name: keyof RootStackParamList;
@@ -21,7 +22,7 @@ type ScreenMapItems = {
 };
 export const NavigationRoute: React.FC = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
-  const {userData} = useAuth();
+  const {userData, isLoading, isAuthenticated} = useAuth();
 
   const loggedScreen: ScreenMapItems[] = [
     {name: 'ContactMail', component: ContactMail},
@@ -38,8 +39,17 @@ export const NavigationRoute: React.FC = () => {
     {name: 'BusinessProfile', component: BusinessProfile},
   ];
 
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
-    <Stack.Navigator initialRouteName={'Home'}>
+    <Stack.Navigator
+      initialRouteName={isAuthenticated ? 'Home' : 'ContactMail'}>
       {loggedScreen?.map((screen, index) => {
         return (
           <Stack.Screen

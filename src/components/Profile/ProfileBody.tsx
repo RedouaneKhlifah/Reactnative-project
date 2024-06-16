@@ -22,13 +22,13 @@ import PrimaryButton from '../ui/buttons/PrimaryButton';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axiosConfig from '../../api/axios.config';
 import axios from 'axios';
-import { useNavigationRef } from '../../store/NavigationContext';
+import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SocialMedia = 'facebook' | 'instagram' | 'youtube'; // Define the types of social media
 
 const ProfileBody = () => {
-  const {userData,checkConfirmation} = useAuth();
+  const {userData, checkConfirmation} = useAuth();
 
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
@@ -41,15 +41,15 @@ const ProfileBody = () => {
   const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
 
   const [errors, setErrors] = useState({
-    email:'',
-    phone:'',
-    first_name:'',
-    last_name:'',
-    date_of_birth:'',
-    gender:'',
-    image:'',
-    interests:'',
-  })
+    email: '',
+    phone: '',
+    first_name: '',
+    last_name: '',
+    date_of_birth: '',
+    gender: '',
+    image: '',
+    interests: '',
+  });
   const navigationRef = useNavigationRef();
 
   const [profileData, setProfileData] = useState({
@@ -121,7 +121,6 @@ const ProfileBody = () => {
       response => {
         setImgloading(true);
         if (response.didCancel) {
-          console.log('User cancelled image picker');
         } else if (response.errorCode) {
           console.log('ImagePicker Error: ', response.errorCode);
         } else if (response.assets && response.assets.length > 0) {
@@ -163,7 +162,7 @@ const ProfileBody = () => {
 
     selectedIntrests?.forEach((interest: string) => {
       formData.append('interests[]', interest);
-    });    
+    });
     setloading(true);
     try {
       const response = await apiClientWithToken.post(
@@ -183,8 +182,6 @@ const ProfileBody = () => {
       setloading(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log('Error request:', error.request);
-        console.log('Error response:', error.response?.data);
         if (error.response?.data) {
           setErrors(error.response?.data.errors);
         }
@@ -196,11 +193,10 @@ const ProfileBody = () => {
   };
   return (
     <ScrollView style={styles.container}>
-
       <View style={styles.ImageContainer}>
         <ImageBackground
           style={styles.ImageInnerContainer}
-          source={imageUri ? {uri: imageUri} : Images.testImage}
+          source={{uri: imageUri ? imageUri : ''}}
           resizeMode="cover"></ImageBackground>
         <Pressable
           onPress={handleImagePick}
@@ -208,7 +204,7 @@ const ProfileBody = () => {
           <Icons.pen />
         </Pressable>
       </View>
-        {errors?.image && <Text style={styles.errorText}>{errors.image[0]}</Text>}
+      {errors?.image && <Text style={styles.errorText}>{errors.image[0]}</Text>}
 
       <View style={styles.fomContainer}>
         <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
@@ -224,7 +220,9 @@ const ProfileBody = () => {
               }}
               inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
             />
-            {errors?.last_name && <Text style={styles.errorText}>{errors.last_name[0]}</Text>}
+            {errors?.last_name && (
+              <Text style={styles.errorText}>{errors.last_name[0]}</Text>
+            )}
           </View>
 
           <View style={{width: '50%'}}>
@@ -239,19 +237,21 @@ const ProfileBody = () => {
               }}
               inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
             />
-            {errors?.first_name && <Text style={styles.errorText}>{errors.first_name[0]}</Text>}
+            {errors?.first_name && (
+              <Text style={styles.errorText}>{errors.first_name[0]}</Text>
+            )}
           </View>
-
         </View>
         <InputWithLabel
           labelText="Email"
           placeholder={userData?.email ?? ''}
-          
-          disabled={userData?.email ? true:false}
+          disabled={userData?.email ? true : false}
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
         />
-        {errors?.email && <Text style={styles.errorText}>{errors.email[0]}</Text>}
+        {errors?.email && (
+          <Text style={styles.errorText}>{errors.email[0]}</Text>
+        )}
         <InputWithLabel
           labelText="Numéro de téléphone"
           placeholder="+212 666666666"
@@ -259,7 +259,9 @@ const ProfileBody = () => {
           labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
           inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
         />
-        {errors?.phone && <Text style={styles.errorText}>{errors.phone[0]}</Text>}
+        {errors?.phone && (
+          <Text style={styles.errorText}>{errors.phone[0]}</Text>
+        )}
 
         <DateInputWithLbel
           labelText="Date de Naissance"
@@ -269,7 +271,9 @@ const ProfileBody = () => {
             setSelectedDate(formattedDate);
           }}
         />
-        {errors?.date_of_birth && <Text style={styles.errorText}>{errors.date_of_birth[0]}</Text>}
+        {errors?.date_of_birth && (
+          <Text style={styles.errorText}>{errors.date_of_birth[0]}</Text>
+        )}
 
         <View style={styles.SelectorsContainer}>
           <Dropdown
@@ -282,7 +286,9 @@ const ProfileBody = () => {
             maxHeight={120}
             labelTextStyle={{fontSize: 16, color: COLORS.darkGray}}
           />
-          {errors?.gender && <Text style={styles.errorText}>{errors.gender[0]}</Text>}
+          {errors?.gender && (
+            <Text style={styles.errorText}>{errors.gender[0]}</Text>
+          )}
 
           <Dropdown
             label="Social Media"
@@ -309,7 +315,9 @@ const ProfileBody = () => {
             maxHeight={120}
             multiple={true}
           />
-         {errors?.interests && <Text style={styles.errorText}>{errors.interests[0]}</Text>}
+          {errors?.interests && (
+            <Text style={styles.errorText}>{errors.interests[0]}</Text>
+          )}
         </View>
         <PrimaryButton
           onPress={handleSubmit}

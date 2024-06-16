@@ -12,15 +12,11 @@ import {UserAuth} from '../interfaces/User';
 
 type AuthContextType = {
   isAuthenticated: boolean;
+  isLoading: boolean;
   checkAuthentication: () => Promise<void>;
-
-  isConfirmed: boolean;
   checkConfirmation: () => Promise<void>;
-
   userData: UserAuth | undefined | null;
   handleAuth: (url: string, data: object) => Promise<any>;
-
-  // handleLogout :()=> Promise<{ success: boolean, message: string}|undefined >
   handleLogout: () => void;
 };
 
@@ -28,7 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<UserAuth | undefined | null>(
     undefined,
   );
@@ -36,7 +32,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const apiClientWithToken = axiosConfig(true);
 
   useEffect(() => {
-    checkAuthentication();
+    checkAuthentication().finally(() => setIsLoading(false));
     checkConfirmation();
   }, []);
 
@@ -59,12 +55,11 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     try {
       const data = await AsyncStorage.getItem('data');
       if (data) {
-        setIsConfirmed(JSON.parse(data).user.confirmed);
         setUserData(JSON.parse(data).user);
       }
     } catch (error) {
       console.error('Failed to check Confirmation', error);
-      setIsConfirmed(false);
+      setUserData(null);
     }
   };
 
@@ -78,7 +73,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        // Axios error handling
         if (error.response) {
           return {success: false, data: error.response.data};
         }
@@ -86,16 +80,19 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
       return {success: false, data: error};
     }
   };
+
   const handleLogout = async () => {
     await AsyncStorage.removeItem('data');
+    setIsAuthenticated(false);
+    setUserData(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        isLoading,
         checkAuthentication,
-        isConfirmed,
         checkConfirmation,
         userData,
         handleAuth,

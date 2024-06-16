@@ -24,7 +24,7 @@ const LoginScreen = () => {
       resizeMode="cover"
       style={{height: SIZES.height, flex: 1}}>
       <View style={styles.navbarContainer}>
-        <NavbarHeader title="Login" />
+        <NavbarHeader title="Se connecter" />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <AuthSection type={AuthType.Login} />

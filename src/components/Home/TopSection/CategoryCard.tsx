@@ -14,7 +14,7 @@ import {CategoryCardT} from '../../../interfaces/bestOfferCardT';
 import {useNavigationRef} from '../../../store/NavigationContext';
 
 const CategoryCard: FC<{categoryData: CategoryCardT}> = ({categoryData}) => {
-  const {image, name, id} = categoryData;
+  const {image_url, name, id} = categoryData;
   const navigationRef = useNavigationRef();
 
   const handlePress = () => {
@@ -30,7 +30,7 @@ const CategoryCard: FC<{categoryData: CategoryCardT}> = ({categoryData}) => {
       style={({pressed}) => [styles.card, {opacity: pressed ? 0.8 : 1}]}>
       <ImageBackground
         style={{width: '100%', height: '100%'}}
-        source={image || Images.testImage}>
+        source={{uri: image_url}}>
         <Text style={styles.CardText}>{name}</Text>
       </ImageBackground>
     </Pressable>
