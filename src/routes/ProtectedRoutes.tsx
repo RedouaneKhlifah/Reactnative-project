@@ -9,7 +9,7 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
   const navigationRef = useNavigationRef();
-  const {userData} = useAuth();
+  const {userData, isLoading} = useAuth();
   const [isNavigationReady, setIsNavigationReady] = useState(false);
 
   useEffect(() => {
@@ -25,10 +25,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
   }, [navigationRef]);
 
   useEffect(() => {
-    console.log('good');
-    console.log(userData);
-
-    if (isNavigationReady) {
+    if (isNavigationReady && userData !== undefined) {
       handleNavigation(userData);
     }
   }, [userData, isNavigationReady]);
@@ -59,7 +56,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
     }
   };
 
-  if (!isNavigationReady) {
+  if (!isNavigationReady || isLoading || userData === undefined) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator size="large" />

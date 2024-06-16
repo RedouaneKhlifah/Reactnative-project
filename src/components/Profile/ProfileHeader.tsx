@@ -11,7 +11,9 @@ const ProfileHeader = () => {
       resizeMode="cover"
       style={styles.container}>
       <View style={styles.innerContainer}>
-        <BackButton/>
+        <View style={{position: 'absolute', top: 0}}>
+          <BackButton />
+        </View>
         <Text style={styles.text}>Détails de profile</Text>
       </View>
     </ImageBackground>
@@ -21,14 +23,13 @@ const ProfileHeader = () => {
 const styles = StyleSheet.create({
   container: {
     height: ' 100%',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
 
   innerContainer: {
     width: '90%',
     justifyContent: 'center',
-    height: '29%',
   },
   pressableContainer: {
     height: '100%',
@@ -36,16 +37,16 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
+    paddingTop: 10,
   },
   textConatiner: {
     backgroundColor: COLORS.white,
-    justifyContent: 'center',
-    height: '100%',
     borderRadius: SIZES.fullRadius,
   },
   text: {
-    ...FONTS.h3,
+    ...FONTS.h1,
     fontSize: responsiveWidth(23),
+    fontWeight: '900',
     color: COLORS.white,
     textAlign: 'center',
     alignSelf: 'center',

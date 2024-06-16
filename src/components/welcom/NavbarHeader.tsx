@@ -16,15 +16,15 @@ const NavbarHeader: FC<NavbarHeaderProp> = ({title, buttonTitle}) => {
         {/* <Pressable style={({pressed}) => [{opacity: pressed ? 0.8 : 1}]}>
           <Icons.backArrow />
         </Pressable> */}
-        <BackButton/>
+        <BackButton />
         <Text
           style={{
-            ...FONTS.h3,
+            ...FONTS.h1,
             fontSize: responsiveWidth(26),
-            fontWeight: '400',
+            fontWeight: '900',
             color: COLORS.white,
             position: 'absolute',
-            left: '50%',
+            left: '41%',
             transform: [{translateX: -40}],
           }}>
           {title}

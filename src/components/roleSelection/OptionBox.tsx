@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  ImageSourcePropType,
+} from 'react-native';
 import React, {useState} from 'react';
 import {appTheme} from '../../constants';
 import {Images} from '../../constants';
@@ -8,14 +15,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {COLORS, FONTS, SIZES} = appTheme;
 type boxProps = {
-  id: string;
   title: string;
   action: string;
-  urlPic: string;
+  urlPic: ImageSourcePropType;
   link: keyof RootStackParamList;
 };
 
-const OptionBox: React.FC<boxProps> = ({title, action, link}) => {
+const OptionBox: React.FC<boxProps> = ({title, action, link, urlPic}) => {
   const navigationRef = useNavigationRef();
   const handleNavigation = () => {
     if (title === 'Influencer') {
@@ -30,7 +36,7 @@ const OptionBox: React.FC<boxProps> = ({title, action, link}) => {
     <Pressable
       style={({pressed}) => [style.container, {opacity: pressed ? 0.8 : 1}]}
       onPress={() => handleNavigation()}>
-      <Image style={style.image} source={Images.testImage} resizeMode="cover" />
+      <Image style={style.image} source={urlPic} resizeMode="cover" />
       <View style={style.textContainer}>
         <Text style={{...FONTS.hs, color: COLORS.black}}>{title}</Text>
         <Text style={{...FONTS.h5, color: COLORS.black}}>{action}</Text>

@@ -65,7 +65,7 @@ export const FONTS = {
   h1: {fontFamily: 'Comfortaa-Bold', fontSize: SIZES.h1},
   h2: {fontFamily: 'Comfortaa-SemiBold', fontSize: SIZES.h2},
   hs: {fontFamily: 'Comfortaa-SemiBold', fontSize: SIZES.hs},
-  h3: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h3},
+  h3: {fontFamily: 'Comfortaa-Regular', fontSize: SIZES.h3},
   h4: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h4},
   h5: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h5},
 
@@ -80,7 +80,7 @@ export const FONTS = {
     lineHeight: 30,
   },
   body3: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Comfortaa-Regular',
     fontSize: SIZES.body3,
   },
   body4: {

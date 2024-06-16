@@ -17,6 +17,9 @@ import milfayaProSource from '../assets/images/milfayaProfile.png';
 import mailsSource from '../assets/images/mails.png';
 import imgwithGradSource from '../assets/images/imgwithGrad.png';
 import requestVerificationSource from '../assets/images/requestVerification.png';
+import contactMailBg from '../assets/images/contactMailBg.jpg';
+import businessRoleSelectSource from '../assets/images/businessRoleSelect.jpg';
+import InfluencerRoleSelectSource from '../assets/images/InfluencerRoleSelect.jpg';
 
 // Define image sources with ImageSourcePropType
 const influencer = influencerSource as ImageSourcePropType;
@@ -35,6 +38,8 @@ const milfayaPro = milfayaProSource as ImageSourcePropType;
 const mails = mailsSource as ImageSourcePropType;
 const imgwithGrad = imgwithGradSource as ImageSourcePropType;
 const requestVerification = requestVerificationSource as ImageSourcePropType;
+const businessRoleSelect = businessRoleSelectSource as ImageSourcePropType;
+const InfluencerRoleSelect = InfluencerRoleSelectSource as ImageSourcePropType;
 
 // Export Images object with image sources
 export const Images = {
@@ -54,4 +59,7 @@ export const Images = {
   mails,
   imgwithGrad,
   requestVerification,
+  contactMailBg,
+  businessRoleSelect,
+  InfluencerRoleSelect,
 };

@@ -42,10 +42,6 @@ const Header = () => {
           <Image source={Icons.profile}></Image>
         </ImageBackground>
       </Pressable>
-      <SearchInput />
-      <ImageBackground
-        source={Images.Union}
-        style={{height: 38, width: 38}}></ImageBackground>
     </View>
   );
 };
@@ -54,7 +50,7 @@ const styles = StyleSheet.create({
   Header: {
     marginTop: SIZES.height * 0.03,
     flexDirection: 'row',
-    width: '95%',
+    width: '90%',
     justifyContent: 'space-between',
   },
 });

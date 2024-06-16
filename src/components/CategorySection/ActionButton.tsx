@@ -34,8 +34,7 @@ const ActionButton: FC<FilterProps> = ({
           backgroundColor: bg ? bg : COLORS.white,
         },
       ]}
-      onPress={onPress} // Call onPress function when pressed
-    >
+      onPress={onPress}>
       <Icon />
       <Text
         style={{
