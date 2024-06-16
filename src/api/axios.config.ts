@@ -36,13 +36,9 @@ const getToken = async (): Promise<string | null> => {
   try {
     const data = await AsyncStorage.getItem('data');
 
-    console.log('getToken');
-    console.log(data);
-
     const token = data && JSON.parse(data).token;
     return token;
   } catch (error) {
-    console.error('Failed to fetch token', error);
     return null;
   }
 };

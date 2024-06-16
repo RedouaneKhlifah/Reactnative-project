@@ -7,9 +7,17 @@ interface FilterProps {
   Icon: React.FC<SvgProps>;
   title: string;
   onPress: () => void;
+  bg?: string;
+  textColor?: string;
 }
 
-const ActionButton: FC<FilterProps> = ({Icon, title, onPress}) => {
+const ActionButton: FC<FilterProps> = ({
+  Icon,
+  title,
+  onPress,
+  bg,
+  textColor,
+}) => {
   return (
     <Pressable
       style={({pressed}) => [
@@ -23,6 +31,7 @@ const ActionButton: FC<FilterProps> = ({Icon, title, onPress}) => {
           flexDirection: 'row',
           borderWidth: 2,
           borderColor: COLORS.black,
+          backgroundColor: bg ? bg : COLORS.white,
         },
       ]}
       onPress={onPress} // Call onPress function when pressed
@@ -31,7 +40,7 @@ const ActionButton: FC<FilterProps> = ({Icon, title, onPress}) => {
       <Text
         style={{
           fontSize: 13,
-          color: COLORS.black,
+          color: textColor ? textColor : COLORS.black,
           fontWeight: '500',
           marginLeft: 7,
         }}>

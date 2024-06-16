@@ -59,11 +59,11 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         const url = await AsyncStorage.getItem('registerUrl');
         if (url) {
           if (formData.password !== formData.confirmPassword) {
-            setErrors((prevErrors) => ({
+            setErrors(prevErrors => ({
               ...prevErrors,
               confirmPassword: 'Password not confirmed',
             }));
-          }else{
+          } else {
             result = await handleAuth(url, formData);
           }
         } else {
@@ -71,9 +71,6 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         }
       }
 
-      if (result?.success === false) {
-        setErrors(result.data?.errors || result.data?.error);
-      }
       if (result?.success) {
         // no user logged and confirmed
         if (result?.data.user.confirmed === true) {
@@ -85,6 +82,8 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         } else {
           navigationRef.current?.navigate('RedirectMail');
         }
+      } else if (result?.success === false) {
+        setErrors(result.data);
       }
     } catch (error) {
       console.error('Error during authentication:', error);
@@ -116,8 +115,8 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         onChangeText={text => handleChange('password', text)}
         secureTextEntry={true}
       />
-      {errors.password && (
-        <Text style={styles.errorText}>{errors.password[0]}</Text>
+      {errors?.password && (
+        <Text style={styles.errorText}>{errors?.password[0]}</Text>
       )}
       {typeof errors === 'string' && (
         <Text style={styles.errorText}>{errors}</Text>

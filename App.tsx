@@ -4,7 +4,7 @@ declare const global: {
 };
 global.ignoreDatePickerWarning = true;
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {AuthProvider} from './src/store/AuthContext';
 import {
@@ -12,7 +12,11 @@ import {
   useNavigationRef,
 } from './src/store/NavigationContext';
 import {NavigationRoute} from './src/routes/NavigationRoute';
+import {LogBox} from 'react-native';
 const App: React.FC = () => {
+  useEffect(() => {
+    LogBox.ignoreAllLogs(true); // Ignore all log notifications
+  }, []);
   return (
     <AuthProvider>
       <NavigationProvider>

@@ -32,6 +32,8 @@ import socialLinksSource from '../assets/icons/socialMediaLinks.png';
 import profileSource from '../assets/icons/profile.png';
 import {ImageSourcePropType} from 'react-native';
 import skeltonCategoriesSource from '../assets/images/skeltonCategories.png';
+import eyeSource from '../assets/icons/eye.png';
+import trierWhite from '../assets/icons/trierWhite.svg';
 
 const verify = verifySource as ImageSourcePropType;
 const facbookLink = facbookLinkSource as ImageSourcePropType;
@@ -51,6 +53,7 @@ const signout = signoutSource as ImageSourcePropType;
 const socialLinks = socialLinksSource as ImageSourcePropType;
 const profile = profileSource as ImageSourcePropType;
 const skeltonCategories = skeltonCategoriesSource as ImageSourcePropType;
+const eye = eyeSource as ImageSourcePropType;
 
 export const Icons = {
   morroco,
@@ -86,4 +89,6 @@ export const Icons = {
   socialLinks,
   profile,
   skeltonCategories,
+  eye,
+  trierWhite,
 };

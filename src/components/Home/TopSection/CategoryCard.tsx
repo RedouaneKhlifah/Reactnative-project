@@ -18,7 +18,10 @@ const CategoryCard: FC<{categoryData: CategoryCardT}> = ({categoryData}) => {
   const navigationRef = useNavigationRef();
 
   const handlePress = () => {
-    navigationRef.current?.navigate('OffersScreen', {categoryId: id});
+    navigationRef.current?.navigate('OffersScreen', {
+      categoryId: id,
+      name: name,
+    });
   };
 
   return (
