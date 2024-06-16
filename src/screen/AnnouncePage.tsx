@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, Pressable} from 'react-native';
+import {View, Text, ScrollView, Pressable, StyleSheet} from 'react-native';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {COLORS, Icons, Images, SIZES} from '../constants';
 import SelectedOffreImages from '../components/AnnouncePage/TopSection.tsx/SelectedOffreImages';
@@ -9,13 +9,15 @@ import OffreRating from '../components/Home/BottomSection/OffreRating';
 import SimilairesOffre from '../components/AnnouncePage/buttomSection/SimilairesOffre';
 import DateInputWithLbel from '../components/ui/DateInputWithLbel';
 import InputWithLabel from '../components/ui/InputWithLabel';
-import {responsiveWidth} from '../utils/responsive';
+import {responsiveHeight, responsiveWidth} from '../utils/responsive';
 import SecondaryButton from '../components/ui/buttons/SecondaryButton';
 import {RouteProp} from '@react-navigation/native';
 import axiosConfig from '../api/axios.config';
 import {IoffreData} from '../components/Home/BottomSection/OffreCard';
 import {useNavigationRef} from '../store/NavigationContext';
 import SkeletonAnnouncePage from '../skelton/SkeletonAnnouncePage';
+import PrimaryButton from '../components/ui/buttons/PrimaryButton';
+import axios from 'axios';
 
 export const offreImagesData = [
   {
@@ -42,7 +44,22 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
     IoffreData[] | null
   >(null);
   const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false)
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<{ message: string | null }>({ message: '' });
+
+  const [submitError, setSubmitError] = useState({
+    number_of_people:''
+  });
+  const apiClientWithToken = axiosConfig(true);
+
+  const [iterationData,setIterationData] = useState({
+    business_profile_id: data?.id,
+    date: "",
+    time: "",
+    number_of_people: '',
+    message: ""
+  })
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -50,13 +67,16 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const apiClientWithToken = axiosConfig(true);
         const res = await apiClientWithToken.get(
           `/influencer/get-business/${id}`,
         );
 
         if (res.data.business) {
           setData(res.data.business);
+          setIterationData((prevData)=>({
+            ...prevData,
+            'business_profile_id': res.data.business.id
+          }))          
           setSuggestedBusinesses(res.data.suggested_businesses);
         } else {
           setData(null);
@@ -76,8 +96,37 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
       scrollViewRef.current.scrollTo({y: 0, animated: true});
     }
   }, [id]);
+  console.log(successMessage);
+  
 
-  const handleSubmit = () => {};
+  const handleSubmit = async() => {
+    console.log(iterationData);
+    setSubmitLoading(true)
+    try {
+      const res = await apiClientWithToken.post('influencer/add-interaction',iterationData)
+      if (res) {
+        console.log(res.data);
+        setSuccessMessage({message:'Sent successfully'})
+        setIterationData((prevData)=>({
+          ...prevData,
+          date:'',
+          message:'',
+          time:'',
+          number_of_people:'',
+        }))
+        setTimeout(() => {
+          setSuccessMessage({message:null})
+        }, 2000);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setSubmitError(error.response?.data.errors)        
+      } 
+    }
+    finally{
+      setSubmitLoading(false)
+    }
+  };
 
   if (loading) {
     return <SkeletonAnnouncePage />;
@@ -150,10 +199,29 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
                 justifyContent: 'space-between',
               }}>
               <View style={{width: SIZES.width * 0.4}}>
-                <DateInputWithLbel placeholder="Date" mode="date" />
+                <DateInputWithLbel 
+                  placeholder="Date" 
+                  mode="date" 
+                  onDateChange={formattedDate => {
+                    setIterationData((prevData)=>({
+                      ...prevData,
+                      'date':formattedDate
+                    }));
+                  }}
+                  />
               </View>
               <View style={{width: SIZES.width * 0.4}}>
-                <DateInputWithLbel placeholder="Heure" mode="time" />
+                <DateInputWithLbel 
+                  placeholder="Heure" 
+                  mode="time"
+                  initialValue=''
+                  onDateChange={formattedDate => {
+                    setIterationData((prevData)=>({
+                      ...prevData,
+                      'time':formattedDate
+                    }));
+                  }} 
+                  />
               </View>
             </View>
             <InputWithLabel
@@ -162,13 +230,29 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
                 fontSize: responsiveWidth(13),
                 color: COLORS.darkGray,
               }}
-              inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
+              value={iterationData.number_of_people}
+              onChangeText={text => {
+                setIterationData((prevData)=>({
+                  ...prevData,
+                  'number_of_people':text
+                }));
+              }}
+              inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',paddingVertical:responsiveHeight(10)}}
               keyboardType="numeric"
             />
+            {submitError?.number_of_people && <Text style={styles.errorText}>{submitError.number_of_people[0]}</Text>}
+
             <InputWithLabel
               labelText="Message"
               multiline={true}
               numberOfLines={10}
+              value={iterationData.message}
+              onChangeText={text => {
+                setIterationData((prevData)=>({
+                  ...prevData,
+                  'message':text
+                }));
+              }}
               placeholder="Ecrivez votre message ici …"
               labelStyle={{
                 fontSize: responsiveWidth(13),
@@ -176,12 +260,19 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               }}
               inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
             />
-            <SecondaryButton
+            <View style={styles.container}>
+              {successMessage.message && 
+                <Text style={styles.successText}>{successMessage.message}</Text>
+              }
+            </View>
+            <PrimaryButton
               title="Envoyer"
+              loading={submitLoading}
               onPress={handleSubmit}
-              buttonStyle={{backgroundColor: '#AB82FF', marginVertical: 15}}
+              buttonStyle={{backgroundColor: '#AB82FF', marginVertical: 15,elevation:0}}
               textStyle={{color: 'white'}}
             />
+
           </View>
 
           <View>
@@ -207,5 +298,21 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
     </ScrollView>
   );
 };
+const styles = StyleSheet.create({
+  errorText: {
+    color: 'red',
+    fontSize: responsiveWidth(11),
+    marginTop: responsiveHeight(1),
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  successText: {
+    color: 'green',
+    fontSize: 16,
+  },
+})
 
 export default AnnouncePage;

@@ -100,6 +100,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         labelText={'Email'}
         placeholder={'hello@gmail.com'}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.black}}
+        value={formData.email}
         inputStyle={{
           fontSize: responsiveWidth(11),
           color: COLORS.black,
@@ -112,6 +113,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
       <InputWithLabel
         labelText={'Mot de passe'}
         placeholder={'Votre mot de passe ...'}
+        value={formData.password}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.black}}
         inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
         onChangeText={text => handleChange('password', text)}
@@ -129,6 +131,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
           <InputWithLabel
             labelText={'Confirmer la Mot de passe'}
             placeholder={'Confirmer password'}
+            value={formData.confirmPassword}
             labelStyle={{fontSize: responsiveWidth(13), color: COLORS.black}}
             inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
             onChangeText={text => handleChange('confirmPassword', text)}

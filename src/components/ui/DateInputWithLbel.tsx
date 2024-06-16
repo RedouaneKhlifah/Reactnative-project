@@ -6,28 +6,41 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import React, {useState} from 'react';
-import {COLORS, FONTS, SIZES} from '../../constants';
+import React, { useState, useEffect } from 'react';
+import { COLORS, FONTS } from '../../constants';
 import DatePicker from 'react-native-date-picker';
-import {Icons} from '../../constants';
-import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
+import { Icons } from '../../constants';
+import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
 
 interface Props {
   labelText?: string;
   placeholder: string;
-  mode?:"date"|"time"|"datetime"
-  onDateChange?: (formattedDate: string) => void; // Updated prop for formatted date string
-
+  mode?: 'date' | 'time' | 'datetime';
+  onDateChange?: (formattedDate: string) => void;
+  initialValue?: string; // New prop for initial value
 }
 
-const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datetime',onDateChange}) => {
+const DateInputWithLabel: React.FC<Props> = ({ labelText, placeholder, mode = 'datetime', onDateChange, initialValue }) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(initialValue || '');
+
+  useEffect(() => {
+    if (initialValue) {
+      setValue(initialValue);
+      setDate(new Date(initialValue));
+    }
+  }, [initialValue]);
 
   const formatDate = (date: Date) => {
-    // Format the date as needed, for example:
-    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    console.log();
+    if (mode ==='datetime') {
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+    }else if (mode ==='date') {
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    }else{
+      return `${date.getHours()}:${date.getMinutes()}`;
+    }
   };
 
   const handleDateChange = (selectedDate: Date) => {
@@ -37,6 +50,7 @@ const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datet
     if (onDateChange) {
       onDateChange(formattedDate);
     }
+    setOpen(false);
   };
 
   return (
@@ -51,7 +65,6 @@ const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datet
           style={styles.input}
           placeholder={placeholder}
           placeholderTextColor={COLORS.grayHalfOpacity}
-          onFocus={() => setOpen(true)}
           value={value}
           editable={false}
         />
@@ -71,25 +84,10 @@ const DateInputWithLabel: React.FC<Props> = ({labelText, placeholder,mode='datet
         open={open}
         date={date}
         mode={mode}
-        onDateChange={handleDateChange}
-        // onDateChange={selectedDate => {
-        //   setDate(selectedDate);
-        //   setValue(formatDate(selectedDate));
-
-        // }}
+        onConfirm={handleDateChange}
         onCancel={() => {
           setOpen(false);
         }}
-        onConfirm={handleDateChange}
-
-        // onConfirm={selectedDate => {
-        //   setOpen(false);
-        //   setDate(selectedDate);
-        //   setValue(formatDate(selectedDate));
-        //   if (onDateChange) {
-        //     onDateChange(selectedDate);
-        //   }
-        // }}
       />
     </View>
   );
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
     paddingLeft: 3,
-    transform: [{translateY: 5}],
+    transform: [{ translateY: 5 }],
   },
   input: {
     ...FONTS.body3,

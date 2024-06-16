@@ -20,6 +20,7 @@ interface Props extends TextInputProps {
   numberOfLines?: number;
   secureTextEntry?: boolean;
   disabled?: boolean; // Add the disabled prop
+  value?: string; // Add value prop
 }
 
 const InputWithLabel: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const InputWithLabel: React.FC<Props> = ({
   secureTextEntry = false,
   numberOfLines = 0, // Adjust this as needed
   disabled = false, // Default value for disabled prop
+  value = '',
 
   ...props
 }) => {
@@ -47,6 +49,7 @@ const InputWithLabel: React.FC<Props> = ({
         numberOfLines={multiline ? numberOfLines : undefined}
         secureTextEntry={secureTextEntry}
         editable={!disabled}
+        value={value}
         {...props}
       />
     </View>
