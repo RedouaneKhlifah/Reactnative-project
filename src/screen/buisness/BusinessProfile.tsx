@@ -6,7 +6,7 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
@@ -14,9 +14,14 @@ import BackButton from '../../components/ui/buttons/BackButton';
 import {responsiveWidth} from '../../utils/responsive';
 import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axiosConfig from '../../api/axios.config';
+import { BusinessData } from '../../interfaces/User';
 
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
+  const apiClientWithToken = axiosConfig(true); // Initialize axios with token
+  const [data, setData] = useState<BusinessData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const items = [
     {
@@ -29,6 +34,22 @@ const BusinessProfile = () => {
     {icon: Icons.starIcon, title: 'Évaluez nous'},
     {icon: Icons.signout, title: 'Se déconnecter', link: 'Logout'},
   ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await apiClientWithToken.get(`/business/get/`);
+        if (res.data) {
+          setData(res.data);
+        } else {
+          setData(null);
+        }
+      } catch (err) {
+        setError('Failed to fetch data');
+      }
+    };
+
+    fetchData();
+  }, []);
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
       await AsyncStorage.removeItem('data');
@@ -52,7 +73,7 @@ const BusinessProfile = () => {
               bgColor={COLORS.mov}
               color={COLORS.white}
             />
-            <Text style={styles.title}>Sambara</Text>
+            <Text style={styles.title}>{data?.name}</Text>
             <SecondaryButton
               onPress={handlePress}
               title="aide"
@@ -62,7 +83,7 @@ const BusinessProfile = () => {
           <View style={styles.profileOptions}>
             <View style={styles.userCard}>
               <View style={styles.userInfo}>
-                <Image source={Images.restaurant} style={styles.profilePic} />
+                <Image source={{uri:data?.gallery_image_urls && data?.gallery_image_urls[0]}} style={styles.profilePic} />
                 <View>
                   <Text
                     style={{
@@ -70,10 +91,10 @@ const BusinessProfile = () => {
                       fontWeight: '400',
                       color: 'black',
                     }}>
-                    {"Nom de l'entreprise"}
+                    { data?.name}
                   </Text>
                   <Text style={{fontSize: SIZES.middleRadius, color: 'black'}}>
-                    category
+                    {data?.category.name}
                   </Text>
                 </View>
               </View>
