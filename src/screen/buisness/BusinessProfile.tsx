@@ -1,3 +1,5 @@
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import {
   StyleSheet,
   ImageBackground,
@@ -5,8 +7,9 @@ import {
   Text,
   Image,
   Pressable,
+  ActivityIndicator,
+  ImageSourcePropType,
 } from 'react-native';
-import React from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
@@ -14,21 +17,84 @@ import BackButton from '../../components/ui/buttons/BackButton';
 import {responsiveWidth} from '../../utils/responsive';
 import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../../interfaces/RootStackParamList';
+import axiosConfig from '../../api/axios.config';
+
+interface BusinessCategory {
+  id: number;
+  name: string;
+  image_url: string;
+}
+
+interface BusinessProfileData {
+  id: number;
+  profile_id: number;
+  gallery_image_urls: string[];
+  email: string;
+  phone: string;
+  name: string;
+  ice: string;
+  patent: string;
+  address: string;
+  category: BusinessCategory;
+  description: string;
+  status: string;
+  isOnline: boolean;
+  completed: boolean;
+  views: number;
+  user_created_at: string;
+  last_profile_update: string;
+}
 
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
+  const [businessData, setBusinessData] = useState<BusinessProfileData | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(true);
 
-  const items = [
+  const apiClientWithToken = axiosConfig(true);
+
+  useEffect(() => {
+    const fetchBusinessData = async () => {
+      try {
+        const res = await apiClientWithToken.get('/business/get');
+        setBusinessData(res.data);
+        console.log('Business data:', res.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBusinessData();
+  }, []);
+
+  interface NavigationItem {
+    icon: ImageSourcePropType; // Assuming Icons is an imported library providing icon components
+    title: string;
+    link?: string; // Optional property if navigation link is needed
+    color?: string; // Optional property for specifying color
+  }
+
+  const items: NavigationItem[] = [
     {
       icon: Icons.location,
-      title: "Détails de l'prise",
+      title: "Détails de l'entreprise",
       link: 'BusinessDetails' as keyof RootStackParamList,
     },
-    {icon: Icons.Lock, title: 'Sécurité du compte'},
-    {icon: Icons.share, title: 'Parrainez et gagnez'},
+    // {icon: Icons.Lock, title: 'Sécurité du compte'},
+    // {icon: Icons.share, title: 'Parrainez et gagnez'},
     {icon: Icons.starIcon, title: 'Évaluez nous'},
-    {icon: Icons.signout, title: 'Se déconnecter', link: 'Logout'},
+    {
+      icon: Icons.signout,
+      title: 'Se déconnecter',
+      link: 'Logout',
+      color: '#DC3545',
+    },
   ];
+
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
       await AsyncStorage.removeItem('data');
@@ -38,31 +104,46 @@ const BusinessProfile = () => {
       navigationRef.current?.navigate(link);
     }
   };
+
   const handlePress = () => {
     // Your onPress logic here
-    console.log('Button pressed!');
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
+  if (!businessData) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.errorText}>Failed to load business data.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.topSection} source={Images.homeBackground}>
         <View style={styles.overlay}>
           <View style={styles.options}>
-            <BackButton
-              onPress={handlePress}
-              bgColor={COLORS.mov}
-              color={COLORS.white}
-            />
-            <Text style={styles.title}>Sambara</Text>
+            <Text style={styles.title}>{businessData.name}</Text>
             <SecondaryButton
               onPress={handlePress}
-              title="aide"
+              title="Aide"
               buttonStyle={{elevation: 0}}
             />
           </View>
           <View style={styles.profileOptions}>
             <View style={styles.userCard}>
               <View style={styles.userInfo}>
-                <Image source={Images.restaurant} style={styles.profilePic} />
+                <Image
+                  source={{uri: businessData.category.image_url}}
+                  style={styles.profilePic}
+                />
                 <View>
                   <Text
                     style={{
@@ -70,10 +151,10 @@ const BusinessProfile = () => {
                       fontWeight: '400',
                       color: 'black',
                     }}>
-                    {"Nom de l'entreprise"}
+                    {businessData.name}
                   </Text>
                   <Text style={{fontSize: SIZES.middleRadius, color: 'black'}}>
-                    category
+                    {businessData.category.name}
                   </Text>
                 </View>
               </View>
@@ -94,6 +175,7 @@ const BusinessProfile = () => {
                         style={{
                           fontFamily: FONTS.body4.fontFamily,
                           fontSize: SIZES.radius,
+                          color: item.color || '',
                         }}>
                         {item.title}
                       </Text>
@@ -133,7 +215,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingHorizontal: '10%',
     paddingTop: '10%',
     alignItems: 'center',
@@ -191,9 +273,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: 'bold',
-    marginVertical: 20,
     color: 'white',
     textAlign: 'center',
+    position: 'absolute',
+    top: '110%', // Position the text 50% from the top of its container
+    left: 0,
+    right: 20,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: 'red',
   },
 });
 

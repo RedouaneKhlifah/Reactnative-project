@@ -15,16 +15,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {COLORS, FONTS, SIZES} = appTheme;
 type boxProps = {
+  id: number;
   title: string;
   action: string;
   urlPic: ImageSourcePropType;
   link: keyof RootStackParamList;
 };
 
-const OptionBox: React.FC<boxProps> = ({title, action, link, urlPic}) => {
+const OptionBox: React.FC<boxProps> = ({id, title, action, link, urlPic}) => {
   const navigationRef = useNavigationRef();
   const handleNavigation = () => {
-    if (title === 'Influencer') {
+    if (id === 1) {
       AsyncStorage.setItem('registerUrl', '/register-influencer-user');
     } else {
       AsyncStorage.setItem('registerUrl', '/register-business-user');

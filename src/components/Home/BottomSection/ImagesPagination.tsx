@@ -83,6 +83,5 @@ const styles = StyleSheet.create({
   dot: {
     borderRadius: SIZES.fullRadius,
     marginHorizontal: 3,
-    backgroundColor: 'red',
   },
 });

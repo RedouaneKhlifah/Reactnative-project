@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   CardText: {
     ...FONTS.body2,
-    fontSize: responsiveWidth(20),
+    fontSize: responsiveWidth(15),
     color: COLORS.black,
     backgroundColor: COLORS.white,
     alignSelf: 'flex-start',

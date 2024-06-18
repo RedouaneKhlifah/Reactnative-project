@@ -18,32 +18,13 @@ const AuthSection: FC<AuthSectionProp> = ({type}) => {
     <View style={styles.Contianer}>
       <View style={styles.header}>
         <Text style={styles.title}>Bienvenue</Text>
-        <Text style={styles.semiTitle}>Commençons par votre Emaail</Text>
+        <Text style={styles.semiTitle}>Commençons par votre Email</Text>
       </View>
       <FormSection type={type} />
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          En continuant, vous acceptez automatiquement nos
+          En continuant, vous acceptez nos conditions
         </Text>
-        <View style={{flexDirection: 'row', gap: 3}}>
-          <View>
-            <Text style={[styles.footerText]}>
-              conditions générales, notre politique de confidentialité
-            </Text>
-            <View
-              style={{borderBottomWidth: 0.2, transform: [{translateY: -2}]}}
-            />
-          </View>
-          <Text style={styles.footerText}>et</Text>
-        </View>
-        <View>
-          <Text style={styles.footerText}>
-            notre politique en matière de cookies.
-          </Text>
-          <View
-            style={{borderBottomWidth: 0.2, transform: [{translateY: -2}]}}
-          />
-        </View>
       </View>
     </View>
   );
@@ -80,11 +61,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     alignSelf: 'center',
+    justifyContent: 'center',
   },
   footerText: {
     textAlign: 'center',
     ...FONTS.h4,
-    fontSize: responsiveWidth(11),
+    fontSize: responsiveWidth(9),
     fontWeight: '300',
     color: COLORS.defaultGray,
   },

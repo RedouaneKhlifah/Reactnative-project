@@ -15,6 +15,7 @@ import NotificationScreen from '../screen/mail/NotificationScreen';
 import OffersScreen from '../screen/OffersScreen';
 import {useAuth} from '../store/AuthContext';
 import {ActivityIndicator, View} from 'react-native';
+import {RootStackParamList} from '../interfaces/RootStackParamList';
 
 type ScreenMapItems = {
   name: keyof RootStackParamList;
@@ -49,7 +50,13 @@ export const NavigationRoute: React.FC = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={isAuthenticated ? 'Home' : 'ContactMail'}>
+      initialRouteName={
+        userData
+          ? userData?.role === 'business'
+            ? 'BusinessProfile'
+            : 'Home'
+          : 'ContactMail'
+      }>
       {loggedScreen?.map((screen, index) => {
         return (
           <Stack.Screen

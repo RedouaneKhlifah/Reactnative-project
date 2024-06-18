@@ -8,6 +8,7 @@ import OffreCardV from '../components/OffresScreenC/OffreCardV';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import axiosConfig from '../api/axios.config';
 import {IoffreData} from '../components/Home/BottomSection/OffreCard';
+import {RootStackParamList} from '../interfaces/RootStackParamList';
 
 type OffersScreenProp = RouteProp<RootStackParamList, 'OffersScreen'>;
 

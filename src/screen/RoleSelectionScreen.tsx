@@ -9,12 +9,14 @@ const {SIZES} = appTheme;
 function RoleSelectionScreen() {
   const data = [
     {
+      id: 1,
       title: 'Influenceur',
       action: 'Obtenez des collaborations Win Win',
       link: 'Login' as keyof RootStackParamList,
       urlPic: Images.InfluencerRoleSelect,
     },
     {
+      id: 2,
       title: "Propriétaire d'entreprise",
       action: 'Créez votre compte Win Win',
       link: 'Login' as keyof RootStackParamList,
@@ -30,6 +32,7 @@ function RoleSelectionScreen() {
         {data.map((item, index) => (
           <OptionBox
             key={index}
+            id={item.id}
             title={item.title}
             action={item.action}
             urlPic={item.urlPic}
