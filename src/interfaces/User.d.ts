@@ -43,7 +43,9 @@ interface BusinessData {
   address:string;
   description:string;
   category:{
-    id:number
+    id:number,
+    name:string,
+    image_url:string
   };
   gallery_image_urls?:string[]
 }

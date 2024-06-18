@@ -512,7 +512,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: COLORS.superLightGray,
     paddingLeft: 0,
-    height:responsiveHeight(80)
+    height:responsiveHeight(85)
   },
   selectedText: {
     fontSize: 18,
