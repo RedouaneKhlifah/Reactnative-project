@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
   ImageSourcePropType,
 } from 'react-native';
+
+import React, { useEffect, useState } from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
@@ -19,57 +21,13 @@ import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootStackParamList} from '../../interfaces/RootStackParamList';
 import axiosConfig from '../../api/axios.config';
-
-interface BusinessCategory {
-  id: number;
-  name: string;
-  image_url: string;
-}
-
-interface BusinessProfileData {
-  id: number;
-  profile_id: number;
-  gallery_image_urls: string[];
-  email: string;
-  phone: string;
-  name: string;
-  ice: string;
-  patent: string;
-  address: string;
-  category: BusinessCategory;
-  description: string;
-  status: string;
-  isOnline: boolean;
-  completed: boolean;
-  views: number;
-  user_created_at: string;
-  last_profile_update: string;
-}
+import { BusinessData } from '../../interfaces/User';
 
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
-  const [businessData, setBusinessData] = useState<BusinessProfileData | null>(
-    null,
-  );
-  const [loading, setLoading] = useState(true);
-
-  const apiClientWithToken = axiosConfig(true);
-
-  useEffect(() => {
-    const fetchBusinessData = async () => {
-      try {
-        const res = await apiClientWithToken.get('/business/get');
-        setBusinessData(res.data);
-        console.log('Business data:', res.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBusinessData();
-  }, []);
+  const apiClientWithToken = axiosConfig(true); // Initialize axios with token
+  const [data, setData] = useState<BusinessData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   interface NavigationItem {
     icon: ImageSourcePropType; // Assuming Icons is an imported library providing icon components
@@ -94,7 +52,22 @@ const BusinessProfile = () => {
       color: '#DC3545',
     },
   ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await apiClientWithToken.get(`/business/get/`);
+        if (res.data) {
+          setData(res.data);
+        } else {
+          setData(null);
+        }
+      } catch (err) {
+        setError('Failed to fetch data');
+      }
+    };
 
+    fetchData();
+  }, []);
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
       await AsyncStorage.removeItem('data');
@@ -130,7 +103,7 @@ const BusinessProfile = () => {
       <ImageBackground style={styles.topSection} source={Images.homeBackground}>
         <View style={styles.overlay}>
           <View style={styles.options}>
-            <Text style={styles.title}>{businessData.name}</Text>
+            <Text style={styles.title}>{data?.name}</Text>
             <SecondaryButton
               onPress={handlePress}
               title="Aide"
@@ -140,10 +113,7 @@ const BusinessProfile = () => {
           <View style={styles.profileOptions}>
             <View style={styles.userCard}>
               <View style={styles.userInfo}>
-                <Image
-                  source={{uri: businessData.category.image_url}}
-                  style={styles.profilePic}
-                />
+                <Image source={{uri:data?.gallery_image_urls && data?.gallery_image_urls[0]}} style={styles.profilePic} />
                 <View>
                   <Text
                     style={{
@@ -151,10 +121,10 @@ const BusinessProfile = () => {
                       fontWeight: '400',
                       color: 'black',
                     }}>
-                    {businessData.name}
+                    { data?.name}
                   </Text>
                   <Text style={{fontSize: SIZES.middleRadius, color: 'black'}}>
-                    {businessData.category.name}
+                    {data?.category.name}
                   </Text>
                 </View>
               </View>

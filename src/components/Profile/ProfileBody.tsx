@@ -101,13 +101,11 @@ const ProfileBody = () => {
     {label: 'Education – Art et culture', value: 'Education – Art et culture'},
   ]);
   useEffect(() => {
-    if (
-      userData?.status === 'approved' &&
-      userData.completed &&
-      userData.confirmed
-    ) {
-      getProfileData();
-      setIsEdit(true);
+
+    if (userData?.status === 'approved' && userData.completed && userData.confirmed) {
+      getProfileData()
+      setIsEdit(true)
+
     }
   }, [userData]);
   useEffect(() => {
@@ -134,6 +132,7 @@ const ProfileBody = () => {
       setSelectedSocialMedia(data);
       // setSelectedSocialMedia(influencerData.social_media_links||null)
       setImageUri(influencerData.profile_image_url || null);
+
     }
   }, [influencerData]);
   const getProfileData = async () => {
@@ -147,6 +146,7 @@ const ProfileBody = () => {
       }
     }
   };
+
   const renderItem = ({item}: {item: SocialMedia}) => (
     <View style={styles.linkContainer}>
       <View

@@ -20,21 +20,43 @@ import axiosConfig from '../../api/axios.config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {Picker} from '@react-native-picker/picker';
+import { BusinessData } from '../../interfaces/User';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 
 const BusinessDetails = () => {
   const navigationRef = useNavigationRef();
   const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
-
+  const [isEdit, setIsEdit] = useState(false)
   const {userData, checkConfirmation} = useAuth();
   const [imageUris, setImageUris] = useState<string[]>([]);
-
-  const [selectedType, setSelectedType] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setloading] = useState(false);
   const [categoriesData, setCategoriesData] = useState([]);
+  const [businessdetails, setBusinessdetails] = useState<BusinessData | null>(null);
 
   useEffect(() => {
     getCategories();
-  }, []);
+    if (userData?.status === 'approved' && userData.completed && userData.confirmed) {
+      getBusinessData()
+      setIsEdit(true)
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (businessdetails) {
+      setBusinessData({
+        name: businessdetails.name || '',
+        ice: businessdetails.ice|| '',
+        email: businessdetails.email|| '',
+        phone: businessdetails.phone|| '',
+        patent: businessdetails.patent|| '',
+        address: businessdetails.address || '',
+        description: businessdetails.description || '',
+        category_id: businessdetails.category?.id || 0,
+      });
+      const newUris: string[] | undefined = businessdetails?.gallery_image_urls
+      setImageUris(prevUris => [...prevUris, ...newUris||[]]);     
+    }
+  }, [businessdetails]);
 
   const getCategories = async () => {
     await apiClientWithToken
@@ -46,12 +68,6 @@ const BusinessDetails = () => {
         console.log(e);
       });
   };
-
-  const [types, setTypes] = useState([
-    {label: 'Type1', value: 'Type1'},
-    {label: 'Type2', value: 'Type2'},
-  ]);
-
   const [businessData, setBusinessData] = useState({
     name: '',
     ice: '',
@@ -114,6 +130,18 @@ const BusinessDetails = () => {
       }));
     }
   };
+  const getBusinessData = async()=>{
+    try {
+      const res = await apiClientWithToken.get('/business/get')
+      setBusinessdetails(res.data)
+      console.log('businessdetailsbusinessdetails',res.data);
+      
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.message);
+      }
+    }
+  } 
 
   const saveChanges = async () => {
     const formData = new FormData();
@@ -140,7 +168,7 @@ const BusinessDetails = () => {
     setLoading(true);
     try {
       const response = await apiClientWithToken.post(
-        '/business/submit',
+        isEdit?'/business/update':'/business/submit',
         formData,
       );
       if (response.data) {
@@ -150,7 +178,11 @@ const BusinessDetails = () => {
           data.user.completed = true;
           await AsyncStorage.setItem('data', JSON.stringify(data));
           checkConfirmation();
-          navigationRef.current?.navigate('Verification');
+          isEdit
+          ?
+          navigationRef.current?.navigate('Home')
+          :
+          navigationRef.current?.navigate('Verification')
         }
       }
       setLoading(false);
@@ -205,6 +237,7 @@ const BusinessDetails = () => {
       <InputWithLabel
         labelText="Nom légal de l'entreprise"
         placeholder="Sombara"
+        value={businessData.name}
         onChangeText={text => handleInputChange('name', text)}
         value={businessData.name}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
@@ -219,6 +252,7 @@ const BusinessDetails = () => {
       <InputWithLabel
         labelText="ICE"
         placeholder="ICE..."
+        value={businessData.ice}
         onChangeText={text => handleInputChange('ice', text)}
         value={businessData.ice}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
@@ -233,6 +267,7 @@ const BusinessDetails = () => {
       <InputWithLabel
         labelText="Patente"
         placeholder="Text"
+        value={businessData.patent}
         onChangeText={text => handleInputChange('patent', text)}
         value={businessData.patent}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
@@ -250,6 +285,7 @@ const BusinessDetails = () => {
         labelText="Numéro de téléphone"
         keyboardType="phone-pad"
         placeholder="+212 666666666"
+        value={businessData.phone}
         onChangeText={text => handleInputChange('phone', text)}
         value={businessData.phone}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
@@ -278,6 +314,7 @@ const BusinessDetails = () => {
       <InputWithLabel
         labelText="Adresse d'affaires"
         placeholder="Rue ....."
+        value={businessData.address}
         onChangeText={text => handleInputChange('address', text)}
         value={businessData.address}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
@@ -294,6 +331,7 @@ const BusinessDetails = () => {
       <InputWithLabel
         labelText="Description"
         placeholder="..."
+        value={businessData.description}
         onChangeText={text => handleInputChange('description', text)}
         value={businessData.description}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
@@ -306,32 +344,35 @@ const BusinessDetails = () => {
       {errors?.description && (
         <Text style={styles.errorText}>{errors.description[0]}</Text>
       )}
-
-      <Picker
-        selectedValue={businessData.category_id}
-        onValueChange={(itemValue: number | null) =>
-          handleCategoryChange(itemValue)
-        }
-        style={styles.picker}>
-        <Picker.Item
-          label="Select a category"
-          value={null}
-          style={styles.pickerInput}
-        />
-        {categoriesData.map((category: {id: number; name: string}) => (
+      <View style={styles.picker}>
+        <Text style={styles.pickerLabel}>Type</Text>
+        <Picker
+          selectedValue={businessData.category_id}
+          onValueChange={(itemValue: number | null) =>
+            handleCategoryChange(itemValue)
+          }>
           <Picker.Item
-            key={category.id}
-            label={category.name}
-            value={category.id}
+            label="Select a category"
+            value={null}
+            style={styles.pickerInput}
           />
-        ))}
-      </Picker>
+          {categoriesData.map((category: {id: number; name: string}) => (
+            <Picker.Item
+              key={category.id}
+              label={category.name}
+              value={category.id}
+            />
+          ))}
+        </Picker>
+      </View>
       {errors?.category_id && (
         <Text style={styles.errorText}>{errors.category_id[0]}</Text>
       )}
 
-      <SecondaryButton
-        title="Sauvegarder"
+
+      <PrimaryButton
+        title={isEdit ? "mise à jour" : "Sauvegarder"} 
+        loading={loading}
         onPress={saveChanges}
         buttonStyle={styles.saveButton}
         textStyle={styles.saveButtonText}
@@ -418,11 +459,11 @@ const styles = StyleSheet.create({
     marginRight: 20,
     borderRadius: responsiveWidth(20),
   },
-  label: {
-    fontSize: 16,
-    color: '#000',
-    marginBottom: 5,
-    alignSelf: 'flex-start',
+  pickerLabel: {
+    fontSize: responsiveWidth(13), color: COLORS.darkGray,
+    fontWeight: '400',
+    paddingLeft: 3,
+    transform: [{translateY: 8}],
   },
   uploadButton: {
     display: 'flex',
@@ -463,9 +504,8 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomWidth: 2,
     borderColor: COLORS.superLightGray,
-    paddingLeft: 3,
-    ...FONTS.body3,
-    fontWeight: '300',
+    paddingLeft: 0,
+    height:responsiveHeight(85)
   },
   selectedText: {
     fontSize: 18,
@@ -477,6 +517,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.superLightGray,
     paddingVertical: 0,
     paddingLeft: 3,
+    backgroundColor:'red',
+    fontSize: responsiveWidth(11),
+
   },
   errorText: {
     color: 'red',
