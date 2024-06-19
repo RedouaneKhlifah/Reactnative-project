@@ -231,7 +231,7 @@ const BusinessDetails = () => {
       {errors?.ice && <Text style={styles.errorText}>{errors.ice[0]}</Text>}
 
       <InputWithLabel
-        labelText="Patent"
+        labelText="Patente"
         placeholder="Text"
         onChangeText={text => handleInputChange('patent', text)}
         value={businessData.patent}
@@ -331,7 +331,7 @@ const BusinessDetails = () => {
       )}
 
       <SecondaryButton
-        title="Save changes"
+        title="Sauvegarder"
         onPress={saveChanges}
         buttonStyle={styles.saveButton}
         textStyle={styles.saveButtonText}

@@ -1,11 +1,12 @@
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   ImageBackground,
+  BackHandler,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
 import {COLORS, Images, SIZES} from '../constants';
 import Header from '../components/Home/TopSection/Header';
 import OffreCard, {
@@ -17,12 +18,15 @@ import {useAuth} from '../store/AuthContext';
 import CategoriesSection from '../components/Home/TopSection/CategoriesSection';
 import axiosConfig from '../api/axios.config';
 import SkeletonOffreCard from '../components/Home/BottomSection/SkeletonOffreCard';
+import {useFocusEffect} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigationRef} from '../store/NavigationContext';
 
 const Home: React.FC = () => {
   const [data, setData] = useState<IoffreData[] | null>(null);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigationRef = useNavigationRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,9 +36,6 @@ const Home: React.FC = () => {
         const res = await apiClientWithToken.get(
           `/influencer/suggest-two-businesses`,
         );
-
-        console.log('res', res.data);
-
         if (res.data) {
           setData(res.data);
         } else {
@@ -45,10 +46,27 @@ const Home: React.FC = () => {
         setError('Failed to fetch data');
         setLoading(false);
         setData(null);
+
+        await AsyncStorage.removeItem('data');
+        navigationRef.current?.navigate('ContactMail');
       }
     };
     fetchData();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
 
   return (
     <ScrollView style={{marginBottom: 20, backgroundColor: COLORS.white}}>

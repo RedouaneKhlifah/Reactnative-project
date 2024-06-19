@@ -98,6 +98,14 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         setSubmitError(prv => {
           return {...prv, number_of_people: ''};
         });
+
+        setIterationData(prevData => ({
+          ...prevData,
+          date: '',
+          message: '',
+          time: '',
+          number_of_people: '',
+        }));
       }
     };
     fetchData();
@@ -108,7 +116,6 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
   }, [id]);
 
   const handleSubmit = async () => {
-    console.log(iterationData);
     setSubmitLoading(true);
     try {
       const res = await apiClientWithToken.post(
@@ -116,8 +123,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         iterationData,
       );
       if (res) {
-        console.log(res.data);
-        setSuccessMessage({message: 'Sent successfully'});
+        setSuccessMessage({message: 'Bien envoyé'});
         setIterationData(prevData => ({
           ...prevData,
           date: '',
@@ -127,12 +133,20 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         }));
         setTimeout(() => {
           setSuccessMessage({message: null});
-        }, 2000);
+        }, 4000);
       }
       setError(null);
       setSubmitError(prv => {
         return {...prv, number_of_people: ''};
       });
+
+      setIterationData(prevData => ({
+        ...prevData,
+        date: '',
+        message: '',
+        time: '',
+        number_of_people: '',
+      }));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setSubmitError(error.response?.data.errors);
@@ -162,10 +176,12 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         <SelectedOffreImages data={data.gallery_images_filenames} />
         <Pressable
           onPress={() =>
-            navigationRef.current?.navigate('OffersScreen', {
-              categoryId: data.category.id,
-              name: data.category.name,
-            })
+            data.category?.id
+              ? navigationRef.current?.navigate('OffersScreen', {
+                  categoryId: data.category.id,
+                  name: data.category.name,
+                })
+              : navigationRef.current?.navigate('Home')
           }
           style={({pressed}) => [
             {opacity: pressed ? 0.8 : 1},
@@ -182,11 +198,13 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <OffreInfo
-              title={data.name}
-              location={data.address}
-              iconSize={18}
-            />
+            <View style={{flex: 1}}>
+              <OffreInfo
+                title={data.name}
+                location={data.address}
+                iconSize={18}
+              />
+            </View>
             <OffreRating views={data.views} />
           </View>
         </View>

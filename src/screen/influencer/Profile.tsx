@@ -14,6 +14,7 @@ import BackButton from '../../components/ui/buttons/BackButton';
 import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosConfig from '../../api/axios.config';
+import {RootStackParamList} from '../../interfaces/RootStackParamList';
 
 export default function Profile() {
   const navigationRef = useNavigationRef();
@@ -72,9 +73,14 @@ export default function Profile() {
       iconHeight: 13,
       link: 'ProfileScreen' as keyof RootStackParamList,
     },
-    {icon: Icons.share, title: 'Parrainez et gagnez'},
+    // {icon: Icons.share, title: 'Parrainez et gagnez'},
     {icon: Icons.starIcon, title: 'Évaluez nous'},
-    {icon: Icons.signout, title: 'Se déconnecter', link: 'Logout'},
+    {
+      icon: Icons.signout,
+      title: 'Se déconnecter',
+      link: 'Logout',
+      colors: 'red',
+    },
   ];
 
   const handlePress = () => {
@@ -117,14 +123,6 @@ export default function Profile() {
                   </Text>
                 </View>
               </View>
-              <RnIcon
-                name="pencil-outline"
-                color="white"
-                bgColor="#FAD932"
-                width={45}
-                height={45}
-                size={20}
-              />
             </View>
             <View style={styles.linksHolder}>
               {items.map((item, index) => {
@@ -142,6 +140,7 @@ export default function Profile() {
                         style={{
                           fontFamily: FONTS.body3.fontFamily,
                           fontSize: SIZES.radius,
+                          color: item.colors ?? '',
                         }}>
                         {item.title}
                       </Text>

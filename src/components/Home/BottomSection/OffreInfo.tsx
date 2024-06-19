@@ -27,7 +27,7 @@ const OffreInfo: FC<OffreInfoProp> = ({
 }) => {
   return (
     <View>
-      <View style={styles.titleContainer}>
+      <View style={[styles.titleContainer]}>
         <Text
           style={[styles.title, titleStyle]}
           numberOfLines={1}
@@ -66,14 +66,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: COLORS.black,
     lineHeight: 22,
-    maxWidth: responsiveWidth(120), // Set a maxWidth to ensure ellipsis
+    maxWidth: responsiveWidth(175), // Set a maxWidth to ensure ellipsis
   },
   location: {
     fontSize: responsiveWidth(11),
     fontWeight: '300',
     transform: [{translateY: 4}],
     lineHeight: 12,
-    maxWidth: responsiveWidth(100), // Set a maxWidth to ensure ellipsis
+    maxWidth: responsiveWidth(160), // Set a maxWidth to ensure ellipsis
   },
 });
 

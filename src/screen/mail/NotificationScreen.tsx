@@ -8,9 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {COLORS, Images} from '../../constants'; // Adjust the import path as necessary
-import BackButton from '../../components/ui/buttons/BackButton';
 import {responsiveWidth} from '../../utils/responsive';
-import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import {useNavigationRef} from '../../store/NavigationContext';
 import {useAuth} from '../../store/AuthContext';
@@ -48,16 +46,8 @@ const NotificationScreen = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        {/* <View style={{display:'flex', width:'100%', alignItems:'center',justifyContent:'flex-end', backgroundColor:'#424242'}}> */}
         <PrimaryButton
-          title="Recevez une notification"
-          textStyle={{color: COLORS.white}}
-          onPress={() => {}}
-          buttonStyle={{width: '80%', elevation: 0, borderRadius: 54}}
-        />
-
-        <PrimaryButton
-          title="Sign Out"
+          title="Se déconnecter"
           onPress={submit}
           loading={loading}
           buttonStyle={{

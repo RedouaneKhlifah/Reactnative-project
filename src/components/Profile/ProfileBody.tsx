@@ -89,9 +89,16 @@ const ProfileBody = () => {
     },
   ]);
   const [interets, setInterets] = useState([
-    {label: 'Restaurants', value: 'Restaurants'},
     {label: 'Hotels', value: 'Hotels'},
-    {label: 'Shops', value: 'Shops'},
+    {label: 'Bien-être', value: 'Bien-être'},
+    {label: 'Mode', value: 'Mode'},
+    {label: 'Beauté', value: 'Beauté'},
+    {label: 'Fitness', value: 'Fitness'},
+    {label: 'Voyage et Tourisme', value: 'Voyage et Tourisme'},
+    {label: 'Restauration', value: 'Restauration'},
+    {label: 'Technologies', value: 'Technologies'},
+    {label: 'Divertissement', value: 'Divertissement'},
+    {label: 'Education – Art et culture', value: 'Education – Art et culture'},
   ]);
   useEffect(() => {
     if (
@@ -356,8 +363,8 @@ const ProfileBody = () => {
             maxHeight={120}
             multiple={true}
           />
-          <FlatList
-            data={selectedSocialMedia}
+          <FlatList<SocialMedia>
+            data={selectedSocialMedia as SocialMedia[]}
             renderItem={renderItem}
             keyExtractor={item => item}
           />
@@ -368,7 +375,7 @@ const ProfileBody = () => {
             items={interets}
             setValue={setSelectedIntrests}
             setItems={setInterets}
-            maxHeight={120}
+            maxHeight={350}
             multiple={true}
           />
           {errors?.interests && (
@@ -378,7 +385,7 @@ const ProfileBody = () => {
         <PrimaryButton
           onPress={handleSubmit}
           loading={loading}
-          title={isEdit ? 'update changes' : 'Save changes'}
+          title={isEdit ? 'mettre à jour' : 'Sauvegarder'}
           textStyle={{color: COLORS.white}}
           buttonStyle={{elevation: 0, borderRadius: 20}}
         />

@@ -48,15 +48,22 @@ export const NavigationRoute: React.FC = () => {
     );
   }
 
+  const initialRouteName = !userData
+    ? 'ContactMail'
+    : userData.confirmed === false
+    ? 'RedirectMail'
+    : userData.confirmed === true && !userData.completed
+    ? userData.role === 'influencer'
+      ? 'ProfileScreen'
+      : 'BusinessDetails'
+    : userData.status !== 'approved'
+    ? 'Verification'
+    : userData.role === 'business'
+    ? 'BusinessProfile'
+    : 'Home';
+
   return (
-    <Stack.Navigator
-      initialRouteName={
-        userData
-          ? userData?.role === 'business'
-            ? 'BusinessProfile'
-            : 'Home'
-          : 'ContactMail'
-      }>
+    <Stack.Navigator initialRouteName={initialRouteName}>
       {loggedScreen?.map((screen, index) => {
         return (
           <Stack.Screen
