@@ -1,8 +1,19 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, TextStyle, ViewStyle } from 'react-native';
-import { COLORS, SIZES } from '../../../constants'
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
+import {COLORS, SIZES} from '../../../constants';
 
-const SecondaryButton: React.FC<ButtonProps> = ({ onPress, title, buttonStyle, textStyle }) => {
+const SecondaryButton: React.FC<ButtonProps> = ({
+  onPress,
+  title,
+  buttonStyle,
+  textStyle,
+}) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, buttonStyle]}>
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
@@ -12,9 +23,9 @@ const SecondaryButton: React.FC<ButtonProps> = ({ onPress, title, buttonStyle, t
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 30,
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 24,
     shadowColor: '#000',
     shadowOffset: {

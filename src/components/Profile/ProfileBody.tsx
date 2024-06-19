@@ -24,24 +24,28 @@ import axiosConfig from '../../api/axios.config';
 import axios from 'axios';
 import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { InfluencerData } from '../../interfaces/User';
+import {InfluencerData} from '../../interfaces/User';
 
 type SocialMedia = 'facebook' | 'instagram' | 'youtube'; // Define the types of social media
 
 const ProfileBody = () => {
   const {userData, checkConfirmation} = useAuth();
 
-  const [selectedGender, setSelectedGender] = useState<string|null>(null);
+  const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [selectedSocialMedia, setSelectedSocialMedia] = useState<string[]>([]);
   const [links, setLinks] = useState<{[key in SocialMedia]?: string}>({});
-  const [selectedIntrests, setSelectedIntrests] = useState<string[]|null>(null);
+  const [selectedIntrests, setSelectedIntrests] = useState<string[] | null>(
+    null,
+  );
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [imageUri, setImageUri] = useState<string | null | undefined>(null);
   const [loading, setloading] = useState(false);
   const [imgloading, setImgloading] = useState(false);
   const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
-  const [isEdit, setIsEdit] = useState(false)
-  const [influencerData, setinfluencerData] = useState<InfluencerData | null>(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [influencerData, setinfluencerData] = useState<InfluencerData | null>(
+    null,
+  );
   const [errors, setErrors] = useState({
     email: '',
     phone: '',
@@ -59,7 +63,7 @@ const ProfileBody = () => {
     lastName: '',
     email: userData?.email || '',
     phone: '',
-    date_of_birth:''
+    date_of_birth: '',
   });
 
   const [genders, setgenders] = useState([
@@ -85,16 +89,25 @@ const ProfileBody = () => {
     },
   ]);
   const [interets, setInterets] = useState([
-    {label: 'Restaurants', value: 'Restaurants'},
     {label: 'Hotels', value: 'Hotels'},
-    {label: 'Shops', value: 'Shops'},
+    {label: 'Bien-être', value: 'Bien-être'},
+    {label: 'Mode', value: 'Mode'},
+    {label: 'Beauté', value: 'Beauté'},
+    {label: 'Fitness', value: 'Fitness'},
+    {label: 'Voyage et Tourisme', value: 'Voyage et Tourisme'},
+    {label: 'Restauration', value: 'Restauration'},
+    {label: 'Technologies', value: 'Technologies'},
+    {label: 'Divertissement', value: 'Divertissement'},
+    {label: 'Education – Art et culture', value: 'Education – Art et culture'},
   ]);
   useEffect(() => {
+
     if (userData?.status === 'approved' && userData.completed && userData.confirmed) {
       getProfileData()
       setIsEdit(true)
+
     }
-  }, [userData])
+  }, [userData]);
   useEffect(() => {
     if (influencerData) {
       setProfileData({
@@ -106,33 +119,34 @@ const ProfileBody = () => {
       });
       setSelectedGender(influencerData.gender || null);
       setSelectedIntrests(influencerData.interests || null);
-      setSelectedDate(influencerData.date_of_birth || null)
-      setImageUri(null)
-      const data:string[] = []
-      Object.keys(influencerData.social_media_links).map((key)=>{
-        data.push(key)
-        setLinks((prevStat)=>({
+      setSelectedDate(influencerData.date_of_birth || null);
+      setImageUri(null);
+      const data: string[] = [];
+      Object.keys(influencerData.social_media_links).map(key => {
+        data.push(key);
+        setLinks(prevStat => ({
           ...prevStat,
-          [key]:influencerData.social_media_links[key]
-        }))
-      })
-      setSelectedSocialMedia(data)
+          [key]: influencerData.social_media_links[key],
+        }));
+      });
+      setSelectedSocialMedia(data);
       // setSelectedSocialMedia(influencerData.social_media_links||null)
-      // setImageUri(influencerData.profile_image_url || null);      
+      setImageUri(influencerData.profile_image_url || null);
+
     }
   }, [influencerData]);
-  const getProfileData = async()=>{
+  const getProfileData = async () => {
     try {
-      const res = await apiClientWithToken.get('/influencer/get')
-      setinfluencerData(res.data)
-      console.log('influencerDatainfluencerDatainfluencerData',influencerData);
-      
+      const res = await apiClientWithToken.get('/influencer/get');
+      setinfluencerData(res.data);
+      console.log('influencerDatainfluencerDatainfluencerData', influencerData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message);
       }
     }
-  }
+  };
+
   const renderItem = ({item}: {item: SocialMedia}) => (
     <View style={styles.linkContainer}>
       <View
@@ -211,7 +225,7 @@ const ProfileBody = () => {
     setloading(true);
     try {
       const response = await apiClientWithToken.post(
-        isEdit?'/influencer/update':'influencer/submit',
+        isEdit ? '/influencer/update' : 'influencer/submit',
         formData,
       );
       if (response.data) {
@@ -222,10 +236,8 @@ const ProfileBody = () => {
           await AsyncStorage.setItem('data', JSON.stringify(data));
           checkConfirmation();
           isEdit
-          ?
-          navigationRef.current?.navigate('Home')
-          :
-          navigationRef.current?.navigate('Verification')
+            ? navigationRef.current?.navigate('Home')
+            : navigationRef.current?.navigate('Verification');
         }
       }
       setloading(false);
@@ -351,8 +363,8 @@ const ProfileBody = () => {
             maxHeight={120}
             multiple={true}
           />
-          <FlatList
-            data={selectedSocialMedia}
+          <FlatList<SocialMedia>
+            data={selectedSocialMedia as SocialMedia[]}
             renderItem={renderItem}
             keyExtractor={item => item}
           />
@@ -363,7 +375,7 @@ const ProfileBody = () => {
             items={interets}
             setValue={setSelectedIntrests}
             setItems={setInterets}
-            maxHeight={120}
+            maxHeight={350}
             multiple={true}
           />
           {errors?.interests && (
@@ -373,7 +385,7 @@ const ProfileBody = () => {
         <PrimaryButton
           onPress={handleSubmit}
           loading={loading}
-          title={isEdit ? "update changes" : "Save changes"} 
+          title={isEdit ? 'mettre à jour' : 'Sauvegarder'}
           textStyle={{color: COLORS.white}}
           buttonStyle={{elevation: 0, borderRadius: 20}}
         />

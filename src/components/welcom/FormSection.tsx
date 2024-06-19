@@ -73,7 +73,6 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
 
       if (result?.success) {
         // no user logged and confirmed
-        console.log('good');
 
         if (result?.data.user.confirmed === true) {
           if (result?.data.user.status === 'approved') {
@@ -85,7 +84,11 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
           navigationRef.current?.navigate('RedirectMail');
         }
       } else if (result?.success === false) {
-        setErrors(result.data);
+        if (result.data.error) {
+          setErrors(result.data.error);
+        } else {
+          setErrors(result.data);
+        }
       }
     } catch (error) {
       console.error('Error during authentication:', error);

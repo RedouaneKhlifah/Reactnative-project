@@ -12,7 +12,6 @@ import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import BackButton from '../../components/ui/buttons/BackButton';
 import InputWithLabel from '../../components/ui/InputWithLabel';
-import Dropdown from '../../components/ui/Dropdown';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import {useNavigationRef} from '../../store/NavigationContext';
 import {useAuth} from '../../store/AuthContext';
@@ -30,7 +29,6 @@ const BusinessDetails = () => {
   const [isEdit, setIsEdit] = useState(false)
   const {userData, checkConfirmation} = useAuth();
   const [imageUris, setImageUris] = useState<string[]>([]);
-
   const [loading, setloading] = useState(false);
   const [categoriesData, setCategoriesData] = useState([]);
   const [businessdetails, setBusinessdetails] = useState<BusinessData | null>(null);
@@ -98,6 +96,7 @@ const BusinessDetails = () => {
       [name]: value,
     }));
   };
+
   const handleImagePick = () => {
     launchImageLibrary(
       {
@@ -122,6 +121,7 @@ const BusinessDetails = () => {
       },
     );
   };
+
   const handleCategoryChange = (itemValue: number | null) => {
     if (itemValue) {
       setBusinessData(prevData => ({
@@ -164,7 +164,8 @@ const BusinessDetails = () => {
     formData.append('patent', businessData.patent);
     formData.append('description', businessData.description);
     formData.append('name', businessData.name);
-    setloading(true);
+
+    setLoading(true);
     try {
       const response = await apiClientWithToken.post(
         isEdit?'/business/update':'/business/submit',
@@ -184,7 +185,7 @@ const BusinessDetails = () => {
           navigationRef.current?.navigate('Verification')
         }
       }
-      setloading(false);
+      setLoading(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log('Error request:', error.request);
@@ -195,9 +196,10 @@ const BusinessDetails = () => {
       }
       console.error('Error submitting form:', error);
     } finally {
-      setloading(false);
+      setLoading(false);
     }
   };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.backgroundContainer}>
@@ -231,19 +233,13 @@ const BusinessDetails = () => {
           <Image key={index} source={{uri}} style={styles.image} />
         ))}
       </ScrollView>
-      {/* 
-      <Text style={styles.galleryTitle}>Logo d'entreprise</Text>
-      <View style={{width:'100%',display:'flex'}}>
-        <TouchableOpacity style={styles.uploadButton}>
-          <Text style={styles.uploadButtonText}>Télécharger ici</Text>
-        </TouchableOpacity>
-      </View> */}
 
       <InputWithLabel
         labelText="Nom légal de l'entreprise"
         placeholder="Sombara"
         value={businessData.name}
         onChangeText={text => handleInputChange('name', text)}
+        value={businessData.name}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -258,6 +254,7 @@ const BusinessDetails = () => {
         placeholder="ICE..."
         value={businessData.ice}
         onChangeText={text => handleInputChange('ice', text)}
+        value={businessData.ice}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -267,21 +264,12 @@ const BusinessDetails = () => {
       />
       {errors?.ice && <Text style={styles.errorText}>{errors.ice[0]}</Text>}
 
-      {/* <Dropdown
-            label="Type d'entreprise"
-            placeholder='Text'
-            value={selectedType}
-            items={types}
-            setValue={setSelectedType}
-            setItems={setTypes}
-            maxHeight={120}
-      /> */}
-
       <InputWithLabel
-        labelText="Patent"
+        labelText="Patente"
         placeholder="Text"
         value={businessData.patent}
         onChangeText={text => handleInputChange('patent', text)}
+        value={businessData.patent}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -299,6 +287,7 @@ const BusinessDetails = () => {
         placeholder="+212 666666666"
         value={businessData.phone}
         onChangeText={text => handleInputChange('phone', text)}
+        value={businessData.phone}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -312,6 +301,7 @@ const BusinessDetails = () => {
         labelText="Email"
         placeholder={userData?.email ?? ''}
         disabled={userData?.email ? true : false}
+        value={businessData.email}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -326,6 +316,7 @@ const BusinessDetails = () => {
         placeholder="Rue ....."
         value={businessData.address}
         onChangeText={text => handleInputChange('address', text)}
+        value={businessData.address}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -342,6 +333,7 @@ const BusinessDetails = () => {
         placeholder="..."
         value={businessData.description}
         onChangeText={text => handleInputChange('description', text)}
+        value={businessData.description}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -377,8 +369,9 @@ const BusinessDetails = () => {
         <Text style={styles.errorText}>{errors.category_id[0]}</Text>
       )}
 
+
       <PrimaryButton
-        title={isEdit ? "update changes" : "Save changes"} 
+        title={isEdit ? "mise à jour" : "Sauvegarder"} 
         loading={loading}
         onPress={saveChanges}
         buttonStyle={styles.saveButton}
@@ -534,4 +527,5 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(1),
   },
 });
+
 export default BusinessDetails;

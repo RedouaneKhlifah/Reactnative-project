@@ -18,6 +18,7 @@ import {useNavigationRef} from '../store/NavigationContext';
 import SkeletonAnnouncePage from '../skelton/SkeletonAnnouncePage';
 import PrimaryButton from '../components/ui/buttons/PrimaryButton';
 import axios from 'axios';
+import {RootStackParamList} from '../interfaces/RootStackParamList';
 
 export const offreImagesData = [
   {
@@ -44,22 +45,24 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
     IoffreData[] | null
   >(null);
   const [loading, setLoading] = useState(true);
-  const [submitLoading, setSubmitLoading] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<{ message: string | null }>({ message: '' });
+  const [successMessage, setSuccessMessage] = useState<{
+    message: string | null;
+  }>({message: ''});
 
   const [submitError, setSubmitError] = useState({
-    number_of_people:''
+    number_of_people: '',
   });
   const apiClientWithToken = axiosConfig(true);
 
-  const [iterationData,setIterationData] = useState({
+  const [iterationData, setIterationData] = useState({
     business_profile_id: data?.id,
-    date: "",
-    time: "",
+    date: '',
+    time: '',
     number_of_people: '',
-    message: ""
-  })
+    message: '',
+  });
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -73,21 +76,36 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
 
         if (res.data.business) {
           setData(res.data.business);
-          setIterationData((prevData)=>({
+          setIterationData(prevData => ({
             ...prevData,
-            'business_profile_id': res.data.business.id
-          }))          
+            business_profile_id: res.data.business.id,
+          }));
           setSuggestedBusinesses(res.data.suggested_businesses);
         } else {
           setData(null);
           setSuggestedBusinesses(null);
         }
         setLoading(false);
+        setError(null);
       } catch (err) {
         setError('Failed to fetch data');
         setLoading(false);
         setData(null);
         setSuggestedBusinesses(null);
+      } finally {
+        setLoading(false);
+        setSubmitLoading(false);
+        setSubmitError(prv => {
+          return {...prv, number_of_people: ''};
+        });
+
+        setIterationData(prevData => ({
+          ...prevData,
+          date: '',
+          message: '',
+          time: '',
+          number_of_people: '',
+        }));
       }
     };
     fetchData();
@@ -96,35 +114,45 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
       scrollViewRef.current.scrollTo({y: 0, animated: true});
     }
   }, [id]);
-  console.log(successMessage);
-  
 
-  const handleSubmit = async() => {
-    console.log(iterationData);
-    setSubmitLoading(true)
+  const handleSubmit = async () => {
+    setSubmitLoading(true);
     try {
-      const res = await apiClientWithToken.post('influencer/add-interaction',iterationData)
+      const res = await apiClientWithToken.post(
+        'influencer/add-interaction',
+        iterationData,
+      );
       if (res) {
-        console.log(res.data);
-        setSuccessMessage({message:'Sent successfully'})
-        setIterationData((prevData)=>({
+        setSuccessMessage({message: 'Bien envoyé'});
+        setIterationData(prevData => ({
           ...prevData,
-          date:'',
-          message:'',
-          time:'',
-          number_of_people:'',
-        }))
+          date: '',
+          message: '',
+          time: '',
+          number_of_people: '',
+        }));
         setTimeout(() => {
-          setSuccessMessage({message:null})
-        }, 2000);
+          setSuccessMessage({message: null});
+        }, 4000);
       }
+      setError(null);
+      setSubmitError(prv => {
+        return {...prv, number_of_people: ''};
+      });
+
+      setIterationData(prevData => ({
+        ...prevData,
+        date: '',
+        message: '',
+        time: '',
+        number_of_people: '',
+      }));
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setSubmitError(error.response?.data.errors)        
-      } 
-    }
-    finally{
-      setSubmitLoading(false)
+        setSubmitError(error.response?.data.errors);
+      }
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -148,10 +176,12 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         <SelectedOffreImages data={data.gallery_images_filenames} />
         <Pressable
           onPress={() =>
-            navigationRef.current?.navigate('OffersScreen', {
-              categoryId: data.category.id,
-              name: data.category.name,
-            })
+            data.category?.id
+              ? navigationRef.current?.navigate('OffersScreen', {
+                  categoryId: data.category.id,
+                  name: data.category.name,
+                })
+              : navigationRef.current?.navigate('Home')
           }
           style={({pressed}) => [
             {opacity: pressed ? 0.8 : 1},
@@ -168,11 +198,13 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <OffreInfo
-              title={data.name}
-              location={data.address}
-              iconSize={18}
-            />
+            <View style={{flex: 1}}>
+              <OffreInfo
+                title={data.name}
+                location={data.address}
+                iconSize={18}
+              />
+            </View>
             <OffreRating views={data.views} />
           </View>
         </View>
@@ -199,29 +231,29 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
                 justifyContent: 'space-between',
               }}>
               <View style={{width: SIZES.width * 0.4}}>
-                <DateInputWithLbel 
-                  placeholder="Date" 
-                  mode="date" 
+                <DateInputWithLbel
+                  placeholder="Date"
+                  mode="date"
                   onDateChange={formattedDate => {
-                    setIterationData((prevData)=>({
+                    setIterationData(prevData => ({
                       ...prevData,
-                      'date':formattedDate
+                      date: formattedDate,
                     }));
                   }}
-                  />
+                />
               </View>
               <View style={{width: SIZES.width * 0.4}}>
-                <DateInputWithLbel 
-                  placeholder="Heure" 
+                <DateInputWithLbel
+                  placeholder="Heure"
                   mode="time"
-                  initialValue=''
+                  initialValue=""
                   onDateChange={formattedDate => {
-                    setIterationData((prevData)=>({
+                    setIterationData(prevData => ({
                       ...prevData,
-                      'time':formattedDate
+                      time: formattedDate,
                     }));
-                  }} 
-                  />
+                  }}
+                />
               </View>
             </View>
             <InputWithLabel
@@ -232,15 +264,23 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               }}
               value={iterationData.number_of_people}
               onChangeText={text => {
-                setIterationData((prevData)=>({
+                setIterationData(prevData => ({
                   ...prevData,
-                  'number_of_people':text
+                  number_of_people: text,
                 }));
               }}
-              inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500',paddingVertical:responsiveHeight(10)}}
+              inputStyle={{
+                fontSize: responsiveWidth(11),
+                fontWeight: '500',
+                paddingVertical: responsiveHeight(10),
+              }}
               keyboardType="numeric"
             />
-            {submitError?.number_of_people && <Text style={styles.errorText}>{submitError.number_of_people[0]}</Text>}
+            {submitError?.number_of_people && (
+              <Text style={styles.errorText}>
+                {submitError.number_of_people[0]}
+              </Text>
+            )}
 
             <InputWithLabel
               labelText="Message"
@@ -248,9 +288,9 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               numberOfLines={10}
               value={iterationData.message}
               onChangeText={text => {
-                setIterationData((prevData)=>({
+                setIterationData(prevData => ({
                   ...prevData,
-                  'message':text
+                  message: text,
                 }));
               }}
               placeholder="Ecrivez votre message ici …"
@@ -261,18 +301,21 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               inputStyle={{fontSize: responsiveWidth(11), fontWeight: '500'}}
             />
             <View style={styles.container}>
-              {successMessage.message && 
+              {successMessage.message && (
                 <Text style={styles.successText}>{successMessage.message}</Text>
-              }
+              )}
             </View>
             <PrimaryButton
               title="Envoyer"
               loading={submitLoading}
               onPress={handleSubmit}
-              buttonStyle={{backgroundColor: '#AB82FF', marginVertical: 15,elevation:0}}
+              buttonStyle={{
+                backgroundColor: '#AB82FF',
+                marginVertical: 15,
+                elevation: 0,
+              }}
               textStyle={{color: 'white'}}
             />
-
           </View>
 
           <View>
@@ -313,6 +356,6 @@ const styles = StyleSheet.create({
     color: 'green',
     fontSize: 16,
   },
-})
+});
 
 export default AnnouncePage;

@@ -15,6 +15,7 @@ import NotificationScreen from '../screen/mail/NotificationScreen';
 import OffersScreen from '../screen/OffersScreen';
 import {useAuth} from '../store/AuthContext';
 import {ActivityIndicator, View} from 'react-native';
+import {RootStackParamList} from '../interfaces/RootStackParamList';
 
 type ScreenMapItems = {
   name: keyof RootStackParamList;
@@ -47,9 +48,22 @@ export const NavigationRoute: React.FC = () => {
     );
   }
 
+  const initialRouteName = !userData
+    ? 'ContactMail'
+    : userData.confirmed === false
+    ? 'RedirectMail'
+    : userData.confirmed === true && !userData.completed
+    ? userData.role === 'influencer'
+      ? 'ProfileScreen'
+      : 'BusinessDetails'
+    : userData.status !== 'approved'
+    ? 'Verification'
+    : userData.role === 'business'
+    ? 'BusinessProfile'
+    : 'Home';
+
   return (
-    <Stack.Navigator
-      initialRouteName={isAuthenticated ? 'Home' : 'ContactMail'}>
+    <Stack.Navigator initialRouteName={initialRouteName}>
       {loggedScreen?.map((screen, index) => {
         return (
           <Stack.Screen

@@ -7,7 +7,7 @@ interface UserAuth {
   completed: boolean;
 }
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
   ContactMail: undefined;
   Login: undefined;
@@ -25,4 +25,4 @@ type RootStackParamList = {
   '': undefined;
 };
 
-type RootStackParamKeys = keyof RootStackParamList;
+export type RootStackParamKeys = keyof RootStackParamList;

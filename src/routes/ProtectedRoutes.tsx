@@ -50,7 +50,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({children}) => {
     } else if (
       userData.status === 'approved' &&
       userData.confirmed === true &&
-      userData.completed === true
+      userData.completed === true &&
+      userData.role === 'business'
+    ) {
+      navigationRef.current?.navigate('BusinessProfile', {
+        id: userData.user_id,
+      });
+    } else if (
+      userData.status === 'approved' &&
+      userData.confirmed === true &&
+      userData.completed === true &&
+      userData.role === 'influencer'
     ) {
       navigationRef.current?.navigate('Home');
     }

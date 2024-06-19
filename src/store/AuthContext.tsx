@@ -32,8 +32,8 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const apiClientWithToken = axiosConfig(true);
 
   useEffect(() => {
+    checkConfirmation().finally(() => setIsLoading(false));
     checkAuthentication().finally(() => setIsLoading(false));
-    checkConfirmation();
   }, []);
 
   const checkAuthentication = async () => {

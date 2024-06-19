@@ -17,7 +17,7 @@ const WelcomeScreen = () => {
       resizeMode="cover"
       style={{height: SIZES.height, backgroundColor: 'red'}}>
       <View style={styles.navbarContainer}>
-        <NavbarHeader title="Sign Up" />
+        <NavbarHeader title="Connecter" />
       </View>
       <View style={styles.LoginSectionContainer}>
         <AuthSection type={AuthType.SignUp} />
