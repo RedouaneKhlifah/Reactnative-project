@@ -20,18 +20,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigationRef} from '../../store/NavigationContext';
 
 const RedirectMail = () => {
-  const {userData} = useAuth();
   const inputRefs = useRef<Array<TextInput | null>>([]);
   const [code, setCode] = useState(['', '', '', '']);
   const apiClientWithToken = axiosConfig(true);
-  const {isConfirmed, checkConfirmation} = useAuth();
+  const {userData, checkConfirmation} = useAuth();
   const navigationRef = useNavigationRef();
 
   useEffect(() => {
-    if (!isConfirmed) {
+    if (!userData?.confirmed) {
       sendEmailVerification();
     }
-  }, [isConfirmed]);
+  }, [userData?.confirmed]);
 
   const sendEmailVerification = async () => {
     try {

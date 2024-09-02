@@ -53,6 +53,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
 
   const [submitError, setSubmitError] = useState({
     number_of_people: '',
+    time: '',
   });
   const apiClientWithToken = axiosConfig(true);
 
@@ -88,7 +89,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         setLoading(false);
         setError(null);
       } catch (err) {
-        setError('Failed to fetch data');
+        setError('Failed to fetch data category');
         setLoading(false);
         setData(null);
         setSuggestedBusinesses(null);
@@ -115,29 +116,36 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
     }
   }, [id]);
 
+  const handleTimeChange = (formattedDate: string) => {
+    const [hours, minutes] = formattedDate.split(':');
+    const formattedTime = `${hours.padStart(2, '0')}:${minutes.padStart(
+      2,
+      '0',
+    )}`;
+    setIterationData(prevData => ({
+      ...prevData,
+      time: formattedTime,
+    }));
+  };
+
   const handleSubmit = async () => {
     setSubmitLoading(true);
     try {
+      console.log(iterationData);
+
       const res = await apiClientWithToken.post(
         'influencer/add-interaction',
         iterationData,
       );
       if (res) {
         setSuccessMessage({message: 'Bien envoyé'});
-        setIterationData(prevData => ({
-          ...prevData,
-          date: '',
-          message: '',
-          time: '',
-          number_of_people: '',
-        }));
         setTimeout(() => {
           setSuccessMessage({message: null});
         }, 4000);
       }
       setError(null);
       setSubmitError(prv => {
-        return {...prv, number_of_people: ''};
+        return {...prv, number_of_people: '', time: ''};
       });
 
       setIterationData(prevData => ({
@@ -197,6 +205,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
+              gap: 10,
             }}>
             <View style={{flex: 1}}>
               <OffreInfo
@@ -247,12 +256,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
                   placeholder="Heure"
                   mode="time"
                   initialValue=""
-                  onDateChange={formattedDate => {
-                    setIterationData(prevData => ({
-                      ...prevData,
-                      time: formattedDate,
-                    }));
-                  }}
+                  onDateChange={handleTimeChange}
                 />
               </View>
             </View>
@@ -341,6 +345,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   errorText: {
     color: 'red',

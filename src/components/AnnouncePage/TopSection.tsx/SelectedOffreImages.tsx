@@ -57,7 +57,7 @@ const SelectedOffreImages: FC<{data: string[]}> = ({data}) => {
         horizontal
         pagingEnabled
         snapToAlignment="center"
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => index?.toString()}
         showsHorizontalScrollIndicator={false}
         onScroll={handleOnScroll}
         onViewableItemsChanged={handleOnViewableItemsChanged}

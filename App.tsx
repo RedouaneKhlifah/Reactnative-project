@@ -13,6 +13,7 @@ import {
 } from './src/store/NavigationContext';
 import {NavigationRoute} from './src/routes/NavigationRoute';
 import {LogBox} from 'react-native';
+
 const App: React.FC = () => {
   useEffect(() => {
     LogBox.ignoreAllLogs(true); // Ignore all log notifications

@@ -49,23 +49,94 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
     }
   };
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+
   const onSubmit = async () => {
     setLoading(true);
     try {
+      // Check for empty fields
+      if (!formData.email) {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          email: 'Adresse e-mail requise',
+        }));
+        setLoading(false);
+        return;
+      }
+
+      if (!formData.password) {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          password: 'Mot de passe requis',
+        }));
+        setLoading(false);
+        return;
+      }
+
+      // Email validation
+      if (!emailRegex.test(formData.email)) {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          email: 'Adresse e-mail invalide',
+        }));
+        setLoading(false);
+        return;
+      } else {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          email: '',
+        }));
+      }
+
+      // Password validation
+      if (!passwordRegex.test(formData.password)) {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          password: 'Mot de passe trop faible.',
+        }));
+        setLoading(false);
+        return;
+      } else {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          password: '',
+        }));
+      }
+
+      if (type == AuthType.SignUp) {
+        if (!formData.confirmPassword) {
+          setErrors(prevErrors => ({
+            ...prevErrors,
+            confirmPassword: 'Confirmation du mot de passe requise',
+          }));
+          setLoading(false);
+          return;
+        }
+
+        // Confirm password validation
+        if (formData.password !== formData.confirmPassword) {
+          setErrors(prevErrors => ({
+            ...prevErrors,
+            confirmPassword: 'Les mots de passe ne correspondent pas.',
+          }));
+          setLoading(false);
+          return;
+        } else {
+          setErrors(prevErrors => ({
+            ...prevErrors,
+            confirmPassword: '',
+          }));
+        }
+      }
+
       let result;
       if (type === AuthType.Login) {
         result = await handleAuth('/login', formData);
       } else {
         const url = await AsyncStorage.getItem('registerUrl');
         if (url) {
-          if (formData.password !== formData.confirmPassword) {
-            setErrors(prevErrors => ({
-              ...prevErrors,
-              confirmPassword: 'Password not confirmed',
-            }));
-          } else {
-            result = await handleAuth(url, formData);
-          }
+          result = await handleAuth(url, formData);
         } else {
           throw new Error('Registration URL not found');
         }
@@ -73,10 +144,17 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
 
       if (result?.success) {
         // no user logged and confirmed
+        const user = result?.data.user;
 
-        if (result?.data.user.confirmed === true) {
-          if (result?.data.user.status === 'approved') {
-            navigationRef.current?.navigate('Home');
+        if (user.confirmed === true) {
+          if (user.status === 'approved') {
+            if (user.role === 'business') {
+              navigationRef.current?.navigate('BusinessProfile', {
+                id: user.user_id,
+              });
+            } else if (user.role === 'influencer') {
+              navigationRef.current?.navigate('Home');
+            }
           } else {
             navigationRef.current?.navigate('Verification');
           }
@@ -111,7 +189,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         }}
         onChangeText={text => handleChange('email', text)}
       />
-      {errors?.email && <Text style={styles.errorText}>{errors.email[0]}</Text>}
+      {errors?.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
       <InputWithLabel
         labelText={'Mot de passe'}
@@ -123,7 +201,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         secureTextEntry={true}
       />
       {errors?.password && (
-        <Text style={styles.errorText}>{errors?.password[0]}</Text>
+        <Text style={styles.errorText}>{errors?.password}</Text>
       )}
       {typeof errors === 'string' && (
         <Text style={styles.errorText}>{errors}</Text>

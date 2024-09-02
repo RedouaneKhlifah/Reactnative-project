@@ -20,24 +20,30 @@ import axiosConfig from '../../api/axios.config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {Picker} from '@react-native-picker/picker';
-import { BusinessData } from '../../interfaces/User';
+import {BusinessData} from '../../interfaces/User';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 
 const BusinessDetails = () => {
   const navigationRef = useNavigationRef();
   const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
-  const [isEdit, setIsEdit] = useState(false)
+  const [isEdit, setIsEdit] = useState(false);
   const {userData, checkConfirmation} = useAuth();
   const [imageUris, setImageUris] = useState<string[]>([]);
   const [loading, setloading] = useState(false);
   const [categoriesData, setCategoriesData] = useState([]);
-  const [businessdetails, setBusinessdetails] = useState<BusinessData | null>(null);
+  const [businessdetails, setBusinessdetails] = useState<BusinessData | null>(
+    null,
+  );
 
   useEffect(() => {
     getCategories();
-    if (userData?.status === 'approved' && userData.completed && userData.confirmed) {
-      getBusinessData()
-      setIsEdit(true)
+    if (
+      userData?.status === 'approved' &&
+      userData.completed &&
+      userData.confirmed
+    ) {
+      getBusinessData();
+      setIsEdit(true);
     }
   }, [userData]);
 
@@ -45,16 +51,16 @@ const BusinessDetails = () => {
     if (businessdetails) {
       setBusinessData({
         name: businessdetails.name || '',
-        ice: businessdetails.ice|| '',
-        email: businessdetails.email|| '',
-        phone: businessdetails.phone|| '',
-        patent: businessdetails.patent|| '',
+        ice: businessdetails.ice || '',
+        email: businessdetails.email || '',
+        phone: businessdetails.phone || '',
+        patent: businessdetails.patent || '',
         address: businessdetails.address || '',
         description: businessdetails.description || '',
         category_id: businessdetails.category?.id || 0,
       });
-      const newUris: string[] | undefined = businessdetails?.gallery_image_urls
-      setImageUris(prevUris => [...prevUris, ...newUris||[]]);     
+      const newUris: string[] | undefined = businessdetails?.gallery_image_urls;
+      setImageUris(prevUris => [...prevUris, ...(newUris || [])]);
     }
   }, [businessdetails]);
 
@@ -130,18 +136,17 @@ const BusinessDetails = () => {
       }));
     }
   };
-  const getBusinessData = async()=>{
+  const getBusinessData = async () => {
     try {
-      const res = await apiClientWithToken.get('/business/get')
-      setBusinessdetails(res.data)
-      console.log('businessdetailsbusinessdetails',res.data);
-      
+      const res = await apiClientWithToken.get('/business/get');
+      setBusinessdetails(res.data);
+      console.log('businessdetailsbusinessdetails', res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message);
       }
     }
-  } 
+  };
 
   const saveChanges = async () => {
     const formData = new FormData();
@@ -165,10 +170,10 @@ const BusinessDetails = () => {
     formData.append('description', businessData.description);
     formData.append('name', businessData.name);
 
-    setLoading(true);
+    setloading(true);
     try {
       const response = await apiClientWithToken.post(
-        isEdit?'/business/update':'/business/submit',
+        isEdit ? '/business/update' : '/business/submit',
         formData,
       );
       if (response.data) {
@@ -179,13 +184,13 @@ const BusinessDetails = () => {
           await AsyncStorage.setItem('data', JSON.stringify(data));
           checkConfirmation();
           isEdit
-          ?
-          navigationRef.current?.navigate('Home')
-          :
-          navigationRef.current?.navigate('Verification')
+            ? navigationRef.current?.navigate('BusinessProfile', {
+                id: response.data.user_id,
+              })
+            : navigationRef.current?.navigate('Verification');
         }
       }
-      setLoading(false);
+      setloading(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log('Error request:', error.request);
@@ -196,7 +201,7 @@ const BusinessDetails = () => {
       }
       console.error('Error submitting form:', error);
     } finally {
-      setLoading(false);
+      setloading(false);
     }
   };
 
@@ -239,7 +244,6 @@ const BusinessDetails = () => {
         placeholder="Sombara"
         value={businessData.name}
         onChangeText={text => handleInputChange('name', text)}
-        value={businessData.name}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -254,7 +258,6 @@ const BusinessDetails = () => {
         placeholder="ICE..."
         value={businessData.ice}
         onChangeText={text => handleInputChange('ice', text)}
-        value={businessData.ice}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -269,7 +272,6 @@ const BusinessDetails = () => {
         placeholder="Text"
         value={businessData.patent}
         onChangeText={text => handleInputChange('patent', text)}
-        value={businessData.patent}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -287,7 +289,6 @@ const BusinessDetails = () => {
         placeholder="+212 666666666"
         value={businessData.phone}
         onChangeText={text => handleInputChange('phone', text)}
-        value={businessData.phone}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -316,7 +317,6 @@ const BusinessDetails = () => {
         placeholder="Rue ....."
         value={businessData.address}
         onChangeText={text => handleInputChange('address', text)}
-        value={businessData.address}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -333,7 +333,6 @@ const BusinessDetails = () => {
         placeholder="..."
         value={businessData.description}
         onChangeText={text => handleInputChange('description', text)}
-        value={businessData.description}
         labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
         inputStyle={{
           fontSize: responsiveWidth(11),
@@ -369,9 +368,8 @@ const BusinessDetails = () => {
         <Text style={styles.errorText}>{errors.category_id[0]}</Text>
       )}
 
-
       <PrimaryButton
-        title={isEdit ? "mise à jour" : "Sauvegarder"} 
+        title={isEdit ? 'mise à jour' : 'Sauvegarder'}
         loading={loading}
         onPress={saveChanges}
         buttonStyle={styles.saveButton}
@@ -460,7 +458,8 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(20),
   },
   pickerLabel: {
-    fontSize: responsiveWidth(13), color: COLORS.darkGray,
+    fontSize: responsiveWidth(13),
+    color: COLORS.darkGray,
     fontWeight: '400',
     paddingLeft: 3,
     transform: [{translateY: 8}],
@@ -505,7 +504,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: COLORS.superLightGray,
     paddingLeft: 0,
-    height:responsiveHeight(85)
+    height: responsiveHeight(85),
   },
   selectedText: {
     fontSize: 18,
@@ -517,9 +516,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.superLightGray,
     paddingVertical: 0,
     paddingLeft: 3,
-    backgroundColor:'red',
     fontSize: responsiveWidth(11),
-
   },
   errorText: {
     color: 'red',
