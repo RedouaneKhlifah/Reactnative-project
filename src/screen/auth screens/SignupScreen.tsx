@@ -15,7 +15,7 @@ const WelcomeScreen = () => {
     <ImageBackground
       source={Images.yellowBackground}
       resizeMode="cover"
-      style={{height: SIZES.height, backgroundColor: 'red'}}>
+      style={{height: SIZES.height}}>
       <View style={styles.navbarContainer}>
         <NavbarHeader title="Connecter" />
       </View>

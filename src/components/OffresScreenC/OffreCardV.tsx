@@ -8,6 +8,7 @@ const OffreCardV: FC<{
   loading: boolean;
   error: string | null;
 }> = ({data, loading, error}) => {
+  
   const renderItem = ({item}: {item: IoffreData}) => <OffreCard data={item} />;
 
   if (loading) {

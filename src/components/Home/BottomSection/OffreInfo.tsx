@@ -25,7 +25,10 @@ const OffreInfo: FC<OffreInfoProp> = ({
   locationStyle,
   iconSize,
 }) => {
+
   return (
+
+    
     <View>
       <View style={[styles.titleContainer]}>
         <Text
@@ -60,20 +63,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    flex: 1,
   },
   title: {
     fontSize: responsiveWidth(16),
     fontWeight: '400',
     color: COLORS.black,
     lineHeight: 22,
-    maxWidth: responsiveWidth(175), // Set a maxWidth to ensure ellipsis
+    maxWidth: 160
+    // Set a maxWidth to ensure ellipsis
   },
   location: {
     fontSize: responsiveWidth(11),
     fontWeight: '300',
     transform: [{translateY: 4}],
     lineHeight: 12,
-    maxWidth: responsiveWidth(160), // Set a maxWidth to ensure ellipsis
+    maxWidth: responsiveWidth(160),
   },
 });
 

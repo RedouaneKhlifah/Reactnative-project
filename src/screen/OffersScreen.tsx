@@ -29,6 +29,8 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
         const res = await apiClientWithToken.get(
           `/influencer/get-category-businesses/${categoryId}/${Order}`,
         );
+        console.log(res);
+        
         if (res.data.businesses) {
           setData(res.data.businesses);
         } else {
@@ -36,6 +38,8 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
         }
         setLoading(false);
       } catch (err) {
+        console.log(err);
+        
         setError('Failed to fetch data');
         setLoading(false);
       }

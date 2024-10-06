@@ -63,7 +63,9 @@ const ContactMail = () => {
             onPress={() => {
               navigationRef.current?.navigate('RoleSelectionScreen');
             }}>
-            <Text style={styles.log}>{"S'inscrire"}</Text>
+          <Text style={[styles.log, { textDecorationLine: 'underline' }]}>
+            {"S'inscrire"}
+          </Text>
           </Pressable>
         </View>
       </View>

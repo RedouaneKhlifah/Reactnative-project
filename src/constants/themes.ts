@@ -57,38 +57,38 @@ export const SIZES = {
 
 export const FONTS = {
   largeTitle: {
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: '',
     fontSize: SIZES.largeTitle,
     lineHeight: 55,
   },
-  semiLargeTitle: {fontFamily: 'Comfortaa-Bold', fontSize: SIZES.body0},
-  h1: {fontFamily: 'Comfortaa-Bold', fontSize: SIZES.h1},
-  h2: {fontFamily: 'Comfortaa-SemiBold', fontSize: SIZES.h2},
-  hs: {fontFamily: 'Comfortaa-SemiBold', fontSize: SIZES.hs},
-  h3: {fontFamily: 'Comfortaa-Regular', fontSize: SIZES.h3},
-  h4: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h4},
-  h5: {fontFamily: 'Poppins-Regular', fontSize: SIZES.h5},
+  semiLargeTitle: {fontFamily: '', fontSize: SIZES.body0},
+  h1: {fontFamily: '', fontSize: SIZES.h1},
+  h2: {fontFamily: '', fontSize: SIZES.h2},
+  hs: {fontFamily: '', fontSize: SIZES.hs},
+  h3: {fontFamily: '', fontSize: SIZES.h3},
+  h4: {fontFamily: '', fontSize: SIZES.h4},
+  h5: {fontFamily: '', fontSize: SIZES.h5},
 
   body1: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: '',
     fontSize: SIZES.body1,
     lineHeight: 36,
   },
   body2: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: '',
     fontSize: SIZES.body2,
     lineHeight: 30,
   },
   body3: {
-    fontFamily: 'Comfortaa-Regular',
+    fontFamily: '',
     fontSize: SIZES.body3,
   },
   body4: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: '',
     fontSize: SIZES.body4,
   },
   body5: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: '',
     fontSize: SIZES.body5,
     lineHeight: 22,
   },

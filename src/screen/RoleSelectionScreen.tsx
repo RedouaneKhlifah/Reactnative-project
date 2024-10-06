@@ -7,38 +7,26 @@ import {responsiveHeight} from '../utils/responsive';
 
 const {SIZES} = appTheme;
 function RoleSelectionScreen() {
-  const data = [
-    {
-      id: 1,
-      title: 'Influenceur',
-      action: 'Obtenez des collaborations Win Win',
-      link: 'Login' as keyof RootStackParamList,
-      urlPic: Images.InfluencerRoleSelect,
-    },
-    {
-      id: 2,
-      title: "Propriétaire d'entreprise",
-      action: 'Créez votre compte Win Win',
-      link: 'Login' as keyof RootStackParamList,
-      urlPic: Images.businessRoleSelect,
-    },
-  ];
   return (
     <ImageBackground
       source={Images.whiteBackground}
       resizeMode="cover"
       style={style.background}>
       <View style={style.container}>
-        {data.map((item, index) => (
-          <OptionBox
-            key={index}
-            id={item.id}
-            title={item.title}
-            action={item.action}
-            urlPic={item.urlPic}
-            link={item.link}
-          />
-        ))}
+        <OptionBox
+          title="Influenceur"
+          action="Obtenez des collaborations Win Win"
+          urlPic={Images.InfluencerRoleSelect}
+          link="Login"
+          id={0}
+        />
+        <OptionBox
+          title="Propriétaire d'entreprise"
+          action="Créez votre compte Win Win"
+          urlPic={Images.businessRoleSelect}
+          link="Login"
+          id={0}
+        />
       </View>
     </ImageBackground>
   );

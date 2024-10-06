@@ -10,8 +10,6 @@ import {
   ActivityIndicator,
   ImageSourcePropType,
 } from 'react-native';
-
-import React, { useEffect, useState } from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
@@ -21,13 +19,16 @@ import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootStackParamList} from '../../interfaces/RootStackParamList';
 import axiosConfig from '../../api/axios.config';
-import { BusinessData } from '../../interfaces/User';
+import {BusinessData} from '../../interfaces/User';
+import {useAuth} from '../../store/AuthContext';
 
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
   const apiClientWithToken = axiosConfig(true); // Initialize axios with token
   const [data, setData] = useState<BusinessData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const {userData} = useAuth();
 
   interface NavigationItem {
     icon: ImageSourcePropType; // Assuming Icons is an imported library providing icon components
@@ -56,6 +57,7 @@ const BusinessProfile = () => {
     const fetchData = async () => {
       try {
         const res = await apiClientWithToken.get(`/business/get/`);
+        console.log(res.data);
         if (res.data) {
           setData(res.data);
         } else {
@@ -63,11 +65,15 @@ const BusinessProfile = () => {
         }
       } catch (err) {
         setError('Failed to fetch data');
+        setLoading(false);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {
       await AsyncStorage.removeItem('data');
@@ -90,7 +96,12 @@ const BusinessProfile = () => {
     );
   }
 
-  if (!businessData) {
+  if (!data) {
+    const Logout = async () => {
+      await AsyncStorage.removeItem('data');
+      navigationRef.current?.navigate('ContactMail');
+    };
+    Logout();
     return (
       <View style={styles.loaderContainer}>
         <Text style={styles.errorText}>Failed to load business data.</Text>
@@ -108,12 +119,19 @@ const BusinessProfile = () => {
               onPress={handlePress}
               title="Aide"
               buttonStyle={{elevation: 0}}
+              textStyle={{fontSize: 12}}
             />
           </View>
           <View style={styles.profileOptions}>
             <View style={styles.userCard}>
               <View style={styles.userInfo}>
-                <Image source={{uri:data?.gallery_image_urls && data?.gallery_image_urls[0]}} style={styles.profilePic} />
+                <Image
+                  source={{
+                    uri:
+                      data?.gallery_image_urls && data?.gallery_image_urls[0],
+                  }}
+                  style={styles.profilePic}
+                />
                 <View>
                   <Text
                     style={{
@@ -121,9 +139,14 @@ const BusinessProfile = () => {
                       fontWeight: '400',
                       color: 'black',
                     }}>
-                    { data?.name}
+                    {data?.name}
                   </Text>
-                  <Text style={{fontSize: SIZES.middleRadius, color: 'black'}}>
+                  <Text
+                    style={{
+                      fontSize: SIZES.middleRadius,
+                      color: 'black',
+                      opacity: 0.7,
+                    }}>
                     {data?.category.name}
                   </Text>
                 </View>
@@ -139,18 +162,18 @@ const BusinessProfile = () => {
                     <View style={styles.userInfo}>
                       <Image
                         source={item.icon}
-                        style={{width: 24, height: 24}}
+                        style={{width: 17, height: 17}}
                       />
                       <Text
                         style={{
                           fontFamily: FONTS.body4.fontFamily,
-                          fontSize: SIZES.radius,
+                          fontSize: 14,
                           color: item.color || '',
                         }}>
                         {item.title}
                       </Text>
                     </View>
-                    <RnIcon name="chevron-right" color="black" size={16} />
+                    <RnIcon name="chevron-right" color="black" size={14} />
                   </Pressable>
                 );
               })}
@@ -241,14 +264,14 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
   },
   title: {
-    fontSize: 25,
+    fontSize: 21,
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
     position: 'absolute',
     top: '110%', // Position the text 50% from the top of its container
     left: 0,
-    right: 20,
+    right: 30,
   },
   loaderContainer: {
     flex: 1,

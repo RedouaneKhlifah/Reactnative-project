@@ -20,24 +20,30 @@ import axiosConfig from '../../api/axios.config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {Picker} from '@react-native-picker/picker';
-import { BusinessData } from '../../interfaces/User';
+import {BusinessData} from '../../interfaces/User';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 
 const BusinessDetails = () => {
   const navigationRef = useNavigationRef();
   const apiClientWithToken = axiosConfig(true, 'multipart/form-data');
-  const [isEdit, setIsEdit] = useState(false)
+  const [isEdit, setIsEdit] = useState(false);
   const {userData, checkConfirmation} = useAuth();
   const [imageUris, setImageUris] = useState<string[]>([]);
   const [loading, setloading] = useState(false);
   const [categoriesData, setCategoriesData] = useState([]);
-  const [businessdetails, setBusinessdetails] = useState<BusinessData | null>(null);
+  const [businessdetails, setBusinessdetails] = useState<BusinessData | null>(
+    null,
+  );
 
   useEffect(() => {
     getCategories();
-    if (userData?.status === 'approved' && userData.completed && userData.confirmed) {
-      getBusinessData()
-      setIsEdit(true)
+    if (
+      userData?.status === 'approved' &&
+      userData.completed &&
+      userData.confirmed
+    ) {
+      getBusinessData();
+      setIsEdit(true);
     }
   }, [userData]);
 
@@ -45,16 +51,16 @@ const BusinessDetails = () => {
     if (businessdetails) {
       setBusinessData({
         name: businessdetails.name || '',
-        ice: businessdetails.ice|| '',
-        email: businessdetails.email|| '',
-        phone: businessdetails.phone|| '',
-        patent: businessdetails.patent|| '',
+        ice: businessdetails.ice || '',
+        email: businessdetails.email || '',
+        phone: businessdetails.phone || '',
+        patent: businessdetails.patent || '',
         address: businessdetails.address || '',
         description: businessdetails.description || '',
         category_id: businessdetails.category?.id || 0,
       });
-      const newUris: string[] | undefined = businessdetails?.gallery_image_urls
-      setImageUris(prevUris => [...prevUris, ...newUris||[]]);     
+      const newUris: string[] | undefined = businessdetails?.gallery_image_urls;
+      setImageUris(prevUris => [...prevUris, ...(newUris || [])]);
     }
   }, [businessdetails]);
 
@@ -130,18 +136,17 @@ const BusinessDetails = () => {
       }));
     }
   };
-  const getBusinessData = async()=>{
+  const getBusinessData = async () => {
     try {
-      const res = await apiClientWithToken.get('/business/get')
-      setBusinessdetails(res.data)
-      console.log('businessdetailsbusinessdetails',res.data);
-      
+      const res = await apiClientWithToken.get('/business/get');
+      setBusinessdetails(res.data);
+      console.log('businessdetailsbusinessdetails', res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message);
       }
     }
-  } 
+  };
 
   const saveChanges = async () => {
     const formData = new FormData();
@@ -165,10 +170,10 @@ const BusinessDetails = () => {
     formData.append('description', businessData.description);
     formData.append('name', businessData.name);
 
-    setLoading(true);
+    setloading(true);
     try {
       const response = await apiClientWithToken.post(
-        isEdit?'/business/update':'/business/submit',
+        isEdit ? '/business/update' : '/business/submit',
         formData,
       );
       if (response.data) {
@@ -179,13 +184,13 @@ const BusinessDetails = () => {
           await AsyncStorage.setItem('data', JSON.stringify(data));
           checkConfirmation();
           isEdit
-          ?
-          navigationRef.current?.navigate('Home')
-          :
-          navigationRef.current?.navigate('Verification')
+            ? navigationRef.current?.navigate('BusinessProfile', {
+                id: response.data.user_id,
+              })
+            : navigationRef.current?.navigate('Verification');
         }
       }
-      setLoading(false);
+      setloading(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log('Error request:', error.request);
@@ -196,7 +201,7 @@ const BusinessDetails = () => {
       }
       console.error('Error submitting form:', error);
     } finally {
-      setLoading(false);
+      setloading(false);
     }
   };
 
@@ -208,7 +213,7 @@ const BusinessDetails = () => {
           style={styles.backgroundImage}>
           <BackButton bgColor={COLORS.mov} color={COLORS.white} />
           <View style={{display: 'flex', width: '80%'}}>
-            <Text style={styles.title}>les détails {'\n'} d'entreprise</Text>
+            <Text style={styles.title}>Les détails d'entreprise</Text>
           </View>
         </ImageBackground>
       </View>
@@ -223,8 +228,8 @@ const BusinessDetails = () => {
           <Image
             source={Icons.plusPn}
             style={{
-              width: responsiveWidth(19),
-              height: responsiveHeight(25),
+              width: responsiveWidth(16),
+              height: responsiveHeight(22),
             }}
             resizeMode="contain"
           />
@@ -239,12 +244,11 @@ const BusinessDetails = () => {
         placeholder="Sombara"
         value={businessData.name}
         onChangeText={text => handleInputChange('name', text)}
-        value={businessData.name}
-        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+        labelStyle={{fontSize: responsiveWidth(12.3), color: COLORS.darkGray}}
         inputStyle={{
-          fontSize: responsiveWidth(11),
+          fontSize: responsiveWidth(12.3),
           fontWeight: '500',
-          marginBottom: 20,
+          marginBottom: 12,
         }}
       />
       {errors?.name && <Text style={styles.errorText}>{errors.name[0]}</Text>}
@@ -254,12 +258,11 @@ const BusinessDetails = () => {
         placeholder="ICE..."
         value={businessData.ice}
         onChangeText={text => handleInputChange('ice', text)}
-        value={businessData.ice}
-        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+        labelStyle={{fontSize: responsiveWidth(12.3), color: COLORS.darkGray}}
         inputStyle={{
-          fontSize: responsiveWidth(11),
+          fontSize: responsiveWidth(12.2),
           fontWeight: '500',
-          marginBottom: 20,
+          marginBottom: 12,
         }}
       />
       {errors?.ice && <Text style={styles.errorText}>{errors.ice[0]}</Text>}
@@ -269,12 +272,11 @@ const BusinessDetails = () => {
         placeholder="Text"
         value={businessData.patent}
         onChangeText={text => handleInputChange('patent', text)}
-        value={businessData.patent}
-        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+        labelStyle={{fontSize: responsiveWidth(12.3), color: COLORS.darkGray}}
         inputStyle={{
-          fontSize: responsiveWidth(11),
+          fontSize: responsiveWidth(12.1),
           fontWeight: '500',
-          marginBottom: 20,
+          marginBottom: 12,
         }}
       />
       {errors?.patent && (
@@ -287,12 +289,11 @@ const BusinessDetails = () => {
         placeholder="+212 666666666"
         value={businessData.phone}
         onChangeText={text => handleInputChange('phone', text)}
-        value={businessData.phone}
-        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+        labelStyle={{fontSize: responsiveWidth(12.3), color: COLORS.darkGray}}
         inputStyle={{
-          fontSize: responsiveWidth(11),
+          fontSize: responsiveWidth(12.2),
           fontWeight: '500',
-          marginBottom: 20,
+          marginBottom: 12,
         }}
       />
       {errors?.phone && <Text style={styles.errorText}>{errors.phone[0]}</Text>}
@@ -302,11 +303,11 @@ const BusinessDetails = () => {
         placeholder={userData?.email ?? ''}
         disabled={userData?.email ? true : false}
         value={businessData.email}
-        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+        labelStyle={{fontSize: responsiveWidth(12.3), color: COLORS.darkGray}}
         inputStyle={{
-          fontSize: responsiveWidth(11),
+          fontSize: responsiveWidth(12.2),
           fontWeight: '500',
-          marginBottom: 20,
+          marginBottom: 12,
         }}
       />
       {errors?.email && <Text style={styles.errorText}>{errors.email[0]}</Text>}
@@ -316,12 +317,11 @@ const BusinessDetails = () => {
         placeholder="Rue ....."
         value={businessData.address}
         onChangeText={text => handleInputChange('address', text)}
-        value={businessData.address}
-        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+        labelStyle={{fontSize: responsiveWidth(12.3), color: COLORS.darkGray}}
         inputStyle={{
-          fontSize: responsiveWidth(11),
+          fontSize: responsiveWidth(12.2),
           fontWeight: '500',
-          marginBottom: 20,
+          marginBottom: 12,
         }}
       />
       {errors?.address && (
@@ -333,12 +333,11 @@ const BusinessDetails = () => {
         placeholder="..."
         value={businessData.description}
         onChangeText={text => handleInputChange('description', text)}
-        value={businessData.description}
-        labelStyle={{fontSize: responsiveWidth(13), color: COLORS.darkGray}}
+        labelStyle={{fontSize: responsiveWidth(12.3), color: COLORS.darkGray}}
         inputStyle={{
-          fontSize: responsiveWidth(11),
+          fontSize: responsiveWidth(12.2),
           fontWeight: '500',
-          marginBottom: 20,
+          marginBottom: 10,
         }}
       />
       {errors?.description && (
@@ -361,6 +360,7 @@ const BusinessDetails = () => {
               key={category.id}
               label={category.name}
               value={category.id}
+              style={{fontSize: responsiveWidth(13.5)}}
             />
           ))}
         </Picker>
@@ -369,9 +369,8 @@ const BusinessDetails = () => {
         <Text style={styles.errorText}>{errors.category_id[0]}</Text>
       )}
 
-
       <PrimaryButton
-        title={isEdit ? "mise à jour" : "Sauvegarder"} 
+        title={isEdit ? 'Mise à jour' : 'Sauvegarder'}
         loading={loading}
         onPress={saveChanges}
         buttonStyle={styles.saveButton}
@@ -420,7 +419,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   title: {
-    fontSize: 25,
+    fontSize: 19,
     fontWeight: 'bold',
     marginVertical: 20,
     color: 'white',
@@ -428,7 +427,7 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   galleryTitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#757575',
     fontWeight: 'bold',
     marginBottom: 10,
@@ -441,8 +440,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   imageContainer: {
-    width: responsiveWidth(110),
-    height: responsiveWidth(100),
+    width: responsiveWidth(95),
+    height: responsiveWidth(95),
     borderRadius: responsiveWidth(20),
     marginRight: 20,
     borderWidth: 1,
@@ -454,13 +453,14 @@ const styles = StyleSheet.create({
     color: '#aaa',
   },
   image: {
-    width: responsiveWidth(110),
-    height: responsiveWidth(100),
+    width: responsiveWidth(95),
+    height: responsiveWidth(95),
     marginRight: 20,
     borderRadius: responsiveWidth(20),
   },
   pickerLabel: {
-    fontSize: responsiveWidth(13), color: COLORS.darkGray,
+    fontSize: responsiveWidth(13),
+    color: COLORS.darkGray,
     fontWeight: '400',
     paddingLeft: 3,
     transform: [{translateY: 8}],
@@ -502,10 +502,10 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: '100%',
-    borderBottomWidth: 2,
+    borderBottomWidth: 0.5,
     borderColor: COLORS.superLightGray,
     paddingLeft: 0,
-    height:responsiveHeight(85)
+    height: responsiveHeight(85),
   },
   selectedText: {
     fontSize: 18,
@@ -517,9 +517,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.superLightGray,
     paddingVertical: 0,
     paddingLeft: 3,
-    backgroundColor:'red',
     fontSize: responsiveWidth(11),
-
   },
   errorText: {
     color: 'red',

@@ -58,12 +58,15 @@ const OffreCard: FC<{data?: IoffreData | null}> = ({data}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: '100%',
+            gap: 12,
           }}>
-          <OffreInfo
-            title={name}
-            location={address}
-            iconSize={responsiveWidth(15)}
-          />
+          <View style={{flex: 1}}>
+            <OffreInfo
+              title={name}
+              location={address}
+              iconSize={responsiveWidth(15)}
+            />
+          </View>
           <OffreRating views={data.views} />
         </View>
 

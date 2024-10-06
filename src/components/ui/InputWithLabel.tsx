@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontWeight: '300',
-    borderBottomWidth: 2,
+    borderBottomWidth: 0.5,
     borderColor: COLORS.superLightGray,
     paddingVertical: 0,
     paddingLeft: 3,

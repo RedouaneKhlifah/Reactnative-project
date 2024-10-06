@@ -17,6 +17,10 @@ const SimilairesOffre: FC<{data: IoffreData | null}> = ({data}) => {
     navigationRef.current?.navigate('AnnouncePage', {id: data.id});
   };
 
+  console.log("//////////// similar offre //////////////////");
+  console.log(data.name);
+
+
   return (
     <Pressable
       onPress={handlePress}

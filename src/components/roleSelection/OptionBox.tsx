@@ -12,6 +12,7 @@ import {Images} from '../../constants';
 import {responsiveHeight, responsiveWidth} from '../../utils/responsive';
 import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../../interfaces/RootStackParamList';
 
 const {COLORS, FONTS, SIZES} = appTheme;
 type boxProps = {

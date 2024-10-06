@@ -41,14 +41,12 @@ const Home: React.FC = () => {
         } else {
           setData(null);
         }
+
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch data');
         setLoading(false);
         setData(null);
-
-        await AsyncStorage.removeItem('data');
-        navigationRef.current?.navigate('ContactMail');
       }
     };
     fetchData();
@@ -102,7 +100,11 @@ const Home: React.FC = () => {
       </View>
 
       <View style={{alignItems: 'center'}}>
-        {loading ? <SkeletonOffreCard /> : data && <OffreCard data={data[0]} />}
+        {loading ? (
+          <SkeletonOffreCard />
+        ) : (
+          data && data[0] && <OffreCard data={data[0]} />
+        )}
       </View>
 
       <View
@@ -123,7 +125,11 @@ const Home: React.FC = () => {
       </View>
 
       <View style={{alignItems: 'center'}}>
-        {loading ? <SkeletonOffreCard /> : data && <OffreCard data={data[1]} />}
+        {loading ? (
+          <SkeletonOffreCard />
+        ) : (
+          data && data[1] && <OffreCard data={data[1]} />
+        )}
       </View>
     </ScrollView>
   );
