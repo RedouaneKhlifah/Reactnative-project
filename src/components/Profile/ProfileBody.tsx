@@ -100,6 +100,7 @@ const ProfileBody = () => {
     {label: 'Divertissement', value: 'Divertissement'},
     {label: 'Education – Art et culture', value: 'Education – Art et culture'},
   ]);
+
   useEffect(() => {
     if (
       userData?.status === 'approved' &&
@@ -110,6 +111,7 @@ const ProfileBody = () => {
       setIsEdit(true);
     }
   }, [userData]);
+
   useEffect(() => {
     if (influencerData) {
       setProfileData({
@@ -136,6 +138,7 @@ const ProfileBody = () => {
       setImageUri(influencerData.profile_image_url || null);
     }
   }, [influencerData]);
+
   const getProfileData = async () => {
     try {
       const res = await apiClientWithToken.get('/influencer/get');
@@ -236,7 +239,7 @@ const ProfileBody = () => {
           await AsyncStorage.setItem('data', JSON.stringify(data));
           checkConfirmation();
           isEdit
-            ? navigationRef.current?.navigate('Home')
+            ? navigationRef.current?.navigate('profile', {isUpdated: Date.now()})
             : navigationRef.current?.navigate('Verification');
         }
       }

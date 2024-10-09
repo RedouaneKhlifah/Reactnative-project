@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
 import {
   StyleSheet,
@@ -22,6 +22,8 @@ import axiosConfig from '../../api/axios.config';
 import {BusinessData} from '../../interfaces/User';
 import {useAuth} from '../../store/AuthContext';
 import { BackHandler, Alert } from 'react-native';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
+
 
 
 interface NavigationItem {
@@ -31,8 +33,13 @@ interface NavigationItem {
   color?: string; // Optional property for specifying color
 }
 
+type BusinessScreenProp = RouteProp<RootStackParamList, 'BusinessProfile'>;
 
-const BusinessProfile = () => {
+const BusinessProfile :FC<{route: BusinessScreenProp }> = ({route}) => {
+
+  const id  = route?.params?.id;
+  const isupdated = route?.params?.isUpdated;
+  
   const navigationRef = useNavigationRef();
   const apiClientWithToken = axiosConfig(true); // Initialize axios with token
   const [data, setData] = useState<BusinessData | null>(null);
@@ -40,7 +47,9 @@ const BusinessProfile = () => {
   const [loading, setLoading] = useState(true);
   const {userData} = useAuth();
 
+
   // OUT OFF THE APP 
+
 
   useEffect(() => {
     // Function to handle back button press
@@ -81,25 +90,28 @@ const BusinessProfile = () => {
     },
   ];
   
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await apiClientWithToken.get(`/business/get/`);
-        console.log(res.data);
-        if (res.data) {
-          setData(res.data);
-        } else {
-          setData(null);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const res = await apiClientWithToken.get(`/business/get/`);
+          if (res.data) {
+            await AsyncStorage.setItem('userData', JSON.stringify(res.data));
+            setData(res.data);
+          } else {
+            setData(null);
+          }
+        } catch (err) {
+          setLoading(false);
+        } finally {
+          setLoading(false);
         }
-      } catch (err) {
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchData();
-  }, []);
+      fetchData();
+    }, [isupdated])
+  );
+
 
   const handleAction = async (action: string | undefined) => {
     if (action === 'Logout') {

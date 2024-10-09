@@ -16,10 +16,10 @@ export type RootStackParamList = {
   RedirectMail: undefined;
   RoleSelectionScreen: undefined;
   ProfileScreen: undefined;
-  Profile: {id: number};
-  OffersScreen: {categoryId: number; name: string};
+  Profile: {id: number , isUpdated?: number};
+  OffersScreen: {categoryId: number, name: string};
   BusinessDetails: undefined;
-  BusinessProfile: {id: number};
+  BusinessProfile: {id: number , isUpdated?: number};
   Protected: undefined;
   Verification: undefined;
   '': undefined;

@@ -193,8 +193,6 @@ const BusinessDetails = () => {
       setloading(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log('Error request:', error.request);
-        console.log('Error response:', error.response?.data);
         if (error.response?.data) {
           setErrors(error.response?.data.errors);
         }

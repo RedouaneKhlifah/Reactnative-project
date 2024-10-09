@@ -6,7 +6,7 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {COLORS, FONTS, Icons, Images, SIZES} from '../../constants';
 import SecondaryButton from '../../components/ui/buttons/SecondaryButton';
 import RnIcon from '../../components/ui/RnIcon';
@@ -15,9 +15,13 @@ import {useNavigationRef} from '../../store/NavigationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosConfig from '../../api/axios.config';
 import {RootStackParamList} from '../../interfaces/RootStackParamList';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
 
-export default function Profile() {
+type BusinessScreenProp = RouteProp<RootStackParamList, 'Profile'>;
+
+const Profile: FC<{route: BusinessScreenProp}> = ({route}) => {
   const navigationRef = useNavigationRef();
+  const isupdated = route.params?.isUpdated;
 
   interface ISocialMediaLinks {
     facebook: string | null;
@@ -46,8 +50,9 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
+
+  useFocusEffect(
+    useCallback(() => {    const fetchData = async () => {
       try {
         const apiClientWithToken = axiosConfig(true); // Initialize axios with token
         const res = await apiClientWithToken.get(`/influencer/get/`);
@@ -63,7 +68,8 @@ export default function Profile() {
     };
 
     fetchData();
-  }, []);
+  }, [isupdated])
+);
 
   const items = [
     {
@@ -232,3 +238,5 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
   },
 });
+
+export default Profile;

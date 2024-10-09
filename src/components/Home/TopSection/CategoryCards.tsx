@@ -25,7 +25,6 @@ const CategoryCards = () => {
         setLoading(true);
       }
     };
-
     fetchData();
   }, []);
 
