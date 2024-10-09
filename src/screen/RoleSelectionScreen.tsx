@@ -17,14 +17,14 @@ function RoleSelectionScreen() {
           title="Influenceur"
           action="Obtenez des collaborations Win Win"
           urlPic={Images.InfluencerRoleSelect}
-          link="Login"
+          link="Signup"
           id={0}
         />
         <OptionBox
           title="Propriétaire d'entreprise"
           action="Créez votre compte Win Win"
           urlPic={Images.businessRoleSelect}
-          link="Login"
+          link="Signup"
           id={0}
         />
       </View>

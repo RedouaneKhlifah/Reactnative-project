@@ -32,7 +32,7 @@ const ContactMail = () => {
           <Pressable
             style={({pressed}) => [styles.button, {opacity: pressed ? 0.7 : 1}]}
             onPress={() => {
-              navigationRef.current?.navigate('RoleSelectionScreen');
+              navigationRef.current?.navigate('Login');
             }}>
             <View style={{paddingLeft: 22}}>
               <RnIcon name="email" size={21} color="white" />
@@ -44,7 +44,7 @@ const ContactMail = () => {
                 fontFamily: FONTS.body3.fontFamily,
                 fontWeight: '400',
               }}>
-              CONTINUE WITH EMAIL
+              CONTINUER AVEC L'EMAIL
             </Text>
           </Pressable>
         </View>

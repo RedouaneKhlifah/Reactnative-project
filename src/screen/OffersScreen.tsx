@@ -1,14 +1,15 @@
-import {View, Text, ScrollView, Pressable} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
-import {COLORS, Icons, FONTS} from '../constants';
+import {COLORS, Icons} from '../constants';
 import ActionButton from '../components/CategorySection/ActionButton';
 import BackButton from '../components/ui/buttons/BackButton';
 import {useNavigationRef} from '../store/NavigationContext';
 import OffreCardV from '../components/OffresScreenC/OffreCardV';
-import {RouteProp, useNavigation} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import axiosConfig from '../api/axios.config';
 import {IoffreData} from '../components/Home/BottomSection/OffreCard';
 import {RootStackParamList} from '../interfaces/RootStackParamList';
+import { InfluencerData } from '../interfaces/User';
 
 type OffersScreenProp = RouteProp<RootStackParamList, 'OffersScreen'>;
 
@@ -21,6 +22,7 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
   const [error, setError] = useState<string | null>(null);
   const [Order, setOrder] = useState<string>('asc');
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,19 +31,16 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
         const res = await apiClientWithToken.get(
           `/influencer/get-category-businesses/${categoryId}/${Order}`,
         );
-        console.log(res);
-        
+
+
         if (res.data.businesses) {
           setData(res.data.businesses);
         } else {
           setData([]);
         }
         setLoading(false);
-      } catch (err) {
-        console.log(err);
-        
-        setError('Failed to fetch data');
-        setLoading(false);
+      } catch (err) {        
+        setLoading(true);
       }
     };
 
@@ -62,7 +61,7 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
           bgColor={COLORS.yellow}
           color={COLORS.white}
         />
-        <Text style={{fontSize: 22, fontWeight: '400', color: COLORS.black}}>
+        <Text style={{fontSize: 19, textAlignVertical : 'center'  , fontWeight: '400', color: COLORS.black}}>
           {name}
         </Text>
       </View>
@@ -88,7 +87,7 @@ const OffersScreen: FC<{route: OffersScreenProp}> = ({route}) => {
           alignSelf: 'center',
           paddingBottom: 10,
         }}>
-        <Text style={{color: COLORS.black, fontSize: 22, fontWeight: '400'}}>
+        <Text style={{color: COLORS.black, fontSize: 16, fontWeight: '400'}}>
           Affichage de {data.length} propriétés
         </Text>
       </View>

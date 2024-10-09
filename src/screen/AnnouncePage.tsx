@@ -10,7 +10,6 @@ import SimilairesOffre from '../components/AnnouncePage/buttomSection/Similaires
 import DateInputWithLbel from '../components/ui/DateInputWithLbel';
 import InputWithLabel from '../components/ui/InputWithLabel';
 import {responsiveHeight, responsiveWidth} from '../utils/responsive';
-import SecondaryButton from '../components/ui/buttons/SecondaryButton';
 import {RouteProp} from '@react-navigation/native';
 import axiosConfig from '../api/axios.config';
 import {IoffreData} from '../components/Home/BottomSection/OffreCard';
@@ -68,9 +67,10 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
+    setLoading(true);
+
     const fetchData = async () => {
       try {
-        setLoading(true);
         const res = await apiClientWithToken.get(
           `/influencer/get-business/${id}`,
         );
@@ -89,8 +89,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         setLoading(false);
         setError(null);
       } catch (err) {
-        setError('Failed to fetch data category');
-        setLoading(false);
+        setLoading(true);
         setData(null);
         setSuggestedBusinesses(null);
       } finally {
@@ -131,8 +130,6 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
   const handleSubmit = async () => {
     setSubmitLoading(true);
     try {
-      console.log(iterationData);
-
       const res = await apiClientWithToken.post(
         'influencer/add-interaction',
         iterationData,
@@ -156,6 +153,8 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
         number_of_people: '',
       }));
     } catch (error) {
+      setSubmitLoading(false);
+
       if (axios.isAxiosError(error)) {
         setSubmitError(error.response?.data.errors);
       }
@@ -211,7 +210,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               <OffreInfo
                 title={data.name}
                 location={data.address}
-                iconSize={18}
+                iconSize={12}
               />
             </View>
             <OffreRating views={data.views} />
@@ -279,6 +278,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
                 paddingVertical: responsiveHeight(10),
               }}
               keyboardType="numeric"
+             
             />
             {submitError?.number_of_people && (
               <Text style={styles.errorText}>
@@ -337,6 +337,7 @@ const AnnouncePage: FC<{route: OffersScreenProp}> = ({route}) => {
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               rowGap: 10,
+              paddingBottom: 20,
             }}>
             {suggestedBusinesses?.map((item, index) => (
               <SimilairesOffre key={index} data={item} />

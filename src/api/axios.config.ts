@@ -9,7 +9,7 @@ const axiosConfig = (
     baseURL: 'https://winwin-media.com/api/app', // Replace with your API base URL
     timeout: 10000, // Set a timeout for requests (optional)
     headers: {
-      'Content-Type': contentType, // Set common headers
+      'content-type': contentType, // Set common headers
       Accept: 'application/json',
     },
   });

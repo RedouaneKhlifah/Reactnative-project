@@ -23,7 +23,7 @@ const BackButton: React.FC<BackProps> = ({
     <TouchableOpacity
       onPress={onPress ? onPress : setBackRoute}
       style={[styles.container, {backgroundColor: bgColor}]}>
-      <RnIcon name="chevron-left" size={24} color={color} />
+      <RnIcon name="chevron-left" size={22} color={color} />
     </TouchableOpacity>
   );
 };
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 33,
-    height: 33,
+    width: 30,
+    height: 30,
     paddingVertical: 8,
     borderRadius: 10,
   },

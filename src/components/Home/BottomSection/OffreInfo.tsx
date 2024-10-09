@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    flex: 1,
   },
   title: {
     fontSize: responsiveWidth(16),
@@ -71,7 +70,6 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     lineHeight: 22,
     maxWidth: 160
-    // Set a maxWidth to ensure ellipsis
   },
   location: {
     fontSize: responsiveWidth(11),

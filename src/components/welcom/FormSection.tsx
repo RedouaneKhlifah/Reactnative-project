@@ -1,5 +1,5 @@
 import {View, StyleSheet, Text, Pressable} from 'react-native';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Prefix from './Prefix';
 import Input from '../ui/Input';
 import {COLORS, FONTS, SIZES} from '../../constants';
@@ -11,8 +11,6 @@ import {useNavigationRef} from '../../store/NavigationContext';
 import {useAuth} from '../../store/AuthContext'; // Adjust the import path
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../ui/buttons/PrimaryButton';
-import {LightSpeedOutLeft} from 'react-native-reanimated';
-
 interface FormSectionProp extends AuthSectionProp {}
 
 enum AuthType {
@@ -43,11 +41,13 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
   };
   const handleNavigate = () => {
     if (navigationRef.current?.getCurrentRoute()?.name === 'Login') {
-      navigationRef.current?.navigate('Signup');
+      navigationRef.current?.navigate('RoleSelectionScreen');
     } else {
       navigationRef.current?.navigate('Login');
     }
   };
+  
+
 
   const onSubmit = async () => {
     setLoading(true);
@@ -57,6 +57,7 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
         result = await handleAuth('/login', formData);
       } else {
         const url = await AsyncStorage.getItem('registerUrl');
+
         if (url) {
           if (formData.password !== formData.confirmPassword) {
             setErrors(prevErrors => ({
@@ -67,16 +68,19 @@ const FormSection: FC<FormSectionProp> = ({type}) => {
             result = await handleAuth(url, formData);
           }
         } else {
+
           throw new Error('Registration URL not found');
         }
       }
 
       if (result?.success) {
-        // no user logged and confirmed
-
         if (result?.data.user.confirmed === true) {
           if (result?.data.user.status === 'approved') {
+            if(result?.data.user.role === "business"){
+              navigationRef.current?.navigate('BusinessProfile', {id: result?.data.user.user_id});
+            }else{
             navigationRef.current?.navigate('Home');
+          }
           } else {
             navigationRef.current?.navigate('Verification');
           }

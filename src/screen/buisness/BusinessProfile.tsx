@@ -21,6 +21,16 @@ import {RootStackParamList} from '../../interfaces/RootStackParamList';
 import axiosConfig from '../../api/axios.config';
 import {BusinessData} from '../../interfaces/User';
 import {useAuth} from '../../store/AuthContext';
+import { BackHandler, Alert } from 'react-native';
+
+
+interface NavigationItem {
+  icon: ImageSourcePropType; // Assuming Icons is an imported library providing icon components
+  title: string;
+  link?: string; // Optional property if navigation link is needed
+  color?: string; // Optional property for specifying color
+}
+
 
 const BusinessProfile = () => {
   const navigationRef = useNavigationRef();
@@ -30,12 +40,31 @@ const BusinessProfile = () => {
   const [loading, setLoading] = useState(true);
   const {userData} = useAuth();
 
-  interface NavigationItem {
-    icon: ImageSourcePropType; // Assuming Icons is an imported library providing icon components
-    title: string;
-    link?: string; // Optional property if navigation link is needed
-    color?: string; // Optional property for specifying color
-  }
+  // OUT OFF THE APP 
+
+  useEffect(() => {
+    // Function to handle back button press
+    const backAction = () => {
+      Alert.alert("Exit App", "Do you want to exit?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+   return () => backHandler.remove();
+  }, []);
+  
+
 
   const items: NavigationItem[] = [
     {
@@ -43,8 +72,6 @@ const BusinessProfile = () => {
       title: "Détails de l'entreprise",
       link: 'BusinessDetails' as keyof RootStackParamList,
     },
-    // {icon: Icons.Lock, title: 'Sécurité du compte'},
-    // {icon: Icons.share, title: 'Parrainez et gagnez'},
     {icon: Icons.starIcon, title: 'Évaluez nous'},
     {
       icon: Icons.signout,
@@ -53,6 +80,7 @@ const BusinessProfile = () => {
       color: '#DC3545',
     },
   ];
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,7 +92,6 @@ const BusinessProfile = () => {
           setData(null);
         }
       } catch (err) {
-        setError('Failed to fetch data');
         setLoading(false);
       } finally {
         setLoading(false);
@@ -248,8 +275,8 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   profilePic: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     borderRadius: 1000,
   },
   linksHolder: {

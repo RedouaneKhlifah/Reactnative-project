@@ -26,8 +26,8 @@ const ActionButton: FC<FilterProps> = ({
           borderRadius: 45,
           alignItems: 'center',
           justifyContent: 'center',
-          paddingHorizontal: 13,
-          paddingVertical: 7,
+          paddingHorizontal: 12,
+          paddingVertical: 6,
           flexDirection: 'row',
           borderWidth: 2,
           borderColor: COLORS.black,
@@ -38,7 +38,7 @@ const ActionButton: FC<FilterProps> = ({
       <Icon />
       <Text
         style={{
-          fontSize: 13,
+          fontSize: 12,
           color: textColor ? textColor : COLORS.black,
           fontWeight: '500',
           marginLeft: 7,

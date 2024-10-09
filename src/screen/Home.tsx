@@ -12,21 +12,18 @@ import Header from '../components/Home/TopSection/Header';
 import OffreCard, {
   IoffreData,
 } from '../components/Home/BottomSection/OffreCard';
-import {responsiveWidth} from '../utils/responsive';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useAuth} from '../store/AuthContext';
 import CategoriesSection from '../components/Home/TopSection/CategoriesSection';
 import axiosConfig from '../api/axios.config';
 import SkeletonOffreCard from '../components/Home/BottomSection/SkeletonOffreCard';
 import {useFocusEffect} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigationRef} from '../store/NavigationContext';
+import { InfluencerData } from '../interfaces/User';
+
 
 const Home: React.FC = () => {
   const [data, setData] = useState<IoffreData[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const navigationRef = useNavigationRef();
+  const [influencerData, setinfluencerData] = useState<InfluencerData | null>(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +33,8 @@ const Home: React.FC = () => {
         const res = await apiClientWithToken.get(
           `/influencer/suggest-two-businesses`,
         );
+        const profile = await apiClientWithToken.get(`/influencer/get/`);
+        setinfluencerData(profile.data);
         if (res.data) {
           setData(res.data);
         } else {
@@ -44,7 +43,6 @@ const Home: React.FC = () => {
 
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch data');
         setLoading(false);
         setData(null);
       }
@@ -73,7 +71,7 @@ const Home: React.FC = () => {
           style={styles.topSection}
           source={Images.homeBackground2}>
           <View style={styles.HeaderContainer}>
-            <Header />
+            <Header influencerData = {influencerData}  loading ={loading}/>
           </View>
 
           <View style={styles.CategoriesSection}>
@@ -144,10 +142,11 @@ const styles = StyleSheet.create({
     width: SIZES.width,
     height: '100%',
     flexDirection: 'column',
-    gap: 25,
+    gap: 20
   },
   HeaderContainer: {
-    alignItems: 'center',
+    marginLeft: 0,
+    padding : 0
   },
   CategoriesSection: {
     flex: 1,

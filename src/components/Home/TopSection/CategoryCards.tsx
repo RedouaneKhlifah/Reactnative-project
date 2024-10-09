@@ -19,12 +19,10 @@ const CategoryCards = () => {
         const res = await apiClientWithToken.get('/categories/index');
 
         setData(res.data.business_categories);
-        console.log('res', res.data.business_categories);
 
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch data');
-        setLoading(false);
+        setLoading(true);
       }
     };
 

@@ -17,9 +17,6 @@ const SimilairesOffre: FC<{data: IoffreData | null}> = ({data}) => {
     navigationRef.current?.navigate('AnnouncePage', {id: data.id});
   };
 
-  console.log("//////////// similar offre //////////////////");
-  console.log(data.name);
-
 
   return (
     <Pressable
@@ -28,7 +25,7 @@ const SimilairesOffre: FC<{data: IoffreData | null}> = ({data}) => {
         {opacity: pressed ? 0.8 : 1},
         {
           borderWidth: 1,
-          borderBlockColor: COLORS.purple,
+          borderColor: COLORS.purple,
           borderRadius: 18,
           padding: 8,
           width: responsiveWidth(163),
@@ -58,12 +55,13 @@ const SimilairesOffre: FC<{data: IoffreData | null}> = ({data}) => {
           location={data.address}
           titleStyle={{
             fontSize: responsiveWidth(11),
+            color: COLORS.black,
           }}
           locationStyle={{
             fontSize: responsiveWidth(10),
             transform: [{translateY: -2}],
           }}
-          iconSize={responsiveWidth(13)}
+          iconSize= {10}
         />
       </View>
     </Pressable>

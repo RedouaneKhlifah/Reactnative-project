@@ -140,7 +140,6 @@ const ProfileBody = () => {
     try {
       const res = await apiClientWithToken.get('/influencer/get');
       setinfluencerData(res.data);
-      console.log('influencerDatainfluencerDatainfluencerData', influencerData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.message);
@@ -248,9 +247,11 @@ const ProfileBody = () => {
           setErrors(error.response?.data.errors);
         }
       }
+      setloading(true);
+
       console.error('Error submitting form:', error);
     } finally {
-      setloading(false);
+      setloading(true);
     }
   };
   return (
@@ -410,7 +411,8 @@ const styles = StyleSheet.create({
   },
   ImageInnerContainer: {
     borderRadius: SIZES.fullRadius,
-    backgroundColor: COLORS.purple,
+    borderWidth : 0.2,
+    borderColor : COLORS.purple,
     width: responsiveWidth(90),
     height: responsiveWidth(90),
     justifyContent: 'flex-end',

@@ -58,8 +58,7 @@ export default function Profile() {
         }
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch data');
-        setLoading(false);
+        setLoading(true);
       }
     };
 
@@ -134,18 +133,18 @@ export default function Profile() {
                     <View style={styles.userInfo}>
                       <Image
                         source={item.icon}
-                        style={{width: 24, height: item.iconHeight ?? 24}}
+                        style={{width: 17, height: 17 ,resizeMode: 'contain'}}
                       />
                       <Text
                         style={{
                           fontFamily: FONTS.body3.fontFamily,
-                          fontSize: SIZES.radius,
+                          fontSize: 14,
                           color: item.colors ?? '',
                         }}>
                         {item.title}
                       </Text>
                     </View>
-                    <RnIcon name="chevron-right" color="black" size={16} />
+                    <RnIcon name="chevron-right" color="black" size={14} />
                   </Pressable>
                 );
               })}
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
-    paddingHorizontal: '10%',
+    paddingHorizontal: '5%',
     paddingTop: '10%',
     alignItems: 'center',
   },
@@ -217,8 +216,8 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   profilePic: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     borderRadius: 1000,
   },
   linksHolder: {

@@ -65,13 +65,16 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
   const handleAuth = async (url: string, formData: object) => {
     try {
+      
       const response = await apiClientWithoutToken.post(url, formData);
+      
       if (response.data) {
         await AsyncStorage.setItem('data', JSON.stringify(response.data));
         await checkConfirmation();
         return {success: true, data: response.data};
       }
-    } catch (error) {
+    } catch (error) {      
+      console.log(error);
       if (axios.isAxiosError(error)) {
         if (error.response) {
           return {success: false, data: error.response.data};
